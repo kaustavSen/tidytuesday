@@ -1,0 +1,156 @@
+---
+title: 'Week 29: Astronauts'
+output: html_document
+---
+
+## Load required packages
+
+```{r lib}
+library(tidyverse)
+library(waffle)
+
+theme_set(theme_light())
+```
+
+## Download and import the raw data
+
+```{r data}
+tuesdata <- tidytuesdayR::tt_load(2020, week = 29)
+tuesdata
+astronauts_data <- tuesdata$astronauts
+```
+
+## Helper functions
+
+```{r utils}
+count_prop <- function(df, ...) {
+  count(df, ...) %>% 
+    mutate(prop = n / sum(n))
+}
+```
+
+## Data exploration
+
+### Distribution by sex
+
+About 90% of the data is related to male astronauts.
+
+However, interestingly amongst female astronauts more than 70% are civilians while amongst males the proportion of civilians is just 35%.
+
+```{r explore}
+astronauts_data %>% 
+  count_prop(sex)
+
+astronauts_data %>% 
+  group_by(sex) %>% 
+  count_prop(military_civilian)
+```
+
+### Which countries do the astronauts represent?
+
+```{r}
+astronauts_data %>% 
+  count_prop(nationality, sort = TRUE) %>% 
+  top_n(5) %>% 
+  mutate(nationality = fct_reorder(nationality, prop)) %>% 
+  ggplot(aes(nationality, prop)) +
+  geom_col() +
+  scale_y_continuous(labels = scales::percent_format()) +
+  expand_limits(y = c(0, 1)) +
+  coord_flip()
+```
+
+### What is the avergae waiting time between selection and first mission?
+
+```{r}
+first_mission <- astronauts_data %>% 
+  filter(mission_number == 1) %>% 
+  mutate(years_waiting = year_of_mission - year_of_selection) %>% 
+  filter(years_waiting > 0) 
+
+first_mission %>% 
+  ggplot(aes(years_waiting)) +
+  geom_density(fill = "black", alpha = 1/3) +
+  expand_limits(x = 0, y = 0)
+```
+
+## Space mission over the years US v/s Russia
+
+```{r}
+missions_by_year <- astronauts_data %>% 
+  mutate(nationality = fct_lump(nationality, 2)) %>% 
+  group_by(year_of_mission, nationality) %>% 
+  summarise(num_missions = length(unique(mission_title))) 
+
+missions_by_year %>%  
+  filter(nationality != "Other") %>% 
+  ggplot(aes(year_of_mission, num_missions)) +
+  geom_line(aes(group = nationality, color = nationality)) +
+  scale_x_continuous(breaks = seq(1960, 2020, 5)) +
+  expand_limits(y = 0)
+```
+
+## Gap between mission for astronauts with multiple space visits
+
+```{r}
+multiple_missions <- astronauts_data %>% 
+  mutate(nationality = fct_lump(nationality, 2)) %>% 
+  filter(total_number_of_missions > 1) %>% 
+  group_by(name) %>% 
+  arrange(mission_number) %>% 
+  mutate(on_earth = year_of_mission - lag(year_of_mission, default = min(year_of_mission))) %>%
+  select(nationality, year_of_mission, mission_number, total_number_of_missions, on_earth) %>% 
+  arrange(name) %>% 
+  ungroup()
+
+names <- multiple_missions %>% 
+  arrange(desc(total_number_of_missions)) %>% 
+  select(name)
+
+top_astronauts <- unique(names)[1:10, "name"] %>% pull()
+
+plot <- multiple_missions %>% 
+  filter(name %in% top_astronauts, mission_number != 1) %>%
+  mutate(mission_number = as.factor(mission_number)) %>% 
+  ggplot(aes(fill = mission_number, values = on_earth)) +
+  geom_waffle(color = "white", size = 2, flip = TRUE) +
+  facet_wrap(~name, ncol = 1, strip.position = "left") +
+  ggthemes::scale_fill_tableau(name="Mission Number") +
+  coord_equal(ratio = 0.3) +
+  labs(title = "What is the waiting time between mission for\n the top 10 astronauts with the most number of missions?",
+       caption = "1 box = 1 year") +
+  theme_minimal(base_family = "Roboto Condensed") +
+  theme(plot.title = element_text(vjust = 0, hjust = 0),
+        plot.caption = element_text(hjust = 1),
+        strip.text.y.left = element_text(angle = 0, vjust = 0, hjust = 0),
+        panel.grid = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text = element_blank()) +
+  guides(fill = guide_legend(reverse = TRUE))
+
+plot
+
+ggsave("2020/plots/week_29.png", plot, device = "png", width = 10, height = 5)
+
+```
+
+## Appendix - Data Issues
+
+1. For the following two astronauts:
+
+- Franco Malerba
+- Thomas, Andrew S. W.
+
+The `year_of_mission` is before the `year_of_selection`
+
+```{r}
+astronauts_data %>% 
+  filter(mission_number == 1) %>% 
+  mutate(years_waiting = year_of_mission - year_of_selection) %>% 
+  filter(years_waiting < 0)
+```
+
+2. For astronaut **Williams, Sunita L.** the `total_number_of_missions` seems incorrect. It should be 2 but instead it is 1 and 2.
+
+3. For astronaut **Shepard, Alan B., Jr** the `total_number_of_missions` is given as 2 but there is only 1 entry.
+
