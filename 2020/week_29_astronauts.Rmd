@@ -117,22 +117,33 @@ plot <- multiple_missions %>%
   facet_wrap(~name, ncol = 1, strip.position = "left") +
   ggthemes::scale_fill_tableau(name="Mission Number") +
   coord_equal(ratio = 0.3) +
-  labs(title = "What is the waiting time between mission for\n the top 10 astronauts with the most number of missions?",
+  labs(title = "What is the waiting time between missions for\n the top 10 astronauts with the most number of missions?",
        caption = "1 box = 1 year") +
-  theme_minimal(base_family = "Roboto Condensed") +
-  theme(plot.title = element_text(vjust = 0, hjust = 0),
+  theme_minimal() +
+  theme(plot.title.position = "plot",
         plot.caption = element_text(hjust = 1),
         strip.text.y.left = element_text(angle = 0, vjust = 0, hjust = 0),
         panel.grid = element_blank(),
         axis.ticks = element_blank(),
-        axis.text = element_blank()) +
-  guides(fill = guide_legend(reverse = TRUE))
+        axis.text = element_blank(),
+        legend.position = "bottom",
+        legend.direction = "horizontal",
+        legend.justification = 1,
+        legend.text = element_text(size = 8),
+        legend.title = element_text(size = 8)) +
+  guides(fill = guide_legend(keyheight = unit(0.05, "cm"),
+                             keywidth = unit(0.9, "cm")))
 
 plot
 
-ggsave("2020/plots/week_29.png", plot, device = "png", width = 10, height = 5)
-
 ```
+
+### Save plot
+
+```{r}
+ggsave("2020/plots/week_29.png", plot, device = "png", width = 15, height = 7)
+```
+
 
 ## Appendix - Data Issues
 
