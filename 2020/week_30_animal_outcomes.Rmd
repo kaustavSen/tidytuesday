@@ -1,0 +1,169 @@
+---
+title: 'Week 30: Animal Outcomes'
+output: html_document
+---
+
+```{r load libraries}
+library(tidyverse)
+library(tidytuesdayR)
+theme_set(theme_light())
+```
+
+```{r load data}
+tuesdata <- tidytuesdayR::tt_load(2020, week = 30)
+tuesdata
+
+animal_outcomes <- tuesdata$animal_outcomes
+```
+
+## Data Exploration
+
+Simple counting to see how the data looks and feels
+
+```{r}
+animal_outcomes %>% 
+  count(year)
+
+animal_outcomes %>% 
+  count(animal_type)
+
+animal_outcomes %>% 
+  count(animal_type, outcome)
+```
+
+Quick sum to check that Total mathces the individual entries
+
+```{r}
+animal_outcomes_test <- animal_outcomes %>% 
+  rowwise() %>% 
+  mutate(total_calc = sum(across(.cols = ACT:WA), na.rm = TRUE),
+         check = Total - total_calc)
+```
+
+```{r}
+animal_outcomes %>% 
+  summarise(across(.fns = ~ sum(is.na(.))))
+```
+
+```{r}
+temp <- animal_outcomes %>% 
+  rowwise() %>% 
+  filter(across(.fns = ~ all(!is.na(.))))
+
+animal_outcomes_test %>% 
+  anti_join(temp)
+```
+
+```{r}
+animal_outcomes %>% 
+  rowwise() %>% 
+  mutate(total_calc = sum(across(.cols = ACT:WA), na.rm = TRUE),
+         check = Total - total_calc) %>% 
+  filter(year == 2005, animal_type == "Dogs", outcome == "In Stock")
+```
+
+```{r}
+animal_outcomes <- tuesdata$animal_outcomes
+
+animal_outcomes_test <- animal_outcomes %>% 
+  rowwise() %>% 
+  mutate(total_calc = sum(across(.cols = ACT:WA), na.rm = TRUE),
+         check = Total - total_calc)
+
+animal_outcomes_test %>% 
+  anti_join(temp)
+```
+
+```{r}
+animal_outcomes %>% 
+  replace_na(0)
+```
+
+```{r}
+animal_outcomes %>% 
+  gather(key = state, value = animals, ACT:WA) %>% 
+  # filter(is.na(animals))
+  mutate(animals = replace_na(animals, 0))
+```
+
+```{r}
+df <- animal_outcomes %>% 
+  gather(key = state, value = animals, ACT:WA) %>% 
+  mutate(animals = replace_na(animals, 0),
+         animal_type_fct = fct_lump(animal_type, 3, w = animals))
+
+df %>% 
+  count(animal_type_fct, wt = animals) %>% 
+  ggplot(aes(animal_type_fct, n)) +
+  geom_col() +
+  coord_flip()
+```
+
+## Time-series plots
+
+```{r}
+df <- animal_outcomes %>% 
+  gather(key = state, value = animals, ACT:WA) %>% 
+  mutate(animals = replace_na(animals, 0),
+         animal_type_fct = fct_lump(animal_type, 3, w = animals))
+
+df %>% 
+  filter(outcome == "Reclaimed") %>% install.packages("ggalluvial")
+  ggplot(aes(x = year, y = animals)) +
+  geom_path(aes(color = animal_type_fct)) +
+  facet_wrap(~state)
+```
+
+```{r}
+animal_outcomes %>%
+  filter(animal_type %in% c("Cats", "Dogs")) ->
+  cats_dogs
+
+ggplot(cats_dogs, aes(x= year, y = animals, col = outcome)) +
+  geom_line() + 
+  facet_grid(state ~ animal_type)+
+  theme_minimal()
+```
+
+
+## Alluvial diagrams
+
+```{r}
+# install.packages("ggalluvial")
+library(ggalluvial)
+
+df <- animal_outcomes %>% 
+  gather(key = state, value = animals, ACT:WA) %>% 
+  mutate(animals = replace_na(animals, 0),
+         animal_type_fct = fct_lump(animal_type, 3, w = animals))
+
+plot <- df %>% 
+  group_by(animal_type_fct, outcome) %>% 
+  summarise(total = sum(animals)) %>% 
+  ggplot(aes(axis1 = animal_type_fct, axis2 = outcome,
+             y = total)) +
+  geom_alluvium(aes(fill = outcome)) +
+  geom_stratum() +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
+  theme_minimal()
+
+ggsave("2020/plots/week_30.png", plot, device = "png", width = 15, height = 8)
+```
+
+### Testing
+
+```{r}
+titanic_wide <- data.frame(Titanic)
+head(titanic_wide)
+
+ggplot(data = titanic_wide,
+       aes(axis1 = Class, axis2 = Sex, axis3 = Age,
+           y = Freq)) +
+  scale_x_discrete(limits = c("Class", "Sex", "Age"), expand = c(.2, .05)) +
+  xlab("Demographic") +
+  geom_alluvium(aes(fill = Survived)) +
+  geom_stratum() +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
+  theme_minimal()
+```
+
