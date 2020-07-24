@@ -3,13 +3,23 @@ title: 'Week 30: Animal Outcomes'
 output: html_document
 ---
 
-```{r load libraries}
-library(tidyverse)
-library(tidytuesdayR)
-theme_set(theme_light())
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
-```{r load data}
+
+```{r load libraries, include=FALSE}
+library(tidyverse)
+library(tidytuesdayR)
+library(cowplot)
+library(ggalluvial)
+library(extrafont)
+
+loadfonts(device = "win", quiet = TRUE)
+theme_set(theme_cowplot())
+```
+
+```{r load data, include=FALSE}
 tuesdata <- tidytuesdayR::tt_load(2020, week = 30)
 tuesdata
 
@@ -22,16 +32,141 @@ Simple counting to see how the data looks and feels
 
 ```{r}
 animal_outcomes %>% 
-  count(year)
+  count(year, wt = Total) %>% 
+  ggplot(aes(year, n)) +
+  geom_line()
 
 animal_outcomes %>% 
-  count(animal_type)
-
-animal_outcomes %>% 
-  count(animal_type, outcome)
+  count(animal_type, wt = Total)
 ```
 
-Quick sum to check that Total mathces the individual entries
+## Pivot-longer
+
+Make the dataset longer and get it visualization ready.
+
+Lumped the following categorical variables:
+
+* **animal_type** as Cats, Dogs and Other
+* **Outcome** as Euthanized, Reclaimed, Rehomed and Other
+
+```{r}
+animal_outcomes_longer <- animal_outcomes %>% 
+  pivot_longer(cols = ACT:WA, names_to = "States") %>% 
+  select(-Total) %>% 
+  mutate(value = replace_na(value, 0),
+         animal_type = fct_lump(animal_type, n = 2, w = value),
+         animal_type = fct_reorder(animal_type, value),
+         outcome = fct_lump(outcome, 3, w = value))
+```
+
+Some initial conclusions:
+
+At an aggregate level, over the years:
+
+* More cats than dogs were euthanized and rehomed.
+* More dogs than cats were reclaimed
+
+```{r}
+bar_plot <- animal_outcomes_longer %>% 
+  filter(outcome != "Other") %>% 
+  count(animal_type, outcome, wt = value) %>% 
+  ggplot(aes(animal_type, n, fill = outcome)) +
+  geom_col(alpha = 0.8) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05)),
+                     labels = scales::comma_format(scale = 1/1000, suffix = "k")) + 
+  coord_flip() +
+  theme_minimal_vgrid(12) +
+  ggthemes::scale_color_tableau() +
+  theme(legend.title = element_blank(),
+        legend.position = "bottom",
+        legend.justification = "center",
+        axis.title = element_blank())
+```
+
+The above plot is based on the aggregate data over all years. The next graph visualizes this year-wise to decipher any trend. 
+
+Also, it will be better to look at proportions rather than absolute numbers.
+
+```{r}
+line_plot <- animal_outcomes_longer %>% 
+  group_by(year, animal_type) %>% 
+  mutate(total = sum(value)) %>% 
+  ungroup() %>% 
+  group_by(year, animal_type, outcome) %>% 
+  mutate(value = sum(value)) %>%
+  summarise(prop = first(value / total), .groups = "drop") %>% 
+  filter(outcome %in% c("Euthanized", "Reclaimed", "Rehomed"),
+         animal_type %in% c("Dogs", "Cats")) %>% 
+  ggplot(aes(year, prop, color = animal_type)) +
+  geom_line() +
+  facet_wrap(~outcome) +
+  scale_x_continuous(breaks = c(1999, 2007, 2015)) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  panel_border() +
+  ggthemes::scale_color_tableau() +
+  theme_minimal_grid(10) +
+  theme(legend.title = element_blank(),
+        legend.position = "bottom",
+        legend.justification = "center",
+        strip.text.x = element_text(size = 12, face = "bold"),
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(size = 10, face = "bold"),
+        panel.spacing.x = unit(1, "lines"),
+        panel.grid.major.y = element_line(color = "grey85", size = 0.5)) +
+  labs(y = "Proportion")
+```
+
+```{r}
+alluvial_plot <- animal_outcomes_longer %>% 
+  group_by(year, animal_type) %>% 
+  mutate(total = sum(value)) %>% 
+  ungroup() %>% 
+  group_by(animal_type, outcome) %>% 
+  summarise(value = sum(value), .groups = "drop") %>% 
+  filter(outcome %in% c("Euthanized", "Reclaimed", "Rehomed"),
+         animal_type %in% c("Dogs", "Cats")) %>% 
+  mutate(across(where(is.factor), as.character)) %>% 
+  ggplot(aes(y = value, axis1 = animal_type, axis2 = outcome)) +
+  geom_alluvium(aes(fill = outcome)) +
+  geom_stratum(size = 0.75, color = "white", aes(fill = outcome)) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum)),
+            size = 5, color = "white") +
+  theme_nothing() 
+```
+
+
+```{r}
+title <- ggdraw() +
+  draw_label("Dogs reclaimed often, Cats euthanized more",
+             fontface = "bold",
+             fontfamily = "Stencil",
+             size = 18,
+             x = 0.3,
+             hjust = 0)
+first_col <- plot_grid(bar_plot, line_plot, nrow = 2)
+two_plots <- plot_grid(first_col, alluvial_plot, ncol = 2, 
+          rel_widths = c(1.75, 1))
+final_plot <- plot_grid(title, two_plots, ncol = 1,
+          rel_heights = c(0.1, 2))
+
+final_plot %>% 
+  theme(back)
+```
+
+# Save final plot
+
+```{r}
+ggsave("2020/plots/week_30.png", final_plot, device = "png", width = 15, height = 7)
+```
+
+
+```{r include=FALSE}
+knitr::knit_exit()
+```
+
+## Appendix
+
+Quick sum to check that Total matches the individual entries
 
 ```{r}
 animal_outcomes_test <- animal_outcomes %>% 
@@ -72,11 +207,6 @@ animal_outcomes_test <- animal_outcomes %>%
 
 animal_outcomes_test %>% 
   anti_join(temp)
-```
-
-```{r}
-animal_outcomes %>% 
-  replace_na(0)
 ```
 
 ```{r}
