@@ -1,0 +1,165 @@
+---
+title: "Australian Pets"
+author: "mnaR99"
+date: "21/7/2020"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(ggforce)
+library(ggfittext)
+library(extrafont)
+library(pdftools)
+```
+
+```{r}
+extrafont::loadfonts(device = "win")
+```
+
+```{r}
+tuesdata <- tidytuesdayR::tt_load(2020, week = 30)
+
+animal_outcomes <- tuesdata$animal_outcomes
+```
+
+```{r data}
+outcomes <- animal_outcomes %>% 
+  mutate(
+    outcome = fct_recode(outcome, "Currently In Care" = "In Stock"),
+    outcome = fct_relevel(outcome, "Rehomed", "Reclaimed", "Released", "Currently In Care", "Transferred", "Euthanized", "Other"),
+    animal_type = fct_relevel(animal_type, "Other Animals", "Livestock", "Horses", "Wildlife", "Dogs", "Cats")
+  ) %>% 
+  count(year, animal_type, outcome, wt = Total) %>% 
+  group_by(outcome, animal_type) %>% 
+  mutate(stnd = (n-min(n))/(max(n)-min(n)))
+```
+
+```{r plot}
+plotAus <- outcomes %>% 
+  ggplot(aes(year, animal_type, fill = animal_type)) +
+  geom_tile(aes(alpha = stnd), width = 0.9, height = 0.9) +
+    facet_col(
+      vars(outcome), 
+      scale = "free_y", 
+      space = "free"
+    ) +
+    geom_tile(aes(alpha = stnd), width = 0.9, height = 0.9) +
+    geom_tile(
+      data = . %>% filter(stnd == 1),
+      color = "#F9EBE0",
+      fill = NA,
+      width = 0.8, 
+      height = 0.8,
+      size = 0.3
+    ) +
+    geom_tile(
+      data = . %>% filter(stnd == 0),
+      aes(color = animal_type),
+      fill = NA,
+      width = 0.8, 
+      height = 0.8,
+      size = 0.3
+    ) +
+    # geom_fit_text(
+    #   data = . %>% filter(stnd %in% c(0,1)),
+    #   aes(label = scales::comma(n,1)),
+    #   family = "Century Gothic",
+    #   color = "#272635"
+    # ) +
+    geom_text(
+      data = . %>% filter(stnd %in% c(0,1)),
+      aes(label = scales::comma(n,1)),
+      color = "grey10",
+      size = 2
+    ) +
+    scale_x_continuous(
+      expand = c(0,0), 
+      breaks = seq(2001,2016,3),
+      sec.axis = dup_axis(breaks = seq(2001,2016,3))
+    ) +
+    scale_y_discrete(
+      expand = c(0,1)
+    ) +
+    scale_fill_brewer(
+      type = "qual",
+      palette = 7
+    ) +
+    scale_color_brewer(
+      type = "qual",
+      palette = 7
+    ) +
+    # rcartocolor::scale_fill_carto_d(type = "qualitative", palette = 1) +
+    # rcartocolor::scale_color_carto_d(type = "qualitative", palette = 1) +
+    # rcartocolor::scale_fill_carto_d(type = "qualitative", palette = 4) +
+    # rcartocolor::scale_color_carto_d(type = "qualitative", palette = 4) +
+    scale_alpha_continuous(
+      breaks = seq(0,1,0.1),
+      labels = c("Min.",rep("",9),"Max.")
+    ) +
+    guides(
+      fill = FALSE,
+      color = FALSE,
+      alpha = FALSE
+    ) +
+    theme_minimal() +
+    theme(
+      axis.title = element_blank(), 
+      axis.ticks = element_blank(),
+      axis.text = element_text(
+        family = "Cooper Black", 
+        color = "#272635"
+      ),
+      plot.background = element_rect(
+        fill = "#F9EBE0",
+        color = "#F9EBE0"
+      ),
+      plot.margin = margin(15,15,15,15),
+      plot.title.position = "plot",
+      plot.title = element_text(
+        family = "Century Gothic Negrita", #Century Gothic Bold
+        color = "#272635", 
+        size = 16
+      ),
+      plot.subtitle = element_text(
+        family = "Century Gothic", 
+        color = "#272635", 
+        size = 8, 
+        margin = margin(t = 10, b = 20)
+      ),
+      plot.caption.position = "plot",
+      plot.caption = element_text(
+        family = "Century Gothic", 
+        color = "#272635", 
+        hjust = 0.5, 
+        margin = margin(15)
+      ),
+      panel.grid.major.x = element_line(
+        color = "#2726351A", 
+        linetype = 3
+      ),
+      panel.grid.major.y = element_blank(),
+      panel.grid.minor = element_blank(),
+      panel.spacing.y = unit(0, "mm"),
+      strip.text = element_text(
+        family = "Cooper Black",
+        face = "bold",
+        color = "#F9EBE0", 
+        hjust = 0
+      ),
+      strip.background = element_rect(
+        fill = "#272635", 
+        color = NA
+      ),
+    )
+
+ggsave("2020/reference/plot.pdf", plotAus, width = 8.4, height = 18.2, device = cairo_pdf)
+
+pdftools::pdf_convert(
+  pdf = "2020/reference/plot.pdf",
+  filenames = "2020/reference/plot.png",
+  format = "png", 
+  dpi = 400
+)
+```
