@@ -1,0 +1,78 @@
+---
+title: "Palmer Penguins"
+author: "Kaustav Sen"
+date: "27/07/2020"
+output: html_document
+---
+
+```{r load libraries}
+library(extrafont)
+library(tidyverse)
+library(ggforce)
+library(cowplot)
+library(magick)
+library(ggbeeswarm)
+library(ggtext)
+
+loadfonts(device = "win")
+```
+
+```{r load data}
+tuesdata <- tidytuesdayR::tt_load(2020, week = 31)
+penguins <- tuesdata$penguins
+```
+
+```{r plot}
+color_scale <- c("Adelie" = "darkorange", "Chinstrap" = "purple","Gentoo" = "cyan4")
+
+p <- 
+  penguins %>% 
+  pivot_longer(cols = bill_length_mm:body_mass_g) %>% 
+  mutate(species = factor(species, 
+                          levels = c("Chinstrap", "Gentoo", "Adelie")),
+         name = case_when(name == "bill_length_mm" ~ "Bill Length (mm)",
+                         name == "bill_depth_mm" ~ "Bill Depth (mm)",
+                         name == "flipper_length_mm" ~ "Flipper Length (mm)",
+                         name == "body_mass_g" ~ "Body Mass (g)")) %>% 
+  ggplot(aes(species, value, color = species)) +
+  geom_violin(aes(fill = species), alpha = 0.50) +
+  geom_beeswarm() +
+  scale_color_manual(values = color_scale) +
+  scale_fill_manual(values = color_scale) +
+  facet_wrap(vars(name), scales = "free_y") +
+  labs(title = "Palmer Penguins: how do they compare?",
+       subtitle = "<b style = 'color: #008B8B'>Gentoo</b> species are the heaviest amongst the three with long flippers and bill but a relatively shorter bill depth. <br /> <b style = 'color: #800080'>Chinstrap</b> and <b style = 'color: #FF8C00'>Adelie</b> have quite similar built features apart from the fact that <b style = 'color: #800080'>Chinstrap</b> have a longer bill length.",
+       caption = "Data by Dr. Kristen Gorman and the Palmer Station, Antarctica LTER | Artwork by @allison_horst | DataViz by Kaustav Sen") +
+  theme_void() +
+  theme(legend.position = "none",
+        plot.margin = margin(10, 10, 10, 10),
+        plot.title = element_text(family = "Cooper Black", size = 16,
+                                  margin = margin(5, 5, 5, 5)),
+        plot.subtitle = element_markdown(size = 9, family = "Century Gothic",
+                                         margin = margin(b = 10)),
+        plot.caption = element_text(family = "Century Gothic", size = 8,
+                                    color = "grey50"),
+        panel.spacing = unit(2, "lines"),
+        panel.background = element_rect(color = "grey10",
+                                        fill = NA),
+        strip.background = element_rect(fill = "grey95"),
+        strip.text = element_text(hjust = 0.5, size = 12,
+                                  family = "Century Gothic",
+                                  face = "bold",
+                                  margin = margin(7, 7, 7, 7)))
+```
+
+```{r image}
+img <- 
+  image_read("2020/img/penguins.png") %>% 
+  image_resize("570x380") %>%
+  image_colorize(75, "white")
+```
+
+```{r final_plot}
+final_plot <- ggdraw() +
+  draw_image(img) +
+  draw_plot(p)
+
+ggsave("2020/plots/week_31.png", final_plot, height = 6, width = 7, type = "cairo")
+```
