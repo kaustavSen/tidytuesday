@@ -1,0 +1,252 @@
+---
+title: "European Energy"
+author: "Kaustav Sen"
+date: "06/08/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-libraries}
+library(extrafont)
+library(tidyverse)
+library(ggalt)
+library(cowplot)
+library(ggflags) # devtools::install_github("rensa/ggflags")
+library(tidytuesdayR)
+
+extrafont::loadfonts(device = "win")
+```
+
+```{r get-data}
+tuesdata <- tidytuesdayR::tt_load(2020, week = 32)
+tuesdata
+
+energy_types <- tuesdata$energy_types
+country_totals <- tuesdata$country_totals
+```
+
+```{r prep-data}
+energy_types_cleaned <- 
+  energy_types %>% 
+  mutate(
+    country_name = case_when(
+      country == "UK" ~ "United Kingdom",
+      TRUE ~ country_name
+    )
+  )
+
+change_over_2016_2018 <- 
+  energy_types_cleaned %>% 
+  filter(level == "Level 1") %>% 
+  mutate(type = fct_collapse(
+    type,
+    Conventional = "Conventional thermal",
+    other_level = "Clean"
+  )) %>% 
+  select(-`2017`) %>% 
+  group_by(country, country_name) %>%
+  mutate(prop_2016 = `2016` / sum(`2016`),
+         prop_2018 = `2018` / sum(`2018`)) %>% 
+  filter(type == "Clean") %>% 
+  summarise(across(c(prop_2016, prop_2018), sum), .groups = "drop") %>% 
+  mutate(change = prop_2018 - prop_2016)
+
+top_5 <- 
+  change_over_2016_2018 %>% 
+  arrange(desc(change)) %>% 
+  head(5)
+
+bottom_5 <- 
+  change_over_2016_2018 %>%  
+  arrange(change) %>% 
+  head(5)
+```
+
+```{r plot-data}
+plot_theme <- 
+  theme_minimal_vgrid(14) +
+  theme(
+    plot.title.position = "plot",
+    plot.title = element_text(
+      family = "Century",
+      face = "bold",
+      hjust = 0
+    ),
+    plot.subtitle = element_text(
+      family = "Century",
+      face = "italic"
+    ),
+    panel.grid.major.x = element_line(
+      color = "grey70",
+      linetype = "dashed"
+    ),
+    axis.line.y = element_blank(),
+    axis.text = element_text(family = "Century Gothic"),
+    axis.text.y = element_text(hjust = 0)
+  )
+  
+plot_bottom_5 <-
+  bottom_5 %>% 
+  mutate(
+    country_name = fct_reorder(country_name, desc(prop_2018)),
+    country = str_to_lower(country)
+  ) %>%
+  ggplot(
+    aes(
+      x = prop_2016, 
+      xend = prop_2018, 
+      y = country_name
+    )
+  ) +
+  geom_dumbbell(
+    colour = "#fccfb1", 
+    size = 7,
+    colour_x = "grey85",
+    colour_xend = NA
+  ) +
+  geom_flag(
+    aes(
+      x = prop_2018, 
+      country = country
+    ), 
+    size = 7
+  ) +
+  scale_x_continuous(
+    breaks = seq(0, 1, 0.25),
+    limits = c(0, 0.9),
+    labels = scales::percent_format(accuracy = 1)
+  ) +
+  scale_y_discrete(labels = scales::label_wrap(width = 10)) +
+  labs(
+    x = "",
+    y = "",
+    subtitle = "Countries which have reduced their reliance on clean energy"
+  ) +
+  plot_theme
+
+plot_top_5 <-
+  top_5 %>% 
+  mutate(
+    country_name = fct_reorder(country_name, desc(prop_2018)),
+    country = str_to_lower(country),
+    country = if_else(country == "uk", "gb", country)
+  ) %>%
+  ggplot(
+    aes(
+      x = prop_2016, 
+      xend = prop_2018, 
+      y = country_name
+    )
+  ) +
+  geom_dumbbell(
+    colour = "#c5ffa1", 
+    size = 7,
+    colour_x = "grey85",
+    colour_xend = NA
+  ) +
+  geom_flag(
+    aes(
+      x = prop_2018, 
+      country = country
+    ), 
+    size = 7
+  ) +
+  # Label for 2016
+  geom_curve(
+    data = tibble(
+      x = 0.22,
+      xend = 0.22,
+      y = 4.9,
+      yend = 4.2),
+    aes(
+      x = x,
+      y = y,
+      xend = xend,
+      yend = yend
+    ),
+    arrow = arrow(
+      length = unit(0.1, "inch"),
+      ends = "first"
+    ),
+    color = "black",
+    size = 0.80,
+    curvature = 0.4
+  ) +
+  geom_text(
+    data = tibble(
+      x = 0.22,
+      y = 4.1,
+      label = "Proportion in 2016"
+    ),
+    aes(
+      x = x,
+      y = y,
+      xend = x,
+      label = label
+    ),
+    color = "grey65",
+    size = 3,
+    fontface = "bold",
+    family = "Century Gothic"
+  ) +
+  # Label for 2018
+  geom_curve(
+    data = tibble(
+      x = 0.45,
+      xend = 0.45,
+      y = 4,
+      yend = 4.6),
+    aes(
+      x = x,
+      y = y,
+      xend = xend,
+      yend = yend
+    ),
+    arrow = arrow(
+      length = unit(0.1, "inch"),
+      ends = "first"
+    ),
+    color = "black",
+    size = 0.80,
+    curvature = 0.4
+  ) +
+  geom_text(
+    data = tibble(
+      x = 0.46,
+      y = 4.75,
+      label = "Proportion in 2018"
+    ),
+    aes(
+      x = x,
+      y = y,
+      xend = x,
+      label = label
+    ),
+    color = "grey65",
+    size = 3,
+    fontface = "bold",
+    family = "Century Gothic"
+  ) +
+  scale_x_continuous(
+    breaks = seq(0, 1, 0.25),
+    limits = c(0, 0.9),
+    labels = scales::percent_format(accuracy = 1)
+  ) +
+  scale_y_discrete(labels = scales::label_wrap(width = 10)) +
+  labs(
+    x = "",
+    y = "",
+    title = "How has been the adoption of clean energy from 2016 to 2018?",
+    subtitle = "Countries which have increased their reliance on clean energy"
+  ) +
+  plot_theme
+
+
+final_plot <- plot_grid(plot_top_5, plot_bottom_5, ncol = 1, align = "v")
+ggsave("plots/week_32.pdf", final_plot, height = 7, width = 8, device = cairo_pdf)
+pdftools::pdf_convert(pdf = "plots/week_32.pdf", format = "png", dpi = 300, 
+            filenames = "plots/week_32.png")
+```
