@@ -1,0 +1,99 @@
+---
+title: "Cleaning Script - Week 32"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Source: https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-08-04/readme.md
+
+```{r load-packages}
+library(tidyverse)
+library(readxl)
+library(countrycode)
+library(here)
+```
+```{r country-code}
+raw_code <- codelist %>% 
+  select(country_name = country.name.en, country = eurostat)
+```
+
+
+```{r get-row-names}
+row_stat <- read_excel("Electricity_generation_statistics_2019.xlsx",
+           sheet = 3,
+           range = "C48:C61",
+           col_names = FALSE)[[1]][c(1, 3:14)] %>% 
+  str_remove("[:digit:]") %>% 
+  str_remove("of which:") %>% 
+  str_remove("\\.") %>% 
+  str_trim()
+```
+
+```{r get-table-ranges}
+country_range <- tibble(
+  row_start = seq(from = 46, to = 454, by = 34),
+  row_end = seq(from = 61, to = 469, by = 34),
+  col1 = 4,
+  col2 = col1 + 5,
+  col3 = col2 + 5
+  ) %>% 
+  pivot_longer(
+    cols = col1:col3, 
+    names_to = "col_var", 
+    values_to = "col_start"
+  ) %>% 
+  mutate(col_end = col_start + 2) %>% 
+  select(-col_var) %>% 
+  slice(-n(), -(n() - 1)) %>% 
+  mutate(row_names = list(row_stat))
+```
+
+```{r fun-def}
+get_country_stats <- function(row_start, row_end, col_start, col_end, row_names){
+  
+  raw_excel <- suppressMessages(
+     read_excel(
+      "Electricity_generation_statistics_2019.xlsx",
+      sheet = 3,
+      cell_limits(
+        ul = c(row_start, col_start),
+        lr = c(row_end, col_end)
+      ),
+    col_names = FALSE
+    ) 
+  )
+  
+  country_data <- raw_excel %>% 
+  set_names(nm = 2016:2018) %>% 
+  filter(!is.na(`2016`), `2016` != "2016") %>% 
+  mutate(
+    country = if_else(
+      is.na(`2017`),
+      `2016`,
+      NA_character_
+    ),
+    .before = 1
+  ) %>% 
+  fill(country) %>% 
+  slice(-1) %>% 
+  mutate(
+    type = row_names,
+    level = c("Total", "Level 1", "Level 1", "Level 1", "Level 2",
+              "Level 1", "Level 1", "Level 1", "Level 1", "Level 1",
+              "Level 1", "Level 1", "Level 1"),
+    .after = country
+  ) %>% 
+  mutate(across(`2016`:`2018`, as.double))
+  country_data
+}
+```
+
+```{r read-all}
+all_countries <- pmap_dfr(country_range, get_country_stats) %>% 
+  left_join(raw_code, by = "country") %>% 
+  select(country, country_name, everything())
+```
+
