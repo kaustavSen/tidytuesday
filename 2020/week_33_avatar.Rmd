@@ -29,8 +29,7 @@ avatar <- read_csv("avatar.csv")
 ```
 
 ```{r generate-plot}
-
-font <- "Footlight MT Light"
+font <- "Slayer"
 
 mean_ratings_by_book <- 
   avatar %>% 
@@ -70,41 +69,37 @@ avatar %>%
             size = 5,
             alpha = 0.5,
             family = font) +
-  annotate("text", x = 2.6, y = 7, 
-           label = "Gets interesting as we \nprogress through the chapters",
-           family = font,
-           size = 3) +
-  geom_curve(x = 2, xend = 2,
-               y = 7.1, yend = 7.7,
-               curvature = -0.6) +
   scale_color_manual(guide = FALSE,
                      values = c("1" = "#0047ab", "2" = "#015E05", "3" = "#a10000")) +
   coord_equal(ratio = 0.75) +
   labs(title = "Avatar: The Last Airbender",
-       subtitle = "How do the ratings change as we progress through the chapters?",
+       subtitle = "How do the ratings change as we \nprogress through the chapters?",
        x = "",
        y = "IMDB Rating") +
   theme_avatar() +
   theme(legend.background = element_blank(),
         plot.title.position = "plot",
         plot.title = element_text(family = font,
-                                  hjust = 0),
+                                  face = "bold",
+                                  hjust = 0.5),
         plot.subtitle = element_text(family = font,
-                                  hjust = 0,
+                                  hjust = 0.5,
                                   margin = margin(b = 10)),
         panel.grid.major.x = element_blank(),
         axis.text.x = element_blank(),
         axis.title.y = element_text(family = font,
                                     margin = margin(r = 10)),
         axis.text.y = element_text(family = font),
-        legend.text = element_text(family = font),
+        legend.box.margin = margin(b = 30),
+        legend.text = element_text(family = font,
+                                   size = 6),
         panel.grid.major.y = element_line(linetype = "dashed",
                                     size = 0.5,
                                     color = "#c7c45e"),
         panel.grid.minor.y = element_line(linetype = "dashed",
                                     size = 0.5,
                                     color = "#c7c45e")) +
-  ggsave("plots/week_33.png", height = 6, width = 6, type = "cairo")
+  ggsave("plots/week_33.png", height = 8, width = 8, type = "cairo")
 ```
 
 ```{r}
