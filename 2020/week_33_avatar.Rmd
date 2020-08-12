@@ -1,0 +1,52 @@
+---
+title: 'Avatar: the last airbender'
+author: "Kaustav Sen"
+date: "11/08/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(tvthemes)
+library(extrafont)
+library(tidytuesdayR)
+
+loadfonts(device = "win")
+```
+
+```{r}
+tuesdata <- tidytuesdayR::tt_load(2020, week = 33)
+tuesdata
+
+avatar <- tuesdata$avatar
+
+avatar <- read_csv("avatar.csv")
+```
+
+```{r}
+avatar %>% 
+  mutate(book = fct_inorder(book)) %>% 
+  filter(!is.na(imdb_rating)) %>% 
+  ggplot(aes(book, imdb_rating)) +
+  geom_jitter(aes(color = chapter_num), width = 0.1, height = 0.1, alpha = 1/20) +
+  scale_y_continuous(limits = c(6, NA)) +
+  scale_color_gradient(name = "",
+                       low = "#c7c45e", high = "#4c7022",
+                       breaks = c(3, 19),
+                       labels = c("Initial \nChapters", "Later \nChapters")) +
+  coord_equal(ratio = 0.75) +
+  labs(title = "Avatar: The Last Airbender",
+       x = "",
+       y = "IMDB Rating") +
+  theme_avatar() +
+  theme(legend.background = element_blank(),
+        plot.title.position = "plot",
+        plot.title = element_text(family = "Footlight MT Light",
+                                  hjust = 0.5,
+                                  margin = margin(b = 20)))
+```
+
