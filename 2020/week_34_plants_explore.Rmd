@@ -1,0 +1,200 @@
+---
+title: "Extinct Plants"
+author: "Kaustav Sen"
+date: "18/08/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages}
+library(tidyverse)
+library(tidytuesdayR)
+library(gghighlight)
+library(waffle)
+library(fishualize)
+library(ggforce)
+library(patchwork)
+library(glue)
+library(ggtext)
+library(extrafont)
+library(here)
+
+loadfonts(device = "win", quiet = TRUE)
+```
+
+```{r get-data}
+tuesdata <- tt_load(2020, week = 34)
+tuesdata
+
+plants <- tuesdata$plants
+```
+
+```{r explore-1}
+plants %>% 
+  count(continent, sort = TRUE) %>% 
+  mutate(continent = fct_reorder(continent, n)) %>% 
+  ggplot(aes(n, continent)) +
+  geom_col() +
+  geom_text(aes(label = n), hjust = 0, nudge_x = 2) +
+  gghighlight(continent == "Africa")
+```
+```{r explore-2}
+threats_count <- 
+  plants %>% 
+  select(continent, starts_with("threat")) %>% 
+  pivot_longer(cols = -continent,
+               names_to = "threats",
+               values_to = "count") %>% 
+  group_by(continent) %>% 
+  mutate(continent_threat = sum(count)) %>% 
+  ungroup()
+  
+threats_count %>% 
+  count(threats, wt = count) %>% 
+  mutate(threats = fct_reorder(threats, n)) %>% 
+  ggplot(aes(n, threats)) +
+  geom_col(fill = colorspace::lighten("red", 0.20)) +
+  gghighlight(threats == "threat_NA")
+```
+
+```{r explore-3}
+threats_count %>% 
+  mutate(continent = fct_reorder(continent, continent_threat)) %>% 
+  group_by(continent, threats) %>% 
+  summarise(count = sum(count)) %>% 
+  ggplot(aes(count, continent)) +
+  geom_col(aes(fill = threats)) +
+  gghighlight(continent == "Africa")
+```
+
+```{r explore-4}
+p1 <- 
+  threats_count %>% 
+  mutate(continent = fct_reorder(continent, continent_threat)) %>% 
+  group_by(continent, threats) %>% 
+  summarise(count = sum(count)) %>% 
+  ggplot(aes(count, continent)) +
+  geom_col() +
+  gghighlight(continent == "Africa")
+
+p2 <- threats_count %>% 
+  filter(continent == "Africa", threats != "threat_NA") %>% 
+  count(threats, wt = count) %>% 
+  mutate(threats = fct_lump(threats, 6, w = n),
+         threats = fct_reorder(threats, n)) %>% 
+  filter(threats != "Other") %>% 
+  ggplot(aes(n, threats)) +
+  geom_col() +
+  scale_y_discrete(position = "right") +
+  scale_x_reverse()
+
+p1 + p2
+```
+
+```{r waffle-plot}
+p1 <- 
+  plants %>% 
+  count(continent, sort = TRUE) %>% 
+  mutate(continent = fct_reorder(continent, n) %>% fct_rev()) %>% 
+  ggplot(aes(values = n, fill = continent)) +
+  geom_waffle(color = "white", size = 1, 
+              n_row = 10, flip = TRUE, alpha = 0.75) +
+  geom_text(aes(x = 5.5, y = 10, label = n),
+            size = 10,
+            fontfamily = "Century Gothic",
+            fontface = "bold",
+            color = "grey40",
+            alpha = 0.40) +
+  facet_wrap(~continent) +
+  scale_fill_fish_d(option = "Holacanthus_ciliaris") +
+  labs(title = "How many plants have become extinct over the years?") +
+  theme_void() +
+  theme(legend.position = "none",
+        plot.title = element_text(hjust = 0.5,
+                                  margin = margin(b = 10)),
+        text = element_text(family = "Century Gothic",
+                            face = "bold"),
+        strip.text = element_text(family = "Century Gothic",
+                                  colour = "white"),
+        strip.background = element_rect(colour = "black",
+                                        fill = "#6CA167"),
+        panel.background = element_rect(colour = "black"))
+```
+
+```{r funnel-plot}
+top_threat_df <- 
+  plants %>% 
+  pivot_longer(cols = starts_with("threat"), values_to = "threat_count", names_to = "threat_type") %>% 
+  select(continent, threat_type, threat_count) %>% 
+  group_by(threat_type) %>% 
+  summarise(threat_count_total = sum(threat_count)) %>% 
+  mutate(threat_prop_total = threat_count_total / sum(threat_count_total)) %>% 
+  filter(threat_type != "threat_NA") %>% 
+  arrange(desc(threat_count_total)) %>% 
+  head(5)
+
+top_threat_africe_and_total <- 
+  plants %>% 
+  pivot_longer(cols = starts_with("threat"), values_to = "threat_count", names_to = "threat_type") %>% 
+  select(continent, threat_type, threat_count) %>% 
+  group_by(continent, threat_type) %>% 
+  summarise(threat_count = sum(threat_count), .groups = "drop") %>% 
+  mutate(threat_prop = threat_count / sum(threat_count)) %>% 
+  filter(threat_type %in% top_threat_df$threat_type, continent == "Africa") %>% 
+  left_join(top_threat_df, by = "threat_type") %>% 
+  arrange(desc(threat_prop_total)) %>% 
+  mutate(
+    threat_type = case_when(
+      threat_type == "threat_AA" ~ "Agriculture & Aquaculture",
+      threat_type == "threat_BRU" ~ "Biological Resource Use",
+      threat_type == "threat_NSM" ~ "Natural System Modifications",
+      threat_type == "threat_RCD" ~ "Commercial Development",
+      TRUE ~ "Invasive Species"
+    ),
+    threat_type = fct_reorder(threat_type, threat_count_total)
+  )
+
+p2 <- 
+  top_threat_africe_and_total %>% 
+  mutate(
+    threat_type = glue("{threat_type} ({scales::percent(threat_prop_total, accuracy = 1)})"),
+    x_total = (80 - threat_count_total) / 2,
+    xend_total = (80 + threat_count_total) / 2,
+    x_africa = (80 - threat_count) / 2,
+    xend_africa = (80 + threat_count) / 2
+  ) %>% 
+  ggplot(aes(y = 5:1, yend = 5:1)) +
+  geom_link(aes(x = x_total, xend = xend_total),
+            size = 8, alpha = 0.4, color = "#E27B0C") +
+  geom_link(aes(x = x_africa, xend = xend_africa),
+            size = 8, alpha = 0.5, color = "#6CA167") +
+  geom_text(aes(x = 40, y = seq(5.4, 1.4, by = -1), label = threat_type),
+            family = "Century Gothic", size = 3.5,
+            colour = "#145A76") +
+  scale_y_continuous(limits = c(0.5, 5.5)) +
+  labs(title = "What are top 5 threats causing extinction of plants?",
+       subtitle = "Africa proportion highlighted in <b style = 'color: #6CA167'>green</b>") +
+  theme_void() +
+  theme(plot.title.position = "plot",
+        plot.title = element_markdown(family = "Century Gothic", face = "bold", hjust = 0.5),
+        plot.subtitle = element_markdown(family = "Century Gothic", hjust = 0.5))
+```
+
+```{r final-plot}
+p_final <- (p1 / p2 & theme(plot.margin = unit(c(0, 0, 0.4, 0), "cm"))) + plot_layout(heights = c(2, 1.5))
+
+ggsave(here("plots", "week_34.png"), p_final, height = 8, width = 6, type = "cairo")
+```
+
+
+```{r test-colour-1}
+fishcolors %>% 
+  filter(option == "Balistapus_undulatus")
+```
+
+```{r test-colour-2}
+fishualize(n = 6, option = "Balistapus_undulatus")
+```

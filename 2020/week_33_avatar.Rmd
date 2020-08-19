@@ -24,8 +24,6 @@ tuesdata <- tidytuesdayR::tt_load(2020, week = 33)
 tuesdata
 
 avatar <- tuesdata$avatar
-
-avatar <- read_csv("avatar.csv")
 ```
 
 ```{r generate-plot}
