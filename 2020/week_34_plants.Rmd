@@ -117,7 +117,7 @@ p2 <-
 ```
 
 ```{r final-plot}
-p_final <- (p1 / p2 & theme(plot.margin = unit(c(0, 0, 0.4, 0), "cm"))) + plot_layout(heights = c(2, 1.5))
+p_final <- (p1 / p2 & theme(plot.margin = unit(c(0.4, 0.2, 0.2, 0.4), "cm"))) + plot_layout(heights = c(2, 1.5))
 
 ggsave(here("2020", "plots", "week_34.png"), p_final, height = 8, width = 6, type = "cairo")
 ```
