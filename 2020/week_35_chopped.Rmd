@@ -1,0 +1,96 @@
+---
+title: "week_35_chopped"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(tidytuesdayR)
+library(skimr)
+library(cowplot)
+library(extrafont)
+library(here)
+
+loadfonts(device = "win", quiet = TRUE)
+```
+
+```{r}
+tuesdata <- tt_load(2020, week = 35)
+
+tuesdata
+
+chopped <- tuesdata$chopped
+```
+
+```{r}
+skim(chopped)
+```
+
+```{r}
+ingredients <- 
+  chopped %>% 
+  select(appetizer, entree, dessert) %>% 
+  pivot_longer(everything(), names_to = "course", values_to = "ingredients") %>% 
+  separate_rows(ingredients, sep = ", ")
+```
+
+```{r}
+top_ingredients <- 
+  ingredients %>% 
+  group_by(course) %>% 
+  count(ingredients, name = "count") %>% 
+  slice_max(order_by = count, n = 5, with_ties = FALSE) %>%
+  mutate(course = factor(course, levels = c("appetizer", "entree", "dessert"))) %>% 
+  arrange(course, desc(count)) %>% 
+  mutate(rank = factor(row_number()),
+         course = str_to_title(course),
+         course = as.factor(course),
+         ingredients = str_wrap(ingredients, width = 10),
+         ingredients = str_to_sentence(ingredients))
+```
+
+```{r}
+plot_ingredients <- 
+  top_ingredients %>% 
+  ggplot(aes(rank, 5)) +
+  geom_point(aes(size = count), color = "#F2BC5A", alpha = 0.75) +
+  geom_text(aes(y = 4, label = ingredients), 
+            size = 3,
+            color = "white",
+            family = "Century Gothic") +
+  scale_y_continuous(limits = c(3, 6)) +
+  scale_size_continuous(range = c(6, 12)) +
+  facet_wrap(~course, ncol = 1, strip.position = "left") +
+  theme_void() +
+  labs(title = "What are most repeated ingredients across all seasons?") +
+  theme(legend.position = "none",
+        # plot.title.position = "plot",
+        plot.title = element_text(face = "bold",
+                                  margin = margin(t = 28),
+                                  color = "#FCC35C",
+                                  hjust = 0.5),
+        plot.background = element_rect(fill = "#D57634",
+                                        color = "#D5602A"),
+        strip.text.y.left = element_text(family = "Century Gothic",
+                                  face = "bold",
+                                  angle = 0,
+                                  vjust = 0.5,
+                                  hjust = 0.5,
+                                  size = 12,
+                                  margin = margin(l = 10)),
+        text = element_text(family = "Century Gothic"))
+```
+
+```{r}
+chopped_logo <- here("2020", "img", "chopped-image.png")
+
+ggdraw() +
+  draw_plot(plot_ingredients) +
+  draw_image(chopped_logo, x = 0.595, y = 0.95, hjust = 1, vjust = 0.5, scale = 0.2) +
+  ggsave(here("2020", "plots", "week_35.png"), width = 7, height = 6.5)
+```
+
