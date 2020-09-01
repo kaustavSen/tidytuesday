@@ -71,7 +71,7 @@ ggplot(top_rice_with_tractor, aes(x, y)) +
                        color = "#107c88",
                        size = 1.1) +
   facet_wrap(~Entity, ncol = 5) +
-  labs(title = "Wheat Yield in 2018 for the top 50 countries",
+  labs(title = "Rice Yield in 2018 for the top 50 countries",
        caption = "Source: Our World in Data | Graphic: Kaustav Sen") +
   theme_void() +
   theme(text = element_text(family = "Century Gothic",
