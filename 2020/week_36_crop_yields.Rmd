@@ -1,0 +1,97 @@
+---
+title: "Global Crop Yields"
+author: "Kaustav Sen"
+date: "9/1/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages}
+library(tidyverse)
+library(ggforce)
+library(glue)
+library(extrafont)
+library(fishualize)
+library(colorspace)
+library(tidytuesdayR)
+library(here)
+
+loadfonts(device = "win", quiet = TRUE)
+```
+
+```{r get-data}
+tues_data <- tt_load(2020, week = 36)
+
+crop_yields_2018 <- 
+  tues_data$key_crop_yields %>% 
+  filter(Year == 2018)
+```
+
+```{r filter-data}
+top_rice <- 
+  crop_yields_2018 %>% 
+  drop_na(Code, `Rice (tonnes per hectare)`) %>% 
+  select(Entity, rice = `Rice (tonnes per hectare)`) %>% 
+  filter(Entity != "World") %>% 
+  arrange(desc(rice)) %>% 
+  top_n(50) %>% 
+  mutate(prop_rank = rice / max(rice))
+```
+```{r tractor}
+tractor_data <- 
+  read_csv("img/tractor.csv") %>% 
+  mutate(x = x,
+         y = -y)
+
+tractor_height_min <- min(tractor_data$y)
+tractor_height_range <- max(tractor_data$y) - min(tractor_data$y)
+
+top_rice_with_tractor <- 
+  top_rice %>% 
+  rowwise() %>% 
+  mutate(
+    Entity = fct_reorder(Entity, prop_rank),
+    tractor_filtered = list(
+      tractor_data %>% 
+        filter(y <= tractor_height_min + prop_rank * tractor_height_range)
+    )
+  ) %>% 
+  unnest_wider(tractor_filtered) %>% 
+  unnest(cols = c(x, y))
+
+ggplot(top_rice_with_tractor, aes(x, y)) +
+  geom_bspline_closed0(fill = "#05bfcb",
+                       alpha = 0.85,
+                       color = NA) +
+   geom_bspline_closed0(data = tractor_data,
+                       fill = NA,
+                       color = "#107c88",
+                       size = 1.1) +
+  facet_wrap(~Entity, ncol = 5) +
+  labs(title = "Wheat Yield in 2018 for the top 50 countries",
+       caption = "Source: Our World in Data | Graphic: Kaustav Sen") +
+  theme_void() +
+  theme(text = element_text(family = "Century Gothic",
+                            face = "bold",
+                            color = "#0293be"),
+        strip.text = element_text(family = "Century Gothic",
+                            face = "bold",
+                            color = "#0293be",
+                            margin = margin(b = 10)),
+        plot.title.position = "plot",
+        plot.caption.position = "plot",
+        plot.caption = element_text(size = 6.5,
+                                    hjust = 1,
+                                    color = "grey50",
+                                    family = "Century Gothic"),
+        plot.title = element_text(family = "Century Gothic",
+                                  face = "bold",
+                                  color = "#E27B0C",
+                                  margin = margin(b = 15),
+                                  hjust = 0.5),
+        plot.margin = margin(5, 5, 5, 5)) + 
+  ggsave("plots/week_36.png", height = 9, width = 6, dpi = 320)
+```
