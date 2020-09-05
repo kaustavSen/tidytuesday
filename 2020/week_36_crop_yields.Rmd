@@ -16,6 +16,8 @@ library(glue)
 library(extrafont)
 library(fishualize)
 library(colorspace)
+library(showtext)
+library(pals)
 library(tidytuesdayR)
 library(here)
 
@@ -40,6 +42,7 @@ top_rice <-
   top_n(50) %>% 
   mutate(prop_rank = rice / max(rice))
 ```
+
 ```{r tractor}
 tractor_data <- 
   read_csv("img/tractor.csv") %>% 
@@ -61,7 +64,9 @@ top_rice_with_tractor <-
   ) %>% 
   unnest_wider(tractor_filtered) %>% 
   unnest(cols = c(x, y))
+```
 
+```{r plot}
 ggplot(top_rice_with_tractor, aes(x, y)) +
   geom_bspline_closed0(fill = "#05bfcb",
                        alpha = 0.85,
@@ -95,3 +100,62 @@ ggplot(top_rice_with_tractor, aes(x, y)) +
         plot.margin = margin(5, 5, 5, 5)) + 
   ggsave("plots/week_36.png", height = 9, width = 6, dpi = 320)
 ```
+
+```{r}
+pals::polychrome(20) %>% 
+  scales::show_col()
+```
+
+
+## Using a different colour scheme
+
+```{r alternate-take}
+font_add_google("Indie Flower")
+font_add_google("Oswald")
+
+showtext_auto()
+
+ggplot(top_rice_with_tractor, aes(x, y)) +
+  geom_bspline_closed0(fill = "#AEC7E8",
+                       alpha = 0.85,
+                       color = NA) +
+   geom_bspline_closed0(data = tractor_data,
+                       fill = NA,
+                       color = "#1F77b4",
+                       size = 1.1) +
+  facet_wrap(~Entity, ncol = 5) +
+  labs(title = "Rice Yield in 2018 for the top 50 countries",
+       caption = "Source: Our World in Data | Graphic: Kaustav Sen") +
+  theme_void() +
+  theme(plot.background = element_rect(fill = "#fffef7",
+                                       color = "#fffef7"),
+        strip.text = element_text(family = "Indie Flower",
+                            face = "bold",
+                            color = "#FF7F0E",
+                            size = 10,
+                            margin = margin(b = 5)),
+        plot.title.position = "plot",
+        plot.caption.position = "plot",
+        plot.caption = element_text(size = 5,
+                                    hjust = 1,
+                                    color = "grey50",
+                                    family = "Oswald",
+                                    margin = margin(t = 15)),
+        plot.title = element_text(family = "Indie Flower",
+                                  face = "bold",
+                                  color = "#E27B0C",
+                                  size = 15,
+                                  margin = margin(b = 5),
+                                  hjust = 0.5),
+        plot.margin = margin(5, 5, 5, 5)) + 
+  ggsave("plots/week_36_alt.pdf", 
+         device = cairo_pdf,
+         height = 9, width = 6, 
+         dpi = 320)
+
+pdftools::pdf_convert("plots/week_36_alt.pdf",
+                      format = "png",
+                      filenames = "plots/week_36_alt.png",
+                      dpi = 320)
+```
+
