@@ -1,0 +1,213 @@
+---
+title: "Friends"
+author: "Kaustav Sen"
+date: "08/09/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages}
+library(tidyverse)
+library(pals)
+library(scales)
+library(glue)
+library(showtext)
+library(ggtext)
+library(ggforce)
+library(patchwork)
+library(cowplot)
+library(tidytuesdayR)
+
+theme_set(theme_minimal())
+```
+
+```{r load-fonts}
+font_add_google("Montserrat", "M")
+font_add_google("Permanent Marker", "P")
+font_add_google("Pacifico", "P2")
+```
+
+```{r get-data}
+tuesdata <- tt_load(2020, week = 37)
+friends <- tuesdata$friends_info
+```
+
+## Distribution of ratings over the seasons
+
+```{r ratings-waterfall-plot}
+showtext_auto()
+
+ratings_plot_data <-
+  friends %>% 
+  arrange(season, episode) %>% 
+  mutate(num = row_number() + season*5, .after = episode) %>% 
+  group_by(season) %>% 
+  mutate(avg_rating = median(imdb_rating),
+         season_start = min(num),
+         season_mid = median(num),
+         season_end = max(num)) %>% 
+  ungroup()
+
+ratings_plot <-
+  ggplot(ratings_plot_data, 
+         aes(num, imdb_rating, color = as.factor(season))) +
+  geom_segment(aes(xend = num, yend = avg_rating)) +
+  geom_segment(aes(
+    x = season_start, xend = season_end, 
+    y = avg_rating, yend = avg_rating
+    ),
+    size = 1.1
+  ) +  
+  geom_text(aes(x = season_mid, y = avg_rating + 0.05, 
+                label = glue("S{season}")),
+            family = "P",
+            vjust = 0,
+            alpha = 1/15,
+            fontface = "bold") +
+  annotate("richtext", x = 118, 
+           y = 7.12, 
+           size = 2.5, 
+           fill = NA,
+           label.color = NA,
+           family = "M",
+           label = "<span style= 'color: #560D1E'>**The One with the invitation**</span> got the lowest rating of 7.2") + 
+   annotate("richtext", x = 150,
+           y = 9.8,
+           size = 2.5,
+           hjust = 0,
+           fill = NA,
+           label.color = NA,
+           family = "M",
+           label = "<span style= 'color: #560D1E'>**The One Where Everybody Finds Out**</span> and <br /><span style= 'color: #560D1E'>**The Last One**</span> (series finale) both got the <br />highest rating of 9.7") +
+  geom_curve(data = tibble(x = c(150, 212), xend = c(138, 283),
+                           y = c(9.80, 9.80), yend = c(9.70, 9.70)),
+             aes(x = x, xend = xend,
+                 y = y, yend = yend),
+             arrow = arrow(length = unit(2, "mm"),
+                           type = "closed"),
+             angle = 45,
+             curvature = 0,
+             color = "#560D1E") +
+    annotate("text",
+             x = 3.5,
+             y = 9.9,
+             hjust = 0,
+             size = 8,
+             color = ocean.amp(13)[13],
+             label = "F R I E N D S",
+             family = "P") +
+  scale_y_continuous(limits = c(7, 10),
+                     breaks = seq(7, 10, 0.5),
+                     sec.axis = dup_axis(name = NULL)) +
+  scale_x_continuous(breaks = NULL) +
+  scale_color_manual(values = ocean.amp(13)[4:13]) +
+  labs(x = "",
+       y = "IMBD Rating") +
+  theme(text = element_text(family = "M",
+                            color = ocean.amp(13)[13]),
+        legend.position = "none",
+        axis.text.y = element_text(family = "M",
+                            color = ocean.amp(13)[13]),
+        plot.background = element_rect(fill = ocean.amp(13)[1],
+                                       color = ocean.amp(13)[1]))
+```
+
+## Change in viewership over the seasons
+
+```{r viewship-plot}
+viewership_plot <- 
+  friends %>% 
+  group_by(season) %>% 
+  summarise(avg_views = median(us_views_millions),
+            max_views = max(us_views_millions),
+            min_views = min(us_views_millions)) %>% 
+  ggplot(aes(season, avg_views, color = as.factor(season))) +
+  geom_line(color = ocean.amp(13)[2],
+            size = 2.5) +
+  geom_segment(aes(xend = season, yend = max_views), alpha = 1/2) +
+  geom_segment(aes(xend = season, yend = min_views), alpha = 1/2) +
+  geom_point(size = 14, color = ocean.amp(13)[3]) +
+  geom_point(aes(y = max_views), size = 4) +
+  geom_point(aes(y = min_views), size = 4) +
+  geom_point(size = 12) +
+  geom_text(aes(label = number(avg_views, accuracy = 0.1)), 
+            color = "white", 
+            fontface = "bold",
+            size = 3,
+            hjust = 0.5, vjust = 0.5) +
+  geom_link(data = tibble(x = 1, xend = 10,
+                          y = 13, yend = y,
+                          season = 7),
+            aes(x = x, xend = xend, 
+                y = y, yend = y,
+                alpha = stat(index)),
+           lineend = "butt",
+            size = 6) +
+  annotate("text", x = 5, y = 13, 
+           label = "Seasons",
+           vjust = 0.4,
+           hjust = 0.4,
+           fontface = "bold",
+           color = "White",
+           family = "M") +
+  annotate("richtext", x = 2.15, y = 53,
+           size = 3,
+           hjust = 0,
+           fill = NA,
+           label.color = NA,
+           family = "M",
+           label = 'Season 2 saw a spike in viewership possibly driven<br /> by a "bandwagon" effect',
+           color = "#560D1E") +
+  annotate("richtext", x = 3, y = 37,
+           size = 3,
+           hjust = 0,
+           fill = NA,
+           label.color = NA,
+           family = "M",
+           label = "After season 2 the viewship count has remained more or less stable",
+           color = "#560D1E") +
+  annotate("richtext", x = 9.8, y = 53,
+           size = 3,
+           hjust = 1,
+           fill = NA,
+           label.color = NA,
+           family = "M",
+           label = "The series finale was highly watched",
+           color = "#560D1E") +
+  annotate("text",
+           x = 4,
+           y = 45,
+           hjust = 0,
+           size = 7,
+           color = ocean.amp(13)[13],
+           label = "...through the seasons",
+           family = "P2") +
+  scale_y_continuous(limits = c(13, 53), breaks = seq(15, 55, 10)) +
+  scale_x_continuous(limits = c(1, 10)) +
+  scale_color_manual(values = ocean.amp(13)[4:13]) +
+  labs(x = "",
+       y = "US Views per episode (in millions)") +
+  theme(legend.position = "none",
+        axis.text.x = element_blank(),
+        plot.margin = margin(15, 15, 15, 15),
+        axis.title.y = element_text(family = "M",
+                                    color = ocean.amp(13)[13],
+                                    margin = margin(r = 10)),
+        plot.background = element_rect(fill = ocean.amp(13)[1],
+                                       color = ocean.amp(13)[1]))
+```
+
+```{r patchup}
+p <- ratings_plot / viewership_plot & 
+  theme(plot.background = element_rect(fill = ocean.amp(13)[1],
+                                       color = ocean.amp(13)[1]))
+
+ggsave("plots/week_37.pdf", p, width = 12, height = 8, device = cairo_pdf)
+
+pdftools::pdf_convert("plots/week_37.pdf", 
+                      filenames = "plots/week_37.png",
+                      dpi = 320)
+```

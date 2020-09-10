@@ -1,0 +1,176 @@
+---
+title: "European energy"
+author: "mnaR99"
+date: "3/8/2020"
+output: html_document
+---
+
+Source: [Github](https://raw.githubusercontent.com/mnaR99/TidyTuesday/master/R/wk_32_2020.Rmd)
+
+```{r}
+library(tidyverse)
+library(ggforce)
+library(geofacet)
+library(scales)
+library(ggnewscale)
+library(cowplot)
+library(ggtext)
+library(showtext)
+```
+
+```{r load data}
+tuesdata <- tidytuesdayR::tt_load(2020, week = 32)
+
+energy_types <- tuesdata$energy_types
+```
+
+```{r clean data}
+energy_clean <- 
+  energy_types %>% 
+  filter(level == "Level 1") %>% 
+  gather(year, n, 5:7, convert = TRUE) %>% 
+  select(-level) %>% 
+  mutate(
+    country_name = case_when(
+      country == "EL" ~ "Greece",
+      country == "UK" ~ "United Kingdom",
+      TRUE ~ country_name
+    ),
+    gtype = case_when(
+      ! type %in% c("Nuclear", "Conventional thermal") ~ "Renewable",
+      TRUE ~ type
+    )
+  ) %>% 
+  rename(code = country, name = country_name) %>% 
+  rows_update(tibble(code = "MT", type = "Other", year = 2018, n = 172), by = c("code", "type", "year"))
+```
+
+```{r geofacet- grid}
+eu_grid <- geofacet::europe_countries_grid1
+
+eu_grid[42, ] <- list(row = 6, col = 10, code = "GE", name = "Georgia")
+
+eu_grid <- 
+  eu_grid %>% 
+  filter(! code %in% c("IS", "CH", "BY", "RU", "MD")) %>% 
+  mutate(name = ifelse(str_detect(name, "Macedonia"), "North Macedonia", name))
+```
+
+```{r summary}
+prop_eu <- 
+  energy_clean %>% 
+  filter(year == 2018) %>% 
+  group_by(name) %>% 
+  summarise(
+    total = sum(n),
+    p_clean = sum(n[gtype != "Conventional thermal"]) / total
+  )
+```
+
+```{r plot data}
+data_plot <- 
+  energy_clean %>% 
+  filter(year == 2018) %>% 
+  mutate(
+    code = recode(code, "UK" = "GB", "EL" = "GR")
+  ) %>% 
+  count(code, name, year, gtype, wt = n) %>% 
+  group_by(code) %>% 
+  mutate(p = n / sum(n)) %>% 
+  ungroup() %>% 
+  left_join(prop_eu)
+```
+
+```{r pies plot}
+# load fonts
+sysfonts::font_add_google("Montserrat")
+sysfonts::font_add_google("Teko")
+
+showtext_auto()
+
+pies <- 
+  ggplot(data_plot) +
+  aes(x0 = 0, y0 = 0) +
+  stat_pie(
+    aes(r0 = 0.7, r = 1, amount = p, fill = gtype),
+    color = "white",
+    size = 1,
+    show.legend = FALSE
+  ) +
+  scale_fill_manual(
+    values = c("#ECBA82", "#2E933C", "#81C14B")
+  ) +
+  new_scale_fill() +
+  geom_circle(
+    aes(r = 0.675, fill = p_clean),
+    color = NA
+  ) +
+  scale_fill_fermenter(
+    type = "div",
+    direction = 1,
+    labels = c("25%", "50%", "75%"),
+    guide = guide_colorsteps(
+      title = "Clean Energy Share",
+      title.position = "top"
+    )
+  ) + 
+  geom_text(
+    aes(x = 0, y = 0, label = str_glue("{comma(total, .01)}\nGWh")),
+    color = "white",
+    family = "Montserrat"
+  ) +
+  coord_fixed() +
+  facet_geo(~code, grid = eu_grid, label = "name") +
+  theme_void(base_family = "Teko") +
+  theme(
+    strip.text = element_text(
+      size = 16,
+      margin = margin(t = 10, b = 10)
+    ),
+    legend.position = "bottom",
+    legend.title = element_text(hjust = 0.5, size = 16),
+    legend.key.width = grid::unit(15, "mm"),
+    legend.key.height = grid::unit(3, "mm"),
+    legend.text = element_text(size = 14)
+  )
+
+piesG <- ggplotGrob(pies + theme(legend.position = "none"))
+legendG <- cowplot::get_legend(pies)
+
+plot <- ggplot() +
+  annotation_custom(
+    piesG,
+    xmin = -5, xmax = 5,
+    ymin = -5, ymax = 5
+  ) +
+  annotation_custom(
+    legendG,
+    xmin = -5, xmax = -2.2,
+    ymin = -3.5, ymax = -3
+  ) +
+  scale_x_continuous(limits = c(-5,5), breaks = -5:5) +
+  scale_y_continuous(limits = c(-5,5), breaks = -5:5) +
+  geom_textbox(
+    aes(
+      x = -5, y = 4.75,
+      label = "<span style='font-size:42pt;font-family:Teko'>Clean Energy Producers, 2018</span> <br><br>
+  <span style='font-size:15pt'>Total net energy produced (GWh) by european countries in 2018, and its distribution by <b style='color:#ECBA82'>conventional thermal</b>, <b style='color:#2E933C'>nuclear</b> and <b style='color:#81C14B'>renewable</b> energy.</span>
+  <br><br>
+  <i style='font-size:10pt;color:#737373;'>**GWh**: Energy generated or consumed by 1 GW of power for one hour.<br>
+**How Much Power is 1 GW?** 110 Million LEDs, on typical performance.</i>"
+    ),
+    family = "Montserrat",
+    width = unit(27, "lines"),
+    lineheight = 2,
+    hjust = 0,
+    vjust = 1,
+    fill = NA,
+    box.color = NA
+  ) +
+  theme_void() +
+  theme(plot.background = element_rect(fill = "#f0f0f0",
+                                       color = NA)) 
+
+ggsave("mnaR99.pdf", plot, width = 20, height = 20, device = cairo_pdf)
+```
+
