@@ -1,0 +1,99 @@
+---
+title: "Govt Spending on kids"
+author: "Kaustav Sen"
+date: "16/09/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages}
+library(tidyverse)
+library(tidytuesdayR)
+library(geofacet)
+library(showtext)
+library(ggtext)
+library(here)
+
+font_add_google("Schoolbell")
+font_add_google("Raleway")
+
+theme_set(theme_minimal())
+```
+
+
+```{r get-data}
+tues_data <- tt_load(2020, week = 38)
+kids <- tues_data$kids
+```
+
+```{r plot}
+pal <- pals::census.blueyellow()
+
+kids_pk12ed <- 
+  kids %>% 
+  filter(variable == "PK12ed") 
+
+change_since_2008 <- 
+  kids_pk12ed %>% 
+  filter(year %in% c(2008, 2016)) %>% 
+  select(state, year, inf_adj) %>% 
+  pivot_wider(names_from = year, values_from = inf_adj) %>% 
+  mutate(change = if_else(`2008` < `2016`, "increase", "decrease")) 
+
+plot_data <- 
+  kids_pk12ed %>%
+  left_join(change_since_2008)
+
+showtext_auto()
+
+plot_body <- 
+  plot_data %>% 
+  ggplot(aes(year, inf_adj, color = change, fill = change)) +
+  geom_line(size = 1.05) +
+  geom_area(data = plot_data %>% filter(year <= 2008),
+            alpha = 0.10) +
+  geom_area(data = plot_data %>% filter(year >= 2008),
+            alpha = 0.25) +
+  scale_fill_manual(values = pal[c(3,6)]) +
+  scale_color_manual(values = pal[c(3,6)]) +
+  scale_x_continuous(limits = c(1996, 2018), breaks = c(2000, 2008, 2016)) +
+  facet_geo(~ state, grid = "us_state_grid2", scales = "free_y", labeller = label_wrap_gen(width = 5)) +
+  labs(x = "",
+       y = "") +
+  theme(plot.background = element_rect(fill = pal[1], color = pal[1]),
+        axis.text = element_blank(),
+        strip.text = element_text(size = 8.5,
+                                  color = "grey50",
+                                  family = "Schoolbell"),
+        legend.position = "none",
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())
+
+plot_body_Grob <- ggplotGrob(plot_body)
+
+plot_final <- 
+  ggplot() +
+  annotation_custom(plot_body_Grob) +
+  annotate("text", x = -4, y = 5, label = "PK12: Laying down the foundation", 
+           family = "Schoolbell", size = 10, hjust = 0) +
+  annotate("richtext", x = -4, y = 4.2, hjust = 0, 
+           label = "Analyzing public spending on elementary and secondary education by state from 1997 to 2016. <br />The recession of 2008 seems to have an impact on education budgets of most states. <br />States grouped into ones where the budget after inflation adjustment <b style='color:#4eb87b'>increased</b> or <b style='color:#efd100'>decreased</b> between 2008 to 2016.",
+           color = "grey70",
+           family = "Raleway",
+           fill = NA,
+           label.color = NA,
+           size = 3) + 
+  scale_x_continuous(limits = c(-5, 5)) +
+  scale_y_continuous(limits = c(-5, 5)) +
+  theme_void() +
+  theme(plot.background = element_rect(fill = pal[1], color = pal[1]))
+
+ggsave(here("2020", "plots", "week_38.pdf"), plot_final, height = 8, width = 10, device = cairo_pdf)
+
+pdftools::pdf_convert(here("2020", "plots", "week_38.pdf"),
+                      filenames = here("2020", "plots", "week_38.png"),
+                      dpi = 300)
+```
