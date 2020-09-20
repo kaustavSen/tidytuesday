@@ -1,0 +1,184 @@
+---
+title: "Extinct Plants"
+author: "mnaR99"
+date: "19/09/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Link to [code](https://github.com/mnaR99/TidyTuesday/blob/master/R/wk_34_2020.Rmd)
+
+```{r}
+library(tidyverse)
+library(ggraph)
+library(tidygraph)
+library(ggforce)
+library(ggtext)
+library(showtext)
+```
+
+```{r}
+font_add_google("Montserrat")
+font_add_google("Courgette")
+```
+
+
+```{r}
+tuesdata <- tidytuesdayR::tt_load(2020, week = 34)
+
+plants <- tuesdata$plants
+
+plants_clean <- plants %>% 
+  mutate(
+    continent = ifelse(country == "Indonesia", "Asia", continent),
+    country = recode(country, "Viet Nam" = "Vietnam")
+  )
+```
+
+```{r}
+transform_hierarchical <- function(data) {
+  map_df(1:(ncol(data) - 1), 
+         ~ select(data, .x, .x + 1) %>% 
+           unique() %>% 
+           rename(from = 1, to = 2))
+}
+```
+
+```{r}
+nodes <- plants_clean %>% 
+  count(country, continent)
+
+graph <- 
+  plants_clean %>% 
+  mutate(
+    continent = fct_relevel(continent, "North America", "Europe", "Asia", "Oceania", "Africa", "South America")
+  ) %>% 
+  distinct(world = "World", continent, country) %>% 
+  select(world, continent, country) %>% 
+  arrange(continent, country) %>% 
+  transform_hierarchical() %>% 
+  as_tbl_graph()
+
+graph <- 
+  graph %>% 
+  left_join(nodes, by = c(name = "country")) %>% 
+  mutate(r = log10(n))
+```
+
+```{r}
+expn <- 1
+
+axis_at <- c(3, 10, 30, 100)
+
+showtext_auto()
+
+graph %>% 
+  ggraph(layout = "dendrogram", circular = TRUE) +
+  geom_circle(
+    data = tibble(x = 0, y = 0, r = log10(axis_at) + expn),
+    aes(x0 = x, y0 = y, r = r),
+    linetype = 2,
+    size = 0.5
+  ) +
+  geom_label(
+    data = tibble(r = log10(axis_at) + expn, t = (12.5 / 180)*pi, label = axis_at),
+    aes(r*cos(t), r*sin(t), label = label),
+    size = 3,
+    label.size = 0,
+    family = "Montserrat"
+  ) +
+  geom_edge_diagonal(
+    aes(filter = from > 1,
+        color = -stat(index)),
+    lineend = "round"
+  ) +
+  geom_node_text(
+    aes(
+      x = x * 5.45,
+      y = y * 5.45,
+      filter = name %in% c("North America", "Europe", "Asia", "Oceania", "Africa", "South America"),
+      label = str_wrap(name, 10)
+    ),
+    family = "Courgette",
+    size = 7
+  ) +
+  geom_link(
+    data = . %>% filter(leaf),
+    aes(
+      x = x * expn,
+      y = y * expn,
+      xend = x * expn + r * cos(node_angle(x, y, degrees = FALSE)),
+      yend = y * expn + r * sin(node_angle(x, y, degrees = FALSE)),
+      color = stat(index)
+    ),
+    lineend = "round"
+  ) +
+  geom_point(
+    data = . %>% filter(leaf),
+    aes(
+      x = x * expn + r * cos(node_angle(x, y, degrees = FALSE)),
+      y = y * expn + r * sin(node_angle(x, y, degrees = FALSE))
+    )
+  ) +
+  geom_node_text(
+    aes(
+      filter = leaf,
+      label = name,
+      x = case_when(
+        name %in% c("Saint Helena, Ascension and Tristan da Cunha", "Sao Tome and Principe") ~ x * expn,
+        TRUE ~ x * expn + r * cos(node_angle(x, y, degrees = FALSE))
+      ),
+      y = case_when(
+        name %in% c("Saint Helena, Ascension and Tristan da Cunha", "Sao Tome and Principe") ~ y * expn,
+        TRUE ~ y * expn + r * sin(node_angle(x, y, degrees = FALSE))
+      ),
+      angle = ifelse(between(node_angle(x, y), 90, 270), node_angle(x, y) + 180, node_angle(x, y)),
+      hjust = case_when(
+        name %in% c("Saint Helena, Ascension and Tristan da Cunha", "Sao Tome and Principe") ~ 1,
+        between(node_angle(x, y), 90, 270) & n > 1 ~ 0,
+        between(node_angle(x, y), 90, 270) & n == 1 ~ 1,
+        !between(node_angle(x, y), 90, 270) & n > 1 ~ 1,
+        !between(node_angle(x, y), 90, 270) & n == 1 ~ 0,
+      )
+    ),
+    vjust = -0.6,
+    size = 4,
+    family = "Montserrat"
+  ) +
+   geom_text(
+    data = tibble(x = 0, y = 0.22, label = "Plants In Danger"),
+    aes(x, y, label = label),
+    family = "Courgette",
+    size = 10
+  ) +
+  geom_textbox(
+    data = tibble(
+      x = 0, y = 0.1, 
+      label = "Around the world, 500 species of plants are considered extinct as of 2020, most of them (94.2%) flowering plants.
+      The 19.6% of those were endemic to Madagascar, 12.8% to Hawaiian islands and 10.4% to Ecuador. <br><br>
+      Increasing threats include climate change, invasive species, use as biological resources, and commercial development. <br><br>
+      However,  to protect remaining populations, many actions have been taken in the first part of this century, such as species management, protection of land and water, and other laws and policies."
+    ),
+    aes(x, y, label = label),
+    family = "Montserrat",
+    width = unit(15.5, "lines"),
+    fill = NA,
+    box.color = NA,
+    size = 2.5,
+    halign = 0.5,
+    vjust = 1
+  ) +
+  scale_edge_color_distiller(palette = 13, direction = 1) +
+  scale_color_distiller(palette = 13, direction = 1) +
+  coord_equal() +
+  theme_void() +
+  labs(caption = "@AtMissing | IUCN. Red List of Threatened Species") +
+  theme(
+    legend.position = "none",
+    plot.caption = element_text(hjust = 0.5, size = 10, family = "Montserrat", margin = margin(b = 30))
+  ) +
+  ggsave("mnaR99.pdf", width = 18, height = 18, device = cairo_pdf)
+```
