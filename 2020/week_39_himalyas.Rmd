@@ -1,0 +1,151 @@
+---
+title: 'Week 39: Himalayas'
+author: "mnaR99"
+date: "9/22/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages}
+library(tidyverse)
+library(ggforce)
+library(cowplot)
+library(showtext)
+library(here)
+```
+
+```{r load-data}
+tues_data <- tidytuesdayR::tt_load(2020, week = 39)
+
+peaks <- tues_data$peaks
+```
+
+```{r load-fonts}
+font_add_google("Nova Mono")
+font_add_google("Lobster")
+font_add_google("Montserrat")
+
+font_labels <- "Nova Mono"
+font_text <- "Montserrat"
+font_title <- "Lobster"
+
+showtext_auto()
+```
+
+
+```{r circular-barplot}
+empty_lines <- 10
+
+empty_df <- 
+  tibble(height_group = rep(1:4, each = empty_lines),
+         height_metres = NA)
+
+plot_1_data <- 
+  peaks %>% 
+  mutate(
+    height_group = case_when(
+      height_metres <= 6000 ~ 1,
+      height_metres > 6000 & height_metres <= 7000 ~ 2,
+      height_metres > 7000 & height_metres <= 8000 ~ 3,
+      TRUE ~ 4
+    )
+  ) %>% 
+  filter(climbing_status == "Climbed") %>% 
+  select(height_group, height_metres) %>% 
+  bind_rows(empty_df) %>% 
+  group_by(height_group) %>% 
+  arrange(height_group, height_metres) %>% 
+  ungroup() %>% 
+  mutate(id = row_number())
+
+line_segment_data <- 
+  plot_1_data %>% 
+  group_by(height_group) %>% 
+  summarise(x = min(id),
+            xend = max(id) - 10 + 1)
+
+label_data <- 
+  plot_1_data %>% 
+  group_by(height_group) %>% 
+  summarise(x_mean = mean(id, na.rm = TRUE)) %>% 
+  mutate(label = c("Less than 6k",
+                   "Between 6k and 7k",
+                   "Between 7k and 8k",
+                   "More than 8k"),
+         height_group = 1:4)
+
+plot_circular_barchart <- 
+  ggplot(plot_1_data) +
+  geom_link(aes(x = id, xend = id,
+                y = 0, yend = height_metres,
+                color = as.factor(height_group)),
+            lineend = "round") +
+  geom_link(data = line_segment_data,
+            aes(x = x, xend = xend,
+                y = -1000, yend = -1000,
+                color = as.factor(height_group)),
+            lineend = "round", size = 1.05) +
+  geom_text(data = label_data,
+            aes(x = x_mean, y = c(7500, 8000, 8000, 9600), 
+                label = label, color = as.factor(height_group)),
+            size = 3.8, hjust = c(0, 0, 1, 1), family = font_labels) +
+  scale_y_continuous(limits = c(-18000, 12000)) +
+  scale_x_continuous(limits = c(NA, 381)) +
+  scale_color_manual(values = c("#F1EDEC", "#E1C1B8", "#D49883", "#C76E51")) +
+  guides(color = "none") +
+  coord_polar() +
+  theme_void() +
+  theme(plot.background = element_rect(fill = "#242347", color = "#242347")) 
+```
+
+```{r bubble-chart}
+plot_2_data <- peaks %>% 
+  select(country = first_ascent_country) %>% 
+  separate_rows(country, sep = ", ") %>% 
+  filter(! is.na(country)) %>% 
+  count(country, sort = TRUE) %>% 
+  head(5) %>% 
+  mutate(
+    rel_size = n / max(n),
+    x = c(1, 1, 1.6, 2, 2),
+    y = c(2, 1, 1.5, 1, 2),
+    label = paste0(country, "\n", n)
+  )
+
+plot_bubblechart <- 
+  ggplot(plot_2_data, aes(x, y)) +
+  geom_point(aes(size = rel_size, alpha = rel_size), color = "#FDFECC") +
+  geom_text(aes(label = label), lineheight = 0.95, color = c("black", "black", "black", "white", "white"), family = font_labels) +
+  scale_size(range = c(30, 50)) +
+  scale_alpha(range = c(0.2, 1)) +
+  scale_x_continuous(limits = c(0.5, 2.5)) +
+  scale_y_continuous(limits = c(0.5, 2.5)) +
+  guides(size = "none",
+         alpha = "none") +
+  coord_equal() +
+  theme_void() +
+  theme(plot.background = element_rect(fill = NA, color = NA))
+```
+
+```{r final-plot}
+plot_final <- 
+  ggdraw() +
+  draw_plot(plot_circular_barchart) +
+  draw_plot(plot_bubblechart, x = 0.265, y = 0.25, height = 0.5, width = 0.5, scale = 0.75) +
+  draw_label("Tell it on the mountains", x = 0.05, y = 0.125, hjust = 0, color = "white", 
+             fontfamily = font_title, size = 40) +
+  draw_label("Distribution of the heights (in metres) of all the Himalayan mountain peaks which have been scaled at least once.\nThe bubbles represent the top 5 nationalities of the mountaineers from the first ascents.", x = 0.05, y = 0.07, hjust = 0, color = "white", 
+             fontfamily = font_text, size = 11) +
+  draw_label("Data: The Himalayan Database | Vizualization: Kaustav Sen", x = 0.98, y = 0.98, hjust = 0, color = "grey75", 
+             fontfamily = font_labels, size = 9, angle = -90) +
+  theme(plot.background = element_rect(fill = "#242347", color = "#242347"))
+  
+path_to_save <- here("2020", "plots", "week_39")
+
+ggsave(paste0(path_to_save, ".pdf"), plot_final, device = cairo_pdf, width = 10, height = 9)
+pdftools::pdf_convert(paste0(path_to_save, ".pdf"), filenames = paste0(path_to_save, ".png"), dpi = 320)
+```
+
