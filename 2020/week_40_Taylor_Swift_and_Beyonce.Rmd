@@ -1,0 +1,201 @@
+---
+title: "Taylor Swift and Beyoné"
+author: "Kaustav Sen"
+date: "10/2/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-libraries}
+library(tidyverse)
+library(ggimage)
+library(cowplot)
+library(showtext)
+library(ggtext)
+library(tidytext)
+library(colorspace)
+library(here)
+```
+
+```{r get-data}
+beyonce_lyrics <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-09-29/beyonce_lyrics.csv')
+taylor_swift_lyrics <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-09-29/taylor_swift_lyrics.csv')
+```
+
+```{r load-fonts}
+font_add_google("Josefin Sans", "body")
+font_add_google("Fira Mono", "labels")
+font_add_google("Playfair Display", "header")
+font_add_google("Pacifico", "sub_heading")
+```
+
+```{r img}
+# Link to images used in the plot along with description
+
+imgs <- 
+  tibble(
+  artist = c("taylor swift", "beyonce"),
+  image_link = c(here("2020", "img", "taylor_swift.png"), here("2020", "img", "beyonce.png")),
+  desc = c("**<span style = 'color: #740001'>Taylor Swift</span>** debuted with her eponymously titled album in 2006, which peaked at #5 in the US charts. Till date she has released 8 studio albums, 7 of which have topped the US charts.",
+           "**<span style = 'color: #d3a625'>Beyoncé</span>** debuted with Dangerously in Love in 2003. Over the years she has released 6 studio albums all of which topped the US charts which is a remarkable feat.")
+  )
+```
+
+```{r activate-fonts}
+showtext_auto()
+```
+
+
+```{r desc-plot}
+# Plot with the Title followed by a brief description for each of the two artists
+p1 <- 
+  ggplot() +
+  # Singer image
+  geom_point(aes(x = 0.1, y = 9.885), size = 45, color = "#740001") +
+  geom_image(data = imgs %>% filter(artist == "taylor swift"), 
+             aes(x = 0.1, y = 9.885, image = image_link), size = 0.12, asp = 1.5, by = "width") +
+  geom_point(aes(x = 1.98, y = 9.885), size = 45, color = "#d3a625") +
+  geom_image(data = imgs %>% filter(artist == "beyonce"), 
+             aes(x = 1.98, y = 9.885, image = image_link), size = 0.12, asp = 1.5, by = "width") +
+  # Singer description
+  geom_textbox(data = imgs %>% filter(artist == "taylor swift"),
+               aes(x = 0, y = 9.88, label = desc), size = 5.5, hjust = 0, 
+               family = "body", color = "grey60", width = unit(10, "cm"), 
+               box.color = NA, fill = NA, height = unit(10, "cm"), vjust = 1) +
+  geom_textbox(data = imgs %>% filter(artist == "beyonce"),
+               aes(x = 1.25, y = 9.88, label = desc), size = 5.5, hjust = 0, 
+               family = "body", color = "grey60", width = unit(10, "cm"), 
+               box.color = NA, fill = NA, height = unit(10, "cm"), vjust = 1) +
+  # Plot Title
+  annotate("text", x = 1.05, y = 9.887, label = "A Lyrical Symphony",
+           size = 16, hjust = 0.5, family = "header", color = "white", 
+           fontface = "bold") +
+  # Sub-title for subsequent plots
+  annotate("text", x = 1, y = 9.863, label = "...Complete with all emotions",
+           size = 15, hjust = 0.5, vjust = 0, family = "sub_heading", color = "white") +
+  ylim(9.86, 9.89) +
+  scale_x_continuous(limits = c(0, 2.05)) +
+  theme_void() +
+  theme(
+    plot.background = element_rect(fill = "#181536", color = "#181536"),
+    plot.margin = margin(5, 25, 0, 5)
+  )
+```
+
+```{r taylor-swift-plot}
+additional_stop_words <- tibble(
+  word = c("ooh", "yeah", "ah", "uh", "ha", "whoa", "eh", "hoo",
+           "ey", "mmm", "eeh", "huh", "na")
+)
+
+tidy_lyrics_taylor <- 
+  taylor_swift_lyrics %>% 
+  unnest_tokens(word, Lyrics) %>% 
+  anti_join(stop_words, by = "word") %>% 
+  anti_join(additional_stop_words, by = "word") %>% 
+  inner_join(get_sentiments("bing"))
+
+p2 <- 
+  tidy_lyrics_taylor %>% 
+  mutate(Album = fct_inorder(Album)) %>% 
+  group_by(Album) %>%
+  summarise(num_postive = sum(sentiment == "positive"),
+            num_negative = -sum(sentiment == "negative")) %>% 
+  pivot_longer(-Album, names_to = "sentiment", values_to = "count") %>% 
+  ggplot() +
+  geom_col(aes(as.numeric(Album), count, fill = sentiment, color = sentiment), 
+           size = 1.1, width = 0.5) +
+  annotate("text", x = 0, y = 200, label = "Positive", size = 10, 
+           family = "labels", fontface = "bold", color = "#ae0001") +
+  annotate("text", x = 0, y = -200, label = "Negative", size = 10,
+           family = "labels", fontface = "bold", color = "#740001") +
+  annotate("text", x = 0, y = 0, label = "Taylor\nSwift", hjust = 0.5, 
+           family = "labels", fontface = "bold", size = 4, color = "white") +
+  annotate("text", x = 9, y = 0, label = "folklore", hjust = 0.5,
+           family = "labels", fontface = "bold", size = 4, color = "white") +
+  geom_textbox(aes(x = 5.3, y = -310), inherit.aes = FALSE,
+               label = "**<span style = 'color:white'>1989</span>** is depicted as having the highest proportion of negative emotions. This is driven by the high frequency of the word 'shake' which actually conveys a positive emotion in the song's context.",
+               hjust = 0, family = "labels", size = 4, color = "grey60",
+               box.color = NA, fill = NA, height = unit(5, "cm"), width = unit(10, "cm")) +
+  geom_textbox(aes(x = 6.8, y = 230), inherit.aes = FALSE,
+               label = "The album **<span style = 'color:white'>Lover</span>** was described by Taylor as ‘a love letter to love itself’. So, it not unexpected to have the most positivity. Although, it does have its fair share of melancholy.", 
+               hjust = 1, vjust = 1, family = "labels", size = 4, color = "grey60",
+               box.color = NA, fill = NA, height = unit(7, "cm"), width = unit(10, "cm")) +
+  scale_x_continuous(limits = c(-1, 10)) +
+  scale_fill_manual(values = c('#740001', "#ae0001")) +
+  scale_color_manual(values = c('#740001', "#ae0001")) +
+  theme_void() +
+  theme(
+    legend.position = "none",
+    plot.margin = margin(0, 0, 0, 0),
+    plot.background = element_rect(fill = "#181536", color = "#181536")
+    
+  )
+```
+
+```{r beyonce-plot}
+tidy_lyrics_beyonce <- 
+  beyonce_lyrics %>% 
+  group_by(song_id) %>% 
+  mutate(
+    song_length = max(song_line),
+    song_name_formatted = str_extract(song_name, "[[:digit:][:alpha:]\\ ',/+]+"),
+    song_name_formatted = str_trim(song_name_formatted)
+  ) %>% 
+  distinct(song_name_formatted, song_line, .keep_all = TRUE) %>%
+  ungroup() %>% 
+  unnest_tokens(word, line) %>% 
+  select(song_name_formatted, song_length, word) %>% 
+  anti_join(stop_words, by = "word") %>% 
+  anti_join(additional_stop_words, by = "word") %>% 
+  inner_join(get_sentiments("bing"))
+  
+plot_df <- 
+  tidy_lyrics_beyonce %>% 
+  group_by(song_name = song_name_formatted) %>% 
+  count(sentiment) %>% 
+  mutate(total = sum(n),
+         prop = n / total) %>% 
+  ungroup() %>% 
+  select(-n) %>% 
+  filter(total > 30) %>% 
+  mutate(prop = if_else(sentiment == "negative", -prop, prop),
+         song_name = fct_reorder(song_name, prop))
+
+p3 <- 
+  ggplot(plot_df) +
+  geom_col(aes(x = as.numeric(song_name), y = prop, fill = sentiment), width = 1) +
+  annotate("text", x = 30, y = -0.80, label = "Songs with more \nnegative emotions", size = 7,
+           family = "labels", hjust = 0, lineheight = 0.8, fontface = "bold", color = "#d3a625") +
+  annotate("text", x = 45, y = 0.80, label = "Songs with more \npositive emotions", size = 7,
+           family = "labels", hjust = 0, lineheight = 0.8, fontface = "bold", color = "#eeba30") +
+  annotate("text", x = 45, y = 0, label = "Overall Beyoncé's songs have a good blend of both\npositive as well as neagtive emtions", size = 5.5,
+           family = "labels", hjust = 0.5, lineheight = 1.25, fontface = "bold", color = "white") +
+  labs(caption = "Data by Rosie Baillie and Dr. Sara Stoudt • Visualization by Kaustav Sen") +
+  scale_color_manual(values = c("positive" = "#eeba30", "negative" = "#d3a625")) +
+  scale_fill_manual(values = c("positive" = "#eeba30", "negative" = "#d3a625")) +
+  theme_void() +
+  theme(
+    plot.background = element_rect(fill = "#181536", color = "#181536"),
+    legend.position = "none",
+    plot.margin = margin(b = 15),
+    plot.caption.position = "plot",
+    plot.caption = element_text(family = "labels", size = 12, color = "grey90")
+  )
+```
+
+```{r final-plot}
+plot_final <- plot_grid(p1, p2, p3, ncol = 1, align = "v", rel_widths = c(3, 1, 1),
+                        rel_heights = c(1, 1.5, 1.5))
+
+# File location to save plot
+path <- here("2020", "plots", "week_40")
+
+ggsave(paste0(path, ".pdf"), plot = plot_final, height = 25, width = 10, device = cairo_pdf)
+
+pdftools::pdf_convert(paste0(path, ".pdf"), filenames = paste0(path, ".png"), dpi = 320)  
+
+```
