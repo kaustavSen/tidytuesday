@@ -1,0 +1,72 @@
+---
+title: "NCAA"
+author: "Kaustav Sen"
+date: "10/8/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages}
+library(tidyverse)
+library(waffle)
+library(showtext)
+library(ggtext)
+library(here)
+library(tidytuesdayR)
+```
+
+```{r load-fonts}
+font_add("Font Awesome 5 Free-Solid-900", here(2020, "fonts", "Font Awesome 5 Free-Solid-900.otf"))
+font_add_google("Fira Mono")
+font_add_google("Baloo Chettan 2", family = "heading")
+font_add_google("Baloo Bhai 2", family = "sub_heading")
+```
+
+```{r get-data}
+tuesdata <- tt_load(2020, week = 41)
+tournament <- tuesdata$tournament
+```
+
+```{r wrangle}
+champs <- 
+  tournament %>% 
+  filter(tourney_finish == "Champ") %>% 
+  count(conference, sort = T) %>% 
+  mutate(conference = glue::glue("{conference} ({n})"),
+         conference = fct_reorder(conference, -n)) 
+```
+
+```{r plot}
+showtext_auto()
+
+plot <- 
+  ggplot(champs) + 
+  geom_pictogram(aes(values = n, label = conference), 
+                 color = "#CF5300", size = 14, flip = TRUE,
+                 family = "Font Awesome 5 Free-Solid-900") +
+  scale_label_pictogram(values = "basketball-ball") +
+  facet_wrap(~conference, ncol = 1, strip.position = "left") +
+  labs(title = "Which conference produces the most NCAA winners?",
+       subtitle = "Out of the 37 tournaments from 1982-2018, almost 50% of the time the winner<br /> has been from either the **Big East** or **Southeastern** conferences.",
+       caption = "Data by FiveThirtyEight • Visualization by Kaustav Sen") +
+  theme_void() +
+  theme(legend.position = "none",
+        plot.title.position = "plot",
+        plot.title = element_text(family = "heading", face = "bold", size = 25, 
+                                  margin = margin(b = 10)),
+        plot.subtitle = element_markdown(family = "sub_heading", color = "grey15", size = 18,
+                                  margin = margin(b = 15), lineheight = 1.25),
+        plot.caption =  element_text(family = "Fira Mono", size = 10),
+        strip.text.y.left = element_text(angle = 0, hjust = 1,
+                                         family = "Fira Mono", size = 14,
+                                         face = "bold", color = "grey40"),
+        plot.margin = margin(15, 15, 15, 15))
+
+path <- here(2020, "plots", "week_41")
+
+ggsave(paste0(path, ".pdf"), height = 10, width = 10, device = cairo_pdf)
+pdftools::pdf_convert(paste0(path, ".pdf"), filenames = paste0(path, ".png"), dpi = 300)
+```
