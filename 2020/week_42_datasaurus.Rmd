@@ -1,0 +1,77 @@
+---
+title: 'Week 42: DatasauRus Dozen'
+author: "Kaustav Sen"
+date: "10/15/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages}
+library(tidyverse)
+library(tidytuesdayR)
+library(showtext)
+library(here)
+```
+
+```{r load-fonts}
+font_add_google("Fira Mono")
+font_add_google("Special Elite")
+font_add_google("Josefin Slab")
+
+showtext_auto()
+```
+
+
+```{r get-data}
+tues_data <- tt_load(2020, week = 42)
+datasaurus <- tues_data$datasaurus
+```
+
+```{r wrangle}
+plot_data <- 
+  datasaurus %>% 
+  filter(dataset != "x_shape") %>% 
+  group_by(dataset) %>% 
+  mutate(mean_x = mean(x),
+         mean_y = mean(y))
+```
+
+```{r visualise}
+plot <- 
+  ggplot(plot_data) +
+  aes(x, y) +
+  geom_vline(aes(xintercept = mean_x), size = 1.1, alpha = 0.5, color = "grey75") +
+  geom_hline(aes(yintercept = mean_y), size = 1.1, alpha = 0.5, color = "grey75") +
+  geom_point(size = 4, color = "black", alpha = 0.25) +
+  scale_x_continuous(limits = c(15, 105), breaks = seq(10, 100, 20)) +
+  scale_y_continuous(limits = c(0, 105), breaks = seq(10, 100, 20)) +
+  facet_wrap(~dataset, ncol = 4) +
+  labs(
+    title = "Lies, Damned Lies and Statistics",
+    subtitle = "Each of the plots below have almost identical summary statistics in terms of mean, standard deviation\nand Pearson correlation. However, when plotted they look diametrically different!",
+    caption = "Data by Alberto Cairo • Plot by Kaustav Sen"
+  ) +
+  theme_void() +
+  theme(
+    plot.title.position = "plot",
+    plot.title = element_text(family = "Special Elite", size = 30, face = "bold", hjust = 0, margin = margin(0, 0, 5, 0)),
+    plot.subtitle = element_text(family = "Josefin Slab", size = 14, hjust = 0, margin = margin(0, 0, 15, 0), color = "grey30", lineheight = 0.9),
+    plot.caption = element_text(color = "grey40", family = "Josefin Slab", size = 9, vjust = 1, margin = margin(t = 10)),
+    plot.margin = margin(20, 20, 5, 20),
+    plot.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5"),
+    panel.spacing = unit(0.75, "cm"),
+    panel.border = element_rect(color = "black", fill = "transparent"),
+    strip.background = element_rect(fill = "black", color = "black"),
+    strip.text = element_text(color = "white", size = 12, family = "Fira Mono", face= "bold", margin = margin(5, 5, 5, 5))
+  )
+```
+
+```{r save-plot}
+file_path <- here(2020, "plots", "week_42.")
+ggsave(paste0(file_path, "pdf"), plot, width = 9, height = 8, device = cairo_pdf)
+pdftools::pdf_convert(paste0(file_path, "pdf"), filenames = paste0(file_path, "png"), dpi = 300)
+```
+
