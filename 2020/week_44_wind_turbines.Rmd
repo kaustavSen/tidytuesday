@@ -58,7 +58,7 @@ plot <-
   scale_y_continuous(sec.axis = dup_axis()) +
   scale_x_continuous(breaks = c(1995, 2005, 2015)) +
   labs(
-    title = "Number of new projects commissioned each year",
+    title = "Number of new wind turbine projects commissioned each year",
     subtitle = "With 269 distinct projects over a 26 year period from 1993 to 2019, we would expect<br />on **average 10 projects per year**",
     caption = "**Data**: open.canada.ca | **Plot**: Kaustav Sen"
   ) +
