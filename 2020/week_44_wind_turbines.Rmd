@@ -12,6 +12,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r load-libraries}
 library(tidyverse)
 library(ggtext)
+library(ggthemes)
+library(patchwork)
 library(showtext)
 ```
 
@@ -79,3 +81,87 @@ file_path <- here::here(2020, "plots", "week_44")
 ggsave(paste0(file_path, ".pdf"), plot, height = 7, width = 8, device = cairo_pdf)
 pdftools::pdf_convert(paste0(file_path, ".pdf"), filenames = paste0(file_path, ".png"), dpi = 300)
 ```
+
+```{r}
+distinct_projects
+```
+
+"Ontario", "Nova Scotia", "Quebec", "Alberta"
+
+```{r}
+theme_set(ggthemes::theme_fivethirtyeight())
+
+turbines_per_project <- 
+  wind_turbine %>% 
+  mutate(
+    commissioning_date = str_extract(commissioning_date, "[:digit:]+") %>% as.double()
+  ) %>% 
+  separate(turbine_number_in_project, into = c("turbine_num", "num_turbines"), sep ="/") %>% 
+  mutate(num_turbines = as.numeric(num_turbines)) %>% 
+  distinct(project_name, province_territory, total_project_capacity_mw, commissioning_date, num_turbines)
+
+p1 <- ggplot(turbines_per_project, aes(num_turbines)) +
+  geom_histogram(bins = 50, fill = "grey70") +
+  geom_histogram(data = filter(turbines_per_project, num_turbines >= 150), bins = 50, fill = "#E69F00") +
+  labs(title = "What is the usual number of turbines in a wind farm?", subtitle = "Around <b>80%</b> of total projects have 50 or less turbines.<br />However, there are also 4 projects with <span style='color:#E69F00'><b>150 or more</b></span> turbines, of which 3 are in <b>Quebec</b>.", x = "Turbines per project", y = "Number of projects") +
+  theme(
+    plot.title.position = "plot",
+    plot.title = element_text(family = "h_font"),
+    plot.subtitle = element_markdown(family = "b_font", margin = margin(b = 20), color = "grey25", lineheight = 1.25, size = rel(0.8)),
+    axis.text = element_text(family = "d_font"),
+    axis.title = element_text(hjust = 1, size = 10, face = "bold", family = "h_font", color = "grey60")
+  )
+
+p1
+```
+
+```{r}
+turbines_per_project %>% 
+  count(num_turbines <= 50) %>% 
+  mutate(prop = n / sum(n))
+```
+
+```{r}
+turbines_per_project %>% 
+  filter(num_turbines >= 150)
+```
+
+```{r}
+turbines_per_project %>% arrange(-total_project_capacity_mw)
+```
+
+
+```{r}
+plot_data <- turbines_per_project %>% 
+  mutate(province_territory = fct_lump(province_territory, 4))
+
+p2 <- ggplot(data = plot_data %>% filter(province_territory != "Other"), aes(total_project_capacity_mw, num_turbines)) +
+  geom_point(data = plot_data %>% select(-province_territory), alpha = 0.5, size = 3, color = "grey85") +
+  geom_point(alpha = 0.5, size = 4, color = "#E69F00") +
+  geom_point(data = plot_data %>% filter(project_name == "Box Springs Wind Project"), alpha = 1, size = 3.5, color = "#D55E00") +
+  facet_wrap(~province_territory) +
+  labs(title = "How does the wind farm capacity vary with the number of turbines?", subtitle = "As expected there exists a strong positive correlation between project capacity and number<br />of turbines. The <span style='color: #D55E00'><b>Box Springs Wind Project</b></span> in Alberta seems to defy this trend but this seems more like a data error.", x = "Project Capacity (in MW)", y = "Number of turbines", caption = "**Data**: open.canada.ca | **Plot**: Kaustav Sen") +
+  theme(
+    plot.title.position = "plot",
+    plot.title = element_text(family = "h_font"),
+    plot.subtitle = element_markdown(family = "b_font", color = "grey25", lineheight = 1.25, size = rel(0.80)),
+    plot.caption = element_markdown(family = "b_font", size = rel(0.6), margin = margin(t = 15)),
+    axis.title = element_text(hjust = 1, size = 10, face = "bold", family = "h_font", color = "grey60"),
+    axis.text = element_text(family = "d_font"),
+    strip.text = element_text(family = "b_font", face = "bold", size = rel(1.01), color = "grey50")
+  )
+
+p2
+```
+
+```{r}
+p <- p1 / p2 + plot_annotation(theme = theme(plot.margin = margin(t = 1, r = 1, b = 0.25, l = 1, unit = "lines")))
+file_path <- here::here(2020, "plots", "week_44_2")
+ggsave(paste0(file_path, ".pdf"), p, height = 10, width = 8, device = cairo_pdf)
+pdftools::pdf_convert(paste0(file_path, ".pdf"), filenames = paste0(file_path, ".png"), dpi = 300)
+```
+
+```{r}
+View(wind_turbine)
+```
+
