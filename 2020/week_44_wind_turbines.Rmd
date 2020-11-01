@@ -48,15 +48,21 @@ plot_data <-
   # If a project has multiple commissioning dates, select the earliest one
   filter(commissioning_date == min(commissioning_date)) %>% 
   ungroup() %>% 
-  count(year = commissioning_date)
+  count(year = commissioning_date) %>% 
+  # For year with no new projects - count them as zeroes
+  right_join(tibble(year = 1993:2019)) %>% 
+  mutate(n = replace_na(n, 0)) %>% 
+  arrange(year)
 
 plot <- 
   ggplot(plot_data, aes(year, n)) +
   geom_point(size = 2)  +
   geom_point(data = filter(plot_data, year %in% c(2014, 2015)), size = 2.5, color = "#E69F00")  +
+  geom_point(data = filter(plot_data, n == 0), size = 2.5, color = "grey80")  +
   geom_hline(yintercept = 10, size = 1.05, color = "grey80") +
   geom_segment(aes(x = year, xend = year, y = n, yend = 10)) +
   geom_segment(data = filter(plot_data, year %in% c(2014, 2015)), aes(x = year, xend = year, y = n, yend = 10), color = "#E69F00") +
+  geom_segment(data = filter(plot_data, n == 0), aes(x = year, xend = year, y = n, yend = 10), color = "grey80") +
   scale_y_continuous(sec.axis = dup_axis()) +
   scale_x_continuous(breaks = c(1995, 2005, 2015)) +
   labs(
@@ -65,6 +71,7 @@ plot <-
     caption = "**Data**: open.canada.ca | **Plot**: Kaustav Sen"
   ) +
   annotate("text", x = 2003, y = 38, hjust = 0, size = 3.5, family = "b_font", color = "grey40", label = "There was a sudden spike in the number of\nprojects commissioned in years 2014 and 2015") +
+  annotate("richtext", x = 1993, y = 12, hjust = 0, size = 3.5, family = "b_font", fill = NA, label.color = NA, color = "grey40", label = "Years with no new projects:<br />**1994**, **1996** and **2000**") +
   ggthemes::theme_fivethirtyeight() +
   theme(
     plot.title = element_text(family = "h_font"),
@@ -74,6 +81,8 @@ plot <-
     panel.grid.minor.x = element_blank(),
     axis.text = element_text(family = "d_font")
   )
+
+plot
 ```
 
 ```{r save-plot}
