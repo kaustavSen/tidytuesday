@@ -1,0 +1,70 @@
+---
+title: "IKEA Furniture"
+author: "Kaustav Sen"
+date: "11/6/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages}
+library(tidyverse)
+library(ggeconodist)
+library(ggtext)
+library(showtext)
+```
+
+```{r load-data}
+tuesdata <- tidytuesdayR::tt_load(2020, week = 45)
+ikea <- tuesdata$ikea
+```
+
+```{r load-fonts}
+font_add("futura", here::here(2020, "fonts", "FUTURAPR.ttf"))
+font_add_google("Fira Mono")
+font_add_google("Lato")
+```
+
+```{r wrangle}
+plot_data <- 
+  ikea %>% 
+  group_by(category) %>% 
+  summarise(min = min(price), max = max(price), median = median(price), num = n()) %>% 
+  mutate(category = fct_reorder(category, max))
+```
+
+```{r plot}
+showtext_auto()
+
+p <- 
+  ggplot(plot_data, aes(x = category)) +
+  geom_econodist(aes(ymin = min, median = median, ymax = max), stat = "identity", show.legend = TRUE, tenth_col = "#003399", ninetieth_col = "#ffcc00", fill = "#003399") +
+  scale_y_continuous(expand = c(0,0), position = "right", limits = c(0, 10000), labels = scales::number_format(big.mark = ",")) +
+  coord_flip(clip = "off") +
+  labs(x = "",
+       y = "Price in Saudi Riyals",
+       caption = "Data by Kaggle | Plot by Kaustav Sen") +
+  annotate("text", x = 6.5, y = 7150, label = "IKEA", size = 25, family = "futura", color = "#ffcc00") +
+  annotate("text", x = 6.7, y = 7000, label = "IKEA", size = 25, family = "futura", color = "#003399") +
+  annotate("richtext", x = 4.7, y = 7100, label = "From <span style='color: #003399'>lowest</span> to <span style='color: #ffcc00'>highest</span>", size = 5, family = "futura", fill = NA, color = "grey", label.color = NA) +
+  theme_minimal() +
+  theme(
+    plot.margin = margin(10, 25, 10, 25),
+    axis.line.x.top = element_line(size = 0.5, color = "grey65"),
+    axis.ticks.x.top = element_line(size = 0.5, color = "grey65"),
+    axis.ticks.length.x.top = unit(2, "mm"),
+    panel.grid.minor.x = element_blank(),
+    axis.text.y = element_text(family = "Lato", hjust = 1, face = "bold", size = 10, margin = margin(r = 10)),
+    axis.text.x = element_text(family = "Fira Mono", size = 9),
+    axis.title.x.top = element_text(family = "Lato", size = 10, face = "bold", color = "grey50", margin = margin(b = 10)),
+    plot.caption = element_text(family = "Fira Mono", size = 7.5, color = "grey50", margin = margin(t = 10))
+  )
+```
+
+```{r save-plot}
+path <- here::here(2020, "plots", "week_45")
+ggsave(paste0(path, ".pdf"), p, width = 8, height = 6, device = cairo_pdf)
+pdftools::pdf_convert(paste0(path, ".pdf"), filenames = paste0(path, ".png"), dpi = 300)
+```
