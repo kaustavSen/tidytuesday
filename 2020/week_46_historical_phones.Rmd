@@ -1,0 +1,177 @@
+---
+title: "Historical Phones"
+author: "Kaustav Sen"
+date: "12/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-libraries}
+library(tidyverse)
+library(waffle)
+library(ggtext)
+library(patchwork)
+library(ggforce)
+library(showtext)
+```
+
+```{r load-fonts}
+font_add(
+  "body_font",
+  here::here(2020, "fonts", "IBM_Plex_Sans", "IBMPlexSans-Light.ttf")
+)
+
+font_add(
+  "num_head",
+  here::here(2020, "fonts", "IBM_Plex_Sans", "IBMPlexSans-SemiBold.ttf")
+)
+
+font_add(
+  "subtitle_font",
+  here::here(2020, "fonts", "IBM_Plex_Sans", "IBMPlexSans-Regular.ttf")
+)
+
+font_add(
+  "header_font",
+  here::here(2020, "fonts", "IBM_Plex_Sans_Condensed", "IBMPlexSansCondensed-Bold.ttf")
+)
+
+showtext_auto()
+```
+
+```{r get-data}
+tuesdata <- tidytuesdayR::tt_load(2020, week = 46)
+
+mobile <- tuesdata$mobile
+landline <- tuesdata$landline
+
+combined <- left_join(mobile, landline, by = c("entity", "code", "year", "continent"))
+```
+
+```{r wrangle}
+change_in_subs <- 
+  combined %>% 
+  filter(year %in% c(2017, 1990)) %>% 
+  group_by(year, continent) %>% 
+  summarise(
+    mobile_subs = round(median(mobile_subs, na.rm = TRUE), 0),
+    landline_subs = round(median(landline_subs, na.rm = TRUE), 0)
+  ) %>% 
+  ungroup() %>% 
+  arrange(continent) %>% 
+  pivot_longer(cols = c(mobile_subs, landline_subs), values_to = "subs", names_to = "type") %>% 
+  mutate(type = as.factor(type))
+
+subs <- 
+  combined %>% 
+  filter(year == 2000 | year == 2017) %>% 
+  group_by(year) %>% 
+  summarise(
+    mobile_subs = round(median(mobile_subs, na.rm = TRUE), 0),
+    landline_subs = round(median(landline_subs, na.rm = TRUE), 0)
+  ) %>% 
+  ungroup() %>% 
+  pivot_longer(cols = c(mobile_subs, landline_subs), values_to = "subs", names_to = "type") %>% 
+  arrange(year, type)
+
+time_series <- 
+  combined %>% 
+  group_by(year) %>% 
+  summarise(
+    mobile_subs = round(median(mobile_subs, na.rm = TRUE), 0),
+    landline_subs = round(median(landline_subs, na.rm = TRUE), 0)
+  ) %>% 
+  ungroup() %>% 
+  pivot_longer(cols = c(mobile_subs, landline_subs), values_to = "subs", names_to = "type") %>% 
+  arrange(year, type) %>% 
+  rowwise() %>% 
+  mutate(data = list(tibble(year, type))) %>%
+  select(-year, -type) %>% 
+  mutate(data = list(slice(data, rep(1, each = subs)))) %>% 
+  unnest(data) %>% 
+  arrange(year, desc(type)) %>% 
+  mutate(n = row_number())
+```
+
+
+
+```{r plot-waffle}
+p1 <- ggplot(subs) +
+  geom_waffle(aes(fill = type, values = subs), size = 1.5, color = "grey98", flip = TRUE, radius = unit(5, "mm"), alpha = 0.7) +
+  geom_richtext(data = tibble(x = 0.5, y = 3.5, year = 2000), aes(x = x, y = y), hjust = 0, fill = NA, label.color = NA, size = 8, lineheight = 1.25, family = "body_font", label = "At the start of the century had we randomly<br>surveyed 100 people in the world, we would have<br>got 17 phone subscriptions amongst them") +
+  geom_richtext(data = tibble(x = 5, y = 5, year = 2000), aes(x = x, y = y), hjust = 0.5, fill = NA, label.color = NA, size = 20, color = "grey30", family = "num_head", label = "2000") +
+  geom_richtext(data = tibble(x = 0.5, y = 14.25, year = 2017), aes(x = x, y = y), hjust = 0, fill = NA, label.color = NA, size = 8, lineheight = 1.25, family = "body_font", label = "A similar experiment at 2017 would have resulted<br>in 128 subscriptions amongst the 100 surveyed") +
+  geom_richtext(data = tibble(x = 5.5, y = 15.5, year = 2017), aes(x = x, y = y), hjust = 0.5, fill = NA, label.color = NA, size = 20, color = "grey30", family = "num_head", label = "2017") +
+  geom_segment(data = tibble(year = 2017), aes(x = 1, xend = 10, y = 0.25, yend = 0.25), size = 1.05, color = "grey75") +
+  geom_segment(data = tibble(year = 2017), aes(x = 1, xend = 1, y = 0.05, yend = 0.45), size = 1.05, color = "grey75") +
+  geom_segment(data = tibble(year = 2017), aes(x = 10, xend = 10, y = 0.05, yend = 0.45), size = 1.05, color = "grey75") +
+  geom_text(data = tibble(year = 2017), aes(x = 5.5, y = 0, label = "1 row = 10 subs."), color = "grey45", family = "num_head", size = 6, vjust = 1, fontface = "bold") +
+  scale_x_continuous(expand = c(0,0), limits = c(-1, 11)) +
+  scale_y_continuous(limits = c(NA, 15.6)) +
+  scale_fill_manual(values = c("#969696", "#009bda")) +
+  coord_fixed(ratio = 1, clip = "on") +
+  facet_wrap(~year) +
+  theme_void() +
+  theme(
+    plot.background = element_rect(fill = "grey98", color = "grey98"),
+    plot.margin = margin(t = 0, r = 20, b = 0, l = 20),
+    legend.position = "none",
+    strip.text = element_blank()
+  ) 
+  # ggsave("temp.pdf", height = 15, width = 15, device = cairo_pdf)
+```
+
+
+
+```{r plot-barchart}
+p2 <-
+  time_series %>% 
+  ggplot() +
+  geom_bar(aes(x = year, group = n, fill = type), color = "grey98", size = 1.5) +
+  geom_mark_rect(data = tibble(x = c(2003.75, 2009.25), y = c(0.5, 104)), aes(x = x, y = y), fill = colorspace::lighten("#009bda", amount = 0.7), color = NA) +
+  annotate("text",x = 1990, y = 18, label = "From 1990 to 2000 landline phones\ndominated the subscriber base", family = "body_font", size = 8, hjust = 0) +
+  annotate("text",x = 2000, y = 85, label = "2004 to 2009 saw a rapid growth in the\nmobile phone subscriber base", family = "body_font", size = 8, hjust = 0) +
+  annotate("text",x = 2005, y = 122, label = "Post 2010, the subscriber base has started\nto slowly level off", family = "body_font", size = 8, hjust = 0) +
+  scale_fill_manual(values = c("#969696", "#009bda")) +
+  scale_x_continuous(breaks = c(1990, 2000, 2007, 2017), labels = c("'90", "'00", "'07", "'17")) +
+  scale_y_continuous(breaks = seq(0, 125, 25)) +
+  labs(x = "", y = "", subtitle = "Looking at the year-on-year Global Average phone subscriptions (per 100 people) reveals some interesting patterns") +
+  theme_minimal() +
+  theme(
+    plot.background = element_rect(fill = "grey98", color = "grey98"),
+    plot.title.position = "plot",
+    plot.subtitle = element_text(family = "subtitle_font", size = 30),
+    legend.position = "none",
+    panel.grid.minor = element_blank(),
+    axis.text = element_text(family = "num_head", size = 18)
+  ) 
+```
+
+```{r patch-up}
+plot_final <- 
+  p1 / p2 + 
+  plot_annotation(
+    title = "Phones: From luxury to a necessity", 
+    subtitle = "Analysing <span style='color:#969696'>landline</span> and <span style='color:#009bda'>mobile phone</span> usage over time based on global average subscriber base",
+    caption = "Data by OurWorldInData.org | Plot by Kaustav Sen"
+  ) & 
+  theme(
+    plot.margin = margin(25, 25, 25, 25),
+    plot.background = element_rect(fill = "grey98", color = "grey98"),
+    plot.title.position = "plot",
+    plot.title = element_text(family = "header_font", size = 60, margin = margin(b = 10)),
+    plot.subtitle = element_markdown(family = "subtitle_font", size = 30),
+    plot.caption = element_text(family = "body_font", size = 15, color = "grey55")
+  ) 
+```
+
+```{r save}
+path <- here::here(2020, "plots", "week_46.")
+
+ggsave(paste0(path, "pdf"), plot_final, height = 25, width = 25, device = cairo_pdf)
+pdftools::pdf_convert(paste0(path, "pdf"), filenames = paste0(path, "png"), dpi = 300)
+```
+
