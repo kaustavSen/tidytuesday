@@ -101,9 +101,9 @@ time_series <-
 ```{r plot-waffle}
 p1 <- ggplot(subs) +
   geom_waffle(aes(fill = type, values = subs), size = 1.5, color = "grey98", flip = TRUE, radius = unit(5, "mm"), alpha = 0.7) +
-  geom_richtext(data = tibble(x = 0.5, y = 3.5, year = 2000), aes(x = x, y = y), hjust = 0, fill = NA, label.color = NA, size = 8, lineheight = 1.25, family = "body_font", label = "At the start of the century had we randomly<br>surveyed 100 people in the world, we would have<br>got 17 phone subscriptions amongst them") +
+  geom_richtext(data = tibble(x = 0.5, y = 3.5, year = 2000), aes(x = x, y = y), hjust = 0, fill = NA, label.color = NA, size = 7, lineheight = 1.25, family = "body_font", label = "At the start of the century had we randomly<br>surveyed 100 people in the world, we would have<br>got 17 phone subscriptions amongst them") +
   geom_richtext(data = tibble(x = 5, y = 5, year = 2000), aes(x = x, y = y), hjust = 0.5, fill = NA, label.color = NA, size = 20, color = "grey30", family = "num_head", label = "2000") +
-  geom_richtext(data = tibble(x = 0.5, y = 14.25, year = 2017), aes(x = x, y = y), hjust = 0, fill = NA, label.color = NA, size = 8, lineheight = 1.25, family = "body_font", label = "A similar experiment at 2017 would have resulted<br>in 128 subscriptions amongst the 100 surveyed") +
+  geom_richtext(data = tibble(x = 0.5, y = 14.25, year = 2017), aes(x = x, y = y), hjust = 0, fill = NA, label.color = NA, size = 7, lineheight = 1.25, family = "body_font", label = "A similar experiment at 2017 would have resulted<br>in 128 subscriptions amongst the 100 surveyed") +
   geom_richtext(data = tibble(x = 5.5, y = 15.5, year = 2017), aes(x = x, y = y), hjust = 0.5, fill = NA, label.color = NA, size = 20, color = "grey30", family = "num_head", label = "2017") +
   geom_segment(data = tibble(year = 2017), aes(x = 1, xend = 10, y = 0.25, yend = 0.25), size = 1.05, color = "grey75") +
   geom_segment(data = tibble(year = 2017), aes(x = 1, xend = 1, y = 0.05, yend = 0.45), size = 1.05, color = "grey75") +
@@ -117,11 +117,10 @@ p1 <- ggplot(subs) +
   theme_void() +
   theme(
     plot.background = element_rect(fill = "grey98", color = "grey98"),
-    plot.margin = margin(t = 0, r = 20, b = 0, l = 20),
+    plot.margin = margin(t = 0, r = 5, b = 0, l = 5),
     legend.position = "none",
     strip.text = element_blank()
   ) 
-  # ggsave("temp.pdf", height = 15, width = 15, device = cairo_pdf)
 ```
 
 
