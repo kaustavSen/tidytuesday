@@ -1,0 +1,177 @@
+---
+title: "Week 48 Washington Trails"
+author: "Kaustav Sen"
+date: "11/26/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(gt)
+library(fontawesome)
+library(htmltools)
+```
+
+```{r}
+tuesdata <- tidytuesdayR::tt_load(2020, week = 48)
+
+hike_data <- tuesdata$hike_data
+```
+
+```{r helper-functions}
+rating_stars <- function(rating, max_rating = 5) {
+  rounded_rating <- floor(rating + 0.5)
+  stars <- lapply(seq_len(max_rating), function(i) {
+    if (i <= rounded_rating)
+      fa("star", fill = "gold")
+    else
+      fa("star", fill = "grey")
+  })
+  div(stars) %>% 
+    as.character() %>% 
+    html()
+}
+
+thumbs_up <- function(value) {
+  icon <- fa("thumbs-up", fill = "#38A605")
+  div(icon) %>% 
+    as.character() %>% 
+    html()
+}
+
+bar_chart <- function(value, color = "#DFB37D"){
+    glue::glue(
+      "<span style=\"display: inline-block; 
+      direction: ltr; border-radius: 4px; 
+      padding-right: 2px; background-color: {color}; 
+      color: {color}; width: {value}%\"> &nbsp; </span>"
+    ) %>% 
+    as.character() %>% 
+    gt::html()
+}
+```
+
+
+```{r wrangle}
+df <- 
+  hike_data %>% 
+  separate(location, sep = " -- ", into = c("location", "temp")) %>% 
+  select(-temp) %>% 
+  group_by(location) %>% 
+  arrange(desc(rating)) %>% 
+  slice(1:5) %>% 
+  ungroup() %>% 
+  select(-description, -gain, -highpoint) %>% 
+  mutate(
+    length = parse_number(length), 
+    length_bar = map(length, bar_chart),
+    rating = parse_number(rating),
+    rating = map(rating, rating_stars),
+    feature_present = 1,
+    feature_present = map(feature_present, thumbs_up)
+  ) %>% 
+  unnest_longer(features) %>% 
+  mutate(features = str_replace(features, pattern = "/.+", replacement = "")) %>% 
+  pivot_wider(
+    names_from = features,
+    values_from = feature_present
+  ) %>%
+  group_by(location) %>% 
+  arrange(-length) %>% 
+  select(name, length, length_bar, rating, everything())
+```
+
+```{r draw-table}
+gt(df) %>% 
+  cols_width(
+    "name" ~ px(250),
+    "length" ~ px(75),
+    "length_bar" ~ px(140),
+    "rating" ~ px(140),
+    4:last_col() ~ px(120)
+  ) %>% 
+  tab_spanner(
+    label = "Features",
+    columns = 5:last_col()
+  ) %>% 
+  cols_label(
+    name = "",
+    length = md("Length<br/>(in miles)"),
+    length_bar = "",
+    rating = "Rating"
+  ) %>% 
+  tab_header(
+    title = "Top Hiking Trails to visit in Washington",
+    subtitle = "The table below shows the 5 top rated trails in each of the 11 locations in Washington"
+  ) %>% 
+  tab_source_note(
+    source_note = md("**Data:** Washington Trails Association | **Table:** Kaustav Sen")
+  ) %>% 
+  # ---- Table styling ----
+  tab_style(
+    style = cell_text(
+      font = google_font("Alegreya Sans SC"),
+      weight = "bold"
+    ),
+    locations = list(cells_row_groups(), cells_column_spanners("Features"))
+  ) %>% 
+  tab_style(
+    style = cell_fill(
+      color = "#DFB37D",
+      alpha = 0.5
+    ),
+    locations = cells_row_groups()
+  ) %>% 
+  tab_style(
+    style = cell_text(
+      font = google_font("Alegreya Sans"),
+      v_align = "bottom",
+      align = "center"
+    ),
+    locations = cells_column_labels(columns = everything())
+  ) %>% 
+  tab_style(
+    style = cell_text(
+      font = google_font("Alegreya Sans"),
+    ),
+    locations = cells_body("name")
+  ) %>% 
+  tab_style(
+    style = cell_text(
+      font = google_font("Alegreya Sans"),
+      align = "left",
+      size = px(30)
+    ),
+    locations = cells_title("subtitle")
+  ) %>% 
+  tab_style(
+    style = cell_text(
+      size = "large"
+    ),
+    locations = cells_body(columns = 4:last_col())
+  ) %>%
+  tab_style(
+    style = cell_text(
+      align = "left"
+    ),
+    locations = cells_body(columns = "length_bar")
+  ) %>%
+  tab_style(
+    style = cell_text(
+      font = google_font("Alegreya Sans SC"),
+      align = "left",
+      weight = "bold",
+      size = px(50)
+    ),
+    locations = cells_title("title")
+  ) %>% 
+  opt_table_font(font = google_font("Fira Mono")) %>% 
+  tab_options(
+    table.border.top.color = "white",
+  ) %>% 
+  gtsave(here::here(2020, "plots", "week_48.html"))
+```
