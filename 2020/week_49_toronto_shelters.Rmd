@@ -1,0 +1,223 @@
+---
+title: 'Week 49: Toronto Shelters'
+author: "Kaustav Sen"
+date: "12/5/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages}
+library(tidyverse)
+library(lubridate)
+library(ggforce)
+library(glue)
+library(cowplot)
+library(showtext)
+```
+
+```{r load-fonts}
+font_add_google("Andika")
+font_add_google("Federo")
+```
+
+```{r get-data}
+tuesdata <- tidytuesdayR::tt_load(2020, week = 49)
+
+shelters <- tuesdata$shelters
+```
+
+```{r wrangle}
+sankey_df <- 
+  shelters %>% 
+  filter(year(occupancy_date) == 2019) %>% 
+  mutate(
+    organization_name = fct_lump(organization_name, n = 5),
+  ) %>% 
+  filter(organization_name != "Other") %>% 
+  distinct(organization_name, program_name, sector) %>% 
+  group_by(organization_name) %>% 
+  count(sector) %>% 
+  ungroup() %>% 
+  mutate(
+    organization_name = factor(organization_name, levels = c("Society of St.Vincent De Paul", "Fred Victor Centre", "Homes First Society", "The Salvation Army of Canada", "City of Toronto")),
+    sector = factor(sector, levels = c("Co-ed", "Families", "Men", "Women"))
+  ) %>% 
+  select(sector, organization_name, everything())
+
+org_labels <- 
+  sankey_df %>% 
+  count(organization_name, wt = n, sort = T) %>% 
+  mutate(
+    cum_n = cumsum(n),
+    offset = c(0, rep(4.15, 4) * 1:4),
+    n_mid = n / 2,
+    y = lag(cum_n, default = 0) + n_mid + offset,
+    x = 2.02,
+    label = glue::glue("{organization_name} [{n}]")
+  )
+
+sector_labels <- 
+  sankey_df %>% 
+  count(sector, wt = n, sort = T) %>% 
+  arrange(rev(sector)) %>% 
+  mutate(
+    cum_n = cumsum(n),
+    offset = c(0, rep(4.15, 3) * 1:3),
+    n_mid = n / 2,
+    y = lag(cum_n, default = 0) + n_mid + offset,
+    x = 0.98,
+    label = glue::glue("{sector} [{n}]")
+  ) 
+```
+
+```{r sankey-plot}
+showtext_auto()
+
+plot_1 <- 
+  gather_set_data(sankey_df, 1:2) %>% 
+  mutate(x = factor(x, levels = c("sector", "organization_name")) %>% as.numeric()) %>% 
+  ggplot(aes(x = x, id = id, split = y, value = n)) +
+  geom_parallel_sets(aes(fill = sector), alpha = 0.6, axis.width = 0.04) +
+  geom_parallel_sets_axes(axis.width = 0.01, fill = "grey50") +
+  geom_text(
+    data = org_labels,
+    aes(
+      x = x,
+      y = y,
+      label = label
+    ),
+    size = 5.5,
+    family = "Andika",
+    fontface = "bold",
+    color = "grey35",
+    hjust = 0,
+    inherit.aes = FALSE
+  ) +
+  geom_text(
+    data = sector_labels,
+    aes(
+      x = x,
+      y = y,
+      label = label,
+      color = sector
+    ),
+    size = 5.5,
+    family = "Andika",
+    fontface = "bold",
+    hjust = 1,
+    inherit.aes = FALSE
+  ) +
+  scale_fill_manual(values = pals::tol(4)) +
+  scale_color_manual(values = pals::tol(4)) +
+  scale_x_continuous(limits = c(NA, 2.75)) +
+  labs(
+    caption = "Data: {opendatatoronto} | Plot: Kaustav Sen"
+  ) +
+  coord_cartesian(clip = "off") +
+  theme_void() +
+  theme(
+    plot.margin = margin(t = 0, r = 30, b = 10, l = 0),
+    plot.background = element_rect(fill = "grey98", color = "grey98"),
+    plot.caption = element_text(family = "Andika", color = "grey30", size = 12),
+    legend.position = "none"
+  ) 
+```
+
+```{r line-plot}
+plot_2 <- 
+  shelters %>% 
+  filter(year(occupancy_date) == 2019) %>% 
+  mutate(
+    organization_name = fct_lump(organization_name, n = 5),
+  ) %>% 
+  filter(organization_name != "Other") %>% 
+  mutate(
+    month = month(occupancy_date, label = TRUE),
+    occupancy_rate = occupancy / capacity
+  ) %>% 
+  group_by(sector, month) %>% 
+  summarise(
+    avg_occupancy_rate = round(mean(occupancy_rate, na.rm = TRUE) * 100, 0)
+  ) %>% 
+  ggplot(aes(as.numeric(month), avg_occupancy_rate, color = sector)) +
+  geom_line() +
+  geom_hline(yintercept = 90, color = "grey50", alpha = 0.75, size = 1.05) +
+  geom_point(size = 3) +
+  geom_point(shape = 1, size = 5) +
+  scale_color_manual(values = pals::tol(4)) +
+  scale_y_continuous(breaks = c(80, 90, 100), labels = c("80%", "90%", "100%"), limits = c(80, 108)) +
+  scale_x_continuous(breaks = c(seq(1, 12, 3), 12), labels = c("Jan", "Apr", "Jul", "Oct", "Dec")) +
+  labs(
+    y = "Average Occupancy Rate"
+  ) +
+  facet_wrap(~sector, ncol = 1) +
+  coord_cartesian(clip = "off") +
+  theme_minimal() +
+  theme(
+    plot.margin = margin(t = 0, r = 0, b = 10, l = 30),
+    plot.background = element_rect(fill = "grey98", color = "grey98"),
+    text = element_text(family = "Andika", size = 16),
+    legend.position = "none",
+    strip.text = element_blank(),
+    axis.title.x = element_blank(),
+    axis.title.y.left = element_text(margin = margin(r = 20)),
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_line(color = "grey85")
+  )
+```
+
+```{r combine-plots}
+plot_row <- plot_grid(plot_2, plot_1, align = "v", nrow = 1, rel_widths = c(1.5, 2.5)) 
+
+title <- ggdraw() +
+  draw_label(
+    "The plight of Toronto shelter homes",
+    x = 0.01,
+    y = 1,
+    fontfamily = "Federo",
+    size = 35,
+    fontface = "bold",
+    hjust = 0
+  ) +
+  draw_label(
+    "Looking at the shelter homes operated by the top 5 organizations in Toronto we observe that occupancy rate has almost\nalways been more than 90% throughout 2019.\n\nThis highlights an urgent need for providing housing at reasonable rates for the masses.",
+    x = 0.01,
+    y = 0.5,
+    fontfamily = "Andika",
+    size = 18,
+    color = "grey35",
+    hjust = 0
+  ) +
+  draw_label(
+    "The figures in [] denote the number of shelter homes operated.",
+    x = 0.01,
+    y = 0.07,
+    fontfamily = "Andika",
+    fontface = "italic",
+    size = 14,
+    color = "grey50",
+    hjust = 0
+  ) +
+  coord_cartesian(clip = "off") +
+  theme(
+    plot.margin = margin(t = 30, r = 30, b = 0, l = 0),
+    plot.background = element_rect(fill = "grey98", color = "grey98")
+  )
+
+plot_final <- plot_grid(
+  title, plot_row,
+  ncol = 1,
+  rel_heights = c(0.35, 1)
+) 
+
+ggsave(here::here(2020, "plots", "week_49.pdf"), plot_final, width = 15, height = 10, device = cairo_pdf)
+
+pdftools::pdf_convert(
+  here::here(2020, "plots", "week_49.pdf"),
+  filenames = here::here(2020, "plots", "week_49.png"),
+  dpi = 72
+)
+```
