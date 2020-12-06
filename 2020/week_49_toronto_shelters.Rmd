@@ -165,7 +165,8 @@ plot_2 <-
     axis.title.x = element_blank(),
     axis.title.y.left = element_text(margin = margin(r = 20)),
     panel.grid.minor = element_blank(),
-    panel.grid.major = element_line(color = "grey85")
+    panel.grid.major = element_line(color = "grey85"),
+    panel.spacing.y = unit(1.5, "lines")
   )
 ```
 
