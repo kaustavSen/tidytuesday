@@ -3,14 +3,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
-    h1, h2 {
-      font-family: 'Fredoka One', cursive;
-    }
-    p {
-      font-family: 'Roboto', sans-serif;
-    }
-    </style>
+    <link rel="stylesheet" href="style.css">
   </head>
 
   <h1>#TidyTuesday Submissions</h1>
