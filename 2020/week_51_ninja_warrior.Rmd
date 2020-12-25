@@ -1,0 +1,85 @@
+---
+title: "Ninja Warrior"
+author: "Kaustav Sen"
+date: "12/19/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+tuesdata <- tidytuesdayR::tt_load(2020, week = 51)
+
+ninja_warrior <- tuesdata$ninja_warrior
+```
+
+```{r}
+View(ninja_warrior)
+```
+
+```{r}
+ninja_warrior %>% 
+  count(season)
+```
+
+```{r}
+ninja_warrior %>% 
+  filter(grepl("(^National Finals.*)|(^Finals.*)", round_stage)) %>% 
+  count(obstacle_name, sort = TRUE) %>% 
+  slice_max(order_by = n, n = 10) %>% 
+  mutate(obstacle_name = fct_reorder(obstacle_name, n)) %>% 
+  ggplot(aes(n, obstacle_name)) +
+  geom_col() +
+  theme_minimal()
+```
+
+```{r}
+ninja_warrior %>% 
+  count(round_stage)
+```
+
+```{r}
+ninja_warrior_cleaned <- 
+  ninja_warrior %>% 
+  mutate(
+    round_stage = case_when(
+      grepl("(^National Finals.*)|(^Finals.*)", round_stage) ~ "Finals",
+      grepl("^Qualifying.*", round_stage) ~ "Qualifying",
+      TRUE ~ round_stage
+    )
+  ) 
+```
+
+```{r}
+ninja_warrior_cleaned %>% 
+  filter(round_stage != "Semi-Finals") %>% 
+  group_by(round_stage) %>% 
+  count(obstacle_name) %>%
+  slice_max(order_by = n, n = 5)
+```
+
+```{r}
+ninja_warrior_cleaned %>% 
+  distinct(round_stage, obstacle_name) %>% 
+  count(round_stage)
+```
+
+```{r}
+ninja_warrior_cleaned %>% 
+  filter(round_stage != "Semi-Finals") %>%
+  count(round_stage, obstacle_name) %>% 
+  filter(n == 1)
+```
+
+```{r}
+ninja_warrior %>% 
+  distinct(season, obstacle_name) %>% 
+  count(season)
+```
+

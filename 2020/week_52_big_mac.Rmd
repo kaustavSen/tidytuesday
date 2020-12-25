@@ -1,0 +1,105 @@
+---
+title: "Big Mac Index"
+author: "Kaustav Sen"
+date: "12/25/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages}
+library(tidyverse)
+library(lubridate)
+library(ggtext)
+library(PNWColors)
+library(showtext)
+```
+
+```{r get-data}
+tuesdata <- tidytuesdayR::tt_load(2020, week=52)
+
+big_mac <- tuesdata$`big-mac`
+```
+
+```{r wrangle}
+plot_data <- 
+  big_mac %>% 
+  filter(date %in% c(ymd("2010-07-01"), ymd("2020-07-01"))) %>% 
+  select(name, date, usd_raw) %>% 
+  add_count(name) %>% 
+  filter(n > 1) %>% 
+  arrange(name) %>% 
+  group_by(name) %>% 
+  mutate(change = usd_raw - lag(usd_raw)) %>% 
+  tidyr::fill(change, .direction = "up") %>% 
+  arrange(change) 
+
+plot_data_5 <- 
+  filter(plot_data, change < -0.55) %>% 
+  mutate(label = glue::glue("{name} [{round(usd_raw*100)}%]"))
+```
+
+```{r load-fonts}
+font_add("mclawsui", here::here(2020, "fonts", "mclawsui.ttf"))
+font_add("futura", here::here(2020, "fonts", "FUTURAPR.ttf"))
+font_add(
+  "Atkinson Hyperlegible",
+  regular = here::here(2020, "fonts", "Atkinson-Hyperlegible-Regular-102.otf"),
+  bold = here::here(2020, "fonts", "Atkinson-Hyperlegible-Bold-102.otf"),
+  italic = here::here(2020, "fonts", "Atkinson-Hyperlegible-Italic-102.otf"),
+  bolditalic = here::here(2020, "fonts", "Atkinson-Hyperlegible-BoldItalic-102.otf"),
+)
+
+```
+
+
+```{r plot}
+showtext_auto()
+
+ggplot(plot_data, aes(date, usd_raw, group = name, color = name)) +
+  geom_line(color = "grey85") +
+  geom_point(color = "grey50", size = 1) +
+  geom_line(data = plot_data_5, size = 1.05) +
+  geom_point(data = plot_data_5, size = 1.5) +
+  geom_point(data = plot_data_5, size = 3.5, shape = 1) +
+  ggrepel::geom_text_repel(
+    data = filter(plot_data_5, date == ymd("2010-07-01")), 
+    aes(label = label), 
+    hjust = 1.1,
+    family = "Atkinson Hyperlegible",
+  ) +
+  ggrepel::geom_text_repel(
+    data = filter(plot_data_5, date == ymd("2020-07-01")), 
+    aes(label = label), 
+    hjust = -0.10,
+    family = "Atkinson Hyperlegible",
+  ) +
+  annotate("text", x = ymd("2010-07-01"), y = -0.75, label = "2010", family = "Atkinson Hyperlegible", fontface = "bold", size = 8) +
+  annotate("text", x = ymd("2020-07-01"), y = -0.75, label = "2020", family = "Atkinson Hyperlegible", fontface = "bold", size = 8) +
+  scale_x_date(limits = c(ymd("2008-07-01"), ymd("2022-07-01"))) +
+  scale_color_manual(values = pnw_palette("Bay", n=5)) +
+  labs(
+    title = "What is the <span style='font-family: mclawsui; color:#db1020; font-size: 35px; font-weight: bold'>BIG MAC</span> Index?",
+    subtitle = "The BIG MAC index is based on the theory of purchasing-power parity (PPP), the notion that in the long run exchange<br>rates should move towards the rate that would equalise the prices of an identical basket of goods and services (in<br>this case, a burger) in any two countries. - <b>The Economist</b><br><br>In the chart below, each point represents a country and shows how the index has changed over the last decade.<br>A positive (negative) number indicating that the country's currency is overvalued (undervalued) relative to the US dollar.",
+    caption = "**Data:** The Economist | **Plot:** Kaustav Sen"
+  ) +
+  theme_void() +
+  theme(
+    plot.margin = margin(10, 30, 10, 30),
+    plot.title.position = "plot",
+    plot.title = element_markdown(family = "futura", face = "bold", size = 22, color = "#ffd700", margin = margin(b = 10)),
+    plot.subtitle = element_markdown(family = "Atkinson Hyperlegible", size = 11, margin = margin(b = 10)),
+    plot.caption = element_markdown(family = "Atkinson Hyperlegible", size = 9, color = "grey40"),
+    legend.position = "none"
+  ) +
+  ggsave(here::here(2020, "plots", "week_52.pdf"), width = 9, height = 9, device = cairo_pdf)
+
+pdftools::pdf_convert(
+  pdf = here::here(2020, "plots", "week_52.pdf"),
+  filenames = here::here(2020, "plots", "week_52.png"),
+  dpi = 100
+)
+```
+
