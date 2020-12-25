@@ -1,23 +1,9 @@
 <html>
-  <head>
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Roboto&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
-      h1, h2 {
-            font-family: 'Fredoka One', cursive;
-      }
-      p {
-            font-family: 'Roboto', sans-serif;
-      }
-    </style>
-  </head>
-
   <h1>#TidyTuesday Submissions</h1>
 
   <p>My contributions to the <a href='https://github.com/rfordatascience/tidytuesday'>#TidyTuesday</a> weekly challenge run by the R4DS online learning community.</p>
 
-  <p>You can find all my contributions on <a href="https://twitter.com/kustav_sen" target="_blank" class="fa fa-twitter"> @kustav_sen</a></p>
+  <p>You can find all my contributions on Twitter <a href="https://twitter.com/kustav_sen" target="_blank" class="fa fa-twitter"> @kustav_sen</a></p>
 
   <h2>2020 Week 52: Big Mac Index [<a href="https://github.com/kaustavSen/tidytuesday/blob/master/2020/week_52_big_mac.Rmd" target="_blank">Code</a>]</h2>
   <img src="2020/plots/week_52.png">
