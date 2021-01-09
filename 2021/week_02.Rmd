@@ -1,0 +1,136 @@
+---
+title: "Transit Costs Project"
+author: "Kaustav Sen"
+date: "1/9/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-libraries}
+library(tidyverse)
+library(ggforce)
+library(glue)
+library(showtext)
+library(pals)
+library(here)
+```
+
+```{r get-data}
+tues_data <- tidytuesdayR::tt_load(2021, week = 2)
+
+transit_cost <- tues_data$transit_cost
+```
+
+```{r load-fonts}
+font_add_google("Fira Code")
+font_add_google("Faster One")
+font_add_google("Josefin Slab")
+showtext_auto()
+```
+
+```{r plot}
+plot <- 
+  transit_cost %>% 
+  filter(city == "Mumbai") %>% 
+  mutate(
+    start_year = as.numeric(start_year),
+    end_year = as.numeric(end_year),
+    length = as.numeric(length),
+    length_label = as.character(round(length)),
+    # Ensuring that all numbers have the same width
+    length_label = if_else(length < 10, paste0(" ", length_label), length_label),
+    line = fct_reorder(line, -start_year),
+    # Converting to number so that a continuous scale can be applied
+    line_order = as.numeric(line) * 1.1,
+    duration = end_year - start_year,
+    duration = glue("{duration} years"),
+    cost_km_millions = round(cost_km_millions),
+    # Ensuring color contrast in the numbers
+    color_cost = if_else(cost_km_millions > 250, "white", "black")
+  ) %>% 
+  ggplot() +
+  # Rounded bars showing the start and end timeline of the projects
+  geom_link(aes(x = start_year, xend = end_year, y = line_order, yend = line_order), size = 7, lineend = "round", color = "#B34660") +
+  # Small white points indicating the start year
+  geom_point(aes(x = start_year, y = line_order), color = "white", size = 3) +
+  geom_text(aes(x = end_year, y = line_order, label = duration), color = "white", hjust = 1, size = 3, family = "Fira Code", fontface = "bold") +
+  geom_text(aes(x = 2007, y = line_order, label = length_label), hjust = 0.5, size = 3.5, family = "Fira Code") +
+  geom_circle(aes(x0 = 2004, y0 = line_order, r = 0.5, fill = cost_km_millions), color = NA, show.legend = FALSE) +
+  geom_text(aes(x = 2004, y = line_order, label = cost_km_millions, color = color_cost), hjust = 0.5, size = 3.5, family = "Fira Code") +
+  geom_text(aes(x = 1999, y = line_order, label = line), hjust = 0, size = 4, family = "Josefin Slab", fontface = "italic") +
+  # Draw horizontal guidelines
+  geom_segment(aes(x = 2007.5, xend = start_year - 0.5, y = line_order, yend = line_order), size = 0.25, color = "grey85") +
+  # Draw sub-header line for project timeline
+  geom_segment(aes(x = 2009, xend = 2026, y = 13.75 * 1.1, yend = 13.75 * 1.1), size = 0.25, color = "grey85") +
+  # Headers
+  annotate(
+    "text", 
+    x = 2004, 
+    y = 14.5 * 1.1, 
+    label = "Cost per km\n(in USD millions)", 
+    hjust = 0.5, 
+    size = 4, 
+    family = "Josefin Slab", 
+    fontface ="bold",
+    lineheight = 0.9
+  ) +
+  annotate(
+    "text", 
+    x = 2007, 
+    y = 14.5 * 1.1, 
+    label = "Length\n(in km)", 
+    hjust = 0.5, 
+    size = 4, 
+    family = "Josefin Slab", 
+    fontface ="bold",
+    lineheight = 0.9 
+  ) +
+  annotate(
+    "text", 
+    x = 2016, 
+    y = 14.5 * 1.1, 
+    label = "Project Timeline", 
+    hjust = 0.5, 
+    size = 4, 
+    family = "Josefin Slab", 
+    fontface ="bold"
+  ) +
+  annotate(
+    "label", 
+    x = c(2009, 2017, 2026), 
+    y = 13.75 * 1.1, 
+    label = c(2009, 2017, 2026), 
+    size = 2.75, 
+    vjust = 0.5, 
+    family = "Fira Code", 
+    label.size = NA, 
+    fontface = "bold", 
+    color = "grey65"
+  ) +
+  labs(
+    title = "Mumbai Metro Rail Projects",
+    caption = "Data: TransitCosts.com | Plot: Kaustav Sen"
+  ) +
+  scale_y_continuous(limits = c(0, 15 * 1.1)) +
+  scale_color_identity() +
+  scale_fill_gradientn(colours = brewer.oranges(150)) +
+  coord_equal(clip = "off") +
+  theme_void() +
+  theme(
+    plot.margin = margin(l = 10, r = 10),
+    plot.title.position = "plot",
+    plot.title = element_text(family = "Faster One", size = 25, face = "bold", hjust = 0.5),
+    plot.caption = element_text(family = "Fira Code", color = "grey35", size = 9)
+  )
+
+ggsave(here(2021, "plots", "week_02.pdf"), plot, width = 10, height = 10, device = cairo_pdf)
+
+pdftools::pdf_convert(
+  here(2021, "plots", "week_02.pdf"),
+  filenames = here(2021, "plots", "week_02.png"),
+  dpi = 100
+)
+```

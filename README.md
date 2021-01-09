@@ -5,6 +5,9 @@
 
   <p>You can find all my contributions on Twitter <a href="https://twitter.com/kustav_sen" target="_blank" class="fa fa-twitter"> @kustav_sen</a></p>
 
+  <h2>2021 Week 2: Transit Costs [<a href="https://github.com/kaustavSen/tidytuesday/blob/master/2021/week_02.Rmd" target="_blank">Code</a>]</h2>
+  <img src="2021/plots/week_02.png">
+  
   <h2>2020 Week 52: Big Mac Index [<a href="https://github.com/kaustavSen/tidytuesday/blob/master/2020/week_52_big_mac.Rmd" target="_blank">Code</a>]</h2>
   <img src="2020/plots/week_52.png">
   
