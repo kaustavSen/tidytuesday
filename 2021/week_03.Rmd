@@ -1,0 +1,77 @@
+---
+title: "Tate Art Collections"
+author: "Kaustav Sen"
+date: "1/16/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-libraries}
+library(tidyverse)
+library(ggforce)
+library(packcircles)
+library(showtext)
+library(here)
+```
+
+```{r get-data}
+tuesdata <- tidytuesdayR::tt_load(2021, week = 3)
+
+artists <- tuesdata$artists
+artwork <- tuesdata$artwork
+```
+```{r load-fonts}
+font_add("header", here(2021, "fonts", "PlayfairDisplay-ExtraBold.ttf"))
+font_add("subtitle", here(2021, "fonts", "PlayfairDisplay-Italic.ttf"))
+font_add_google("Fira Mono")
+
+showtext_auto()
+```
+
+
+```{r wrangle}
+count_non_uk <- 
+  artwork %>% 
+  left_join(artists, by = c("artist" = "name")) %>% 
+  drop_na(acquisitionYear, placeOfBirth) %>% 
+  filter(! grepl(".*United Kingdom.*", placeOfBirth)) %>%
+  count(acquisitionYear)
+```
+
+
+```{r plot}
+set.seed(400)
+
+scale <- 100
+
+data <- filter(count_non_uk, acquisitionYear > 1900)
+
+df <- circleRepelLayout(data$n/(scale/5), xlim = 100, ylim = 100)$layout %>% 
+  bind_cols(data) %>% 
+  mutate(sides = 5)
+
+expand_grid(df, angle = seq(0, 0.75, 0.01)) %>% 
+  ggplot() +
+  geom_regon(aes(x0 = x, y0 = y, sides = sides, angle = angle, r = n/scale), 
+             alpha = 0.01, fill = "#bb5645", color = "#bb5645") +
+  coord_equal() +
+  labs(
+    title = "Tate's Global collection",
+    subtitle = stringr::str_wrap("Size of each point represents the annual number of art collections acquired by Tate from foreign (non-UK) artists over the years since 1900.", width = 90),
+    caption = "Data: Tate Collection | Plot: Kaustav Sen"
+  ) +
+  theme_void() +
+  theme(
+    plot.title.position = "plot",
+    plot.title = element_text(family = "header", size = 60),
+    plot.subtitle = element_text(family = "subtitle", margin = margin(t = 10, b = 15), size = 25, lineheight = 0.6),
+    plot.caption = element_text(family = "Fira Mono", size = 15),
+    plot.margin = margin(15, 15, 15, 15),
+    panel.background = element_rect(fill = colorspace::lighten("#e2aba0", 0.7), color = NA),
+    plot.background = element_rect(fill = colorspace::lighten("#e2aba0", 0.9), color = "#8a3223", size = 1.5)
+  ) +
+  ggsave(here(2021, "plots", "week_03.png"), height = 10, width = 9, dpi = 150)
+```
