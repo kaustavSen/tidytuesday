@@ -1,0 +1,143 @@
+---
+title: "Kenya Census"
+author: "Kaustav Sen"
+date: "1/26/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-libraries}
+library(tidyverse)
+library(ggforce)
+library(cowplot)
+library(showtext)
+library(here)
+```
+
+```{r load-fonts}
+font_add_google("Bitter")
+font_add_google("Roboto")
+```
+
+
+```{r get-data}
+tues_data <- tidytuesdayR::tt_load(2021, week = 4)
+
+crops <- tues_data$crops
+```
+
+```{r data-wrangle}
+all_crops <- colnames(crops)[-(1:2)]
+
+crops_cultivated <- 
+  crops %>% 
+  select(-Farming) %>% 
+  mutate(SubCounty = str_to_title(SubCounty)) %>% 
+  filter(SubCounty != "Kenya") %>% 
+  pivot_longer(cols = -SubCounty, names_to = "Crop", values_to = "Pop") %>% 
+  mutate(
+    is_cultivated = if_else(is.na(Pop), 0, 1),
+    Crop = if_else(Crop == "Khat (Miraa)", "Khat", Crop)
+  ) %>% 
+  select(-Pop)
+
+all_counties <- crops_cultivated$SubCounty %>% unique() %>% sort()
+```
+
+```{r flower}
+k <- 4
+theta <- seq(from = -pi/(2*k), to = 2*pi-pi/(2*k), length.out = k * 50)
+x <- cos(k * theta) * cos(theta)
+y <- cos(k * theta) * sin(theta)
+lobe <- cut(theta, 2*k, labels = all_crops[1:8])
+
+df_flower <- tibble(x = x, y = y, lobe=lobe)
+```
+
+
+```{r create-plot-data}
+fill_is_cultivated <- tibble(crop = all_crops[1:8], 
+                               fill = pals::ocean.curl(8))
+
+plot_data_excluding_khat <-
+  map_dfr(all_counties, ~ mutate(df_flower, county = .x)) %>% 
+  left_join(crops_cultivated, by = c("lobe" = "Crop", "county" = "SubCounty")) %>% 
+  left_join(fill_is_cultivated, by = c("lobe" = "crop")) %>% 
+  mutate(alpha = if_else(is_cultivated == 0, 0.3, 1), 
+         geom = "polygon")
+
+plot_data_khat <-
+  crops_cultivated %>% 
+  filter(Crop == "Khat") %>% 
+  mutate(fill = if_else(is_cultivated == 0, "#BAE5AD", colorspace::darken("#BAE5AD", 0.25)),
+         geom = "circle") %>% 
+  rename(county = SubCounty)
+
+plot_data <- bind_rows(plot_data_excluding_khat, plot_data_khat)
+
+plot_legend_data <-
+  df_flower %>% 
+  left_join(fill_is_cultivated, by = c("lobe" = "crop")) 
+
+plot_legend_labels <- 
+  tibble(
+    label = all_crops[1:8],
+    angle_degrees = (90 - 360 * (1:8) / 8),
+    angle_radians = angle_degrees * pi / 180,
+    angle_text = ifelse(angle_degrees < -90, angle_degrees+180, angle_degrees),
+    x = 0.5 * cos(angle_radians),
+    y= 0.5 * sin(angle_radians)
+  )
+```
+
+```{r}
+showtext_auto()
+
+main_plot <- 
+  ggplot(plot_data) +
+  geom_polygon(data = filter(plot_data, geom == "polygon"), aes(x = x, y = y, fill = fill, alpha = alpha, color = fill), size = 1.1) +
+  geom_circle(data = filter(plot_data, geom == "circle"), aes(x0 = 0, y0 = 0, r = 0.15, fill = fill), color = "#79AB68", size = 1.1) +
+  labs(
+    title = "Which counties grow Kenya's crops?",
+    subtitle = str_wrap("The petals and bud of each flower represents a crop. A solid fill indicates that the corresponding crop is cultivated in the county while an absence represents that it is not cultivated.", 75),
+    caption = "Data: rKenyaCensus | Plot: Kaustav Sen"
+  ) +
+  scale_color_identity() +
+  scale_fill_identity() +
+  scale_alpha_identity() +
+  facet_wrap(~county, ncol = 6) +
+  theme_void() +
+  theme(
+    plot.title.position = "plot",
+    plot.title = element_text(family = "Bitter", face = "bold", size = 30, margin = margin(b = 15)),
+    plot.subtitle = element_text(family = "Bitter", face = "italic", size = 20, margin = margin(b = 160)),
+    strip.text = element_text(family = "Bitter", face = "italic", size = 15, margin = margin(t = 7.5, b = 4)),
+    plot.caption = element_text(family = "Roboto", size = 10),
+    strip.background = element_rect(color = "#D9B9B0", fill = "#D9B9B0"),
+    panel.spacing = unit(0.3, "lines"),
+    panel.background = element_rect(fill = "#E8D7D3", color = "#E8D7D3"),
+    plot.background = element_rect(fill = "#FDF5F3", color = "#FDF5F3"),
+    plot.margin = margin(20, 20, 20, 20)
+  ) 
+
+plot_legend <- 
+  ggplot(plot_legend_data) +
+  geom_polygon(aes(x = x, y = y, fill = fill, color = fill), size = 1.1) +
+  geom_circle(aes(x0 = 0, y0 = 0, r = 0.15), fill = "#79AB68", color = "#79AB68", size = 1.1) +
+  geom_text(data = plot_legend_labels, aes(x = x, y = y, label = label, angle = angle_text), color = "white", family = "Roboto", size = 4.5, fontface = "bold") +
+  geom_text(aes(x = 0, y = 0, label = "Khat"), color = "white", family = "Roboto", size = 4.5, fontface = "bold") +
+  scale_fill_identity() +
+  scale_color_identity() +
+  coord_equal() +
+  theme_void() +
+  theme(
+    plot.background = element_rect(fill = "#FDF5F3", color = "#FDF5F3")
+  )
+
+ggdraw(main_plot) +
+  draw_plot(plot_legend, x = -0.7, y = 0.65, height = 0.5, width = 3, scale = 0.40) +
+  ggsave(here(2021, "plots", "week_04.png"), height = 27, width = 21, device = ragg::agg_png, scaling = 1.5, res = 72)
+```
