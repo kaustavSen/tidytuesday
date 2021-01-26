@@ -102,7 +102,7 @@ main_plot <-
   geom_circle(data = filter(plot_data, geom == "circle"), aes(x0 = 0, y0 = 0, r = 0.15, fill = fill), color = "#79AB68", size = 1.1) +
   labs(
     title = "Which counties grow Kenya's crops?",
-    subtitle = str_wrap("The petals and bud of each flower represents a crop. A solid fill indicates that the corresponding crop is cultivated in the county while an absence represents that it is not cultivated.", 75),
+    subtitle = str_wrap("The petals and pistil of each flower represents a crop. A solid fill indicates that the corresponding crop is cultivated in the county while an absence represents that it is not cultivated.", 75),
     caption = "Data: rKenyaCensus | Plot: Kaustav Sen"
   ) +
   scale_color_identity() +
