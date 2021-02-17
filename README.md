@@ -5,7 +5,10 @@
 
   <p>You can find all my contributions on Twitter <a href="https://twitter.com/kustav_sen" target="_blank" class="fa fa-twitter"> @kustav_sen</a></p>
 
-  <h2>2021 Week 6: HBCU Enrollment [<a href="https://github.com/kaustavSen/tidytuesday/blob/master/2021/week_06.Rmd" target="_blank">Code</a>]</h2>
+  <h2>2021 Week 8: Dubois Challenge [<a href="https://github.com/kaustavSen/tidytuesday/blob/master/2021/week_08.R" target="_blank">Code</a>]</h2>
+  <img src="2021/plots/week_08_final.png">
+
+  <h2>2021 Week 6: HBCU Enrollment [<a href="https://github.com/kaustavSen/tidytuesday/blob/master/2021/week_06.R" target="_blank">Code</a>]</h2>
   <img src="2021/plots/week_06.png">
 
   <h2>2021 Week 4: Kenya Census [<a href="https://github.com/kaustavSen/tidytuesday/blob/master/2021/week_04.Rmd" target="_blank">Code</a>]</h2>
