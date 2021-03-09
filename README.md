@@ -5,6 +5,9 @@
 
   <p>You can find all my contributions on Twitter <a href="https://twitter.com/kustav_sen" target="_blank" class="fa fa-twitter"> @kustav_sen</a></p>
 
+  <h2>2021 Week 10: SuperBowl Ads [<a href="https://github.com/kaustavSen/tidytuesday/blob/master/2021/week_10.R" target="_blank">Code</a>]</h2>
+  <img src="2021/plots/week_10.png">
+
   <h2>2021 Week 9: Employment and Earnings [<a href="https://github.com/kaustavSen/tidytuesday/blob/master/2021/week_09.R" target="_blank">Code</a>]</h2>
   <img src="2021/plots/week_09.png">
 
