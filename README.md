@@ -5,6 +5,9 @@
 
   <p>You can find all my contributions on Twitter <a href="https://twitter.com/kustav_sen" target="_blank" class="fa fa-twitter"> @kustav_sen</a></p>
 
+  <h2>2021 Week 23: Survivor TV Show [<a href="https://github.com/kaustavSen/tidytuesday/blob/master/2021/week_23.R" target="_blank">Code</a>]</h2>
+  <img src="2021/plots/week_23.png">
+  
   <h2>2021 Week 22: Mario Kart World Records [<a href="https://github.com/kaustavSen/tidytuesday/blob/master/2021/week_22.R" target="_blank">Code</a>]</h2>
   <img src="2021/plots/week_22.png">
   
