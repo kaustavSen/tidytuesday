@@ -5,6 +5,9 @@
 
   <p>You can find all my contributions on Twitter <a href="https://twitter.com/kustav_sen" target="_blank" class="fa fa-twitter"> @kustav_sen</a></p>
 
+  <h2>2021 Week 25: WEB Du Bois and Juneteenth [<a href="https://github.com/kaustavSen/tidytuesday/blob/master/2021/week_25.R" target="_blank">Code</a>]</h2>
+  <img src="2021/plots/week_25.png">
+  
   <h2>2021 Week 24: Great Lakes Fish [<a href="https://github.com/kaustavSen/tidytuesday/blob/master/2021/week_24.R" target="_blank">Code</a>]</h2>
   <img src="2021/plots/week_24.png">
   
