@@ -102,9 +102,10 @@ plot_final <-
 ggsave(here::here(2021, "plots", "week_26.png"), width = 12, height = 8, dpi = 150)
 
 # Using {rtweet} to directly post the tweet from R! 
-post_tweet(
+rtweet::post_tweet(
   status =
   "#TidyTuesday Week 26: Looked at how San Francisco park ranking have been over the years.
+  Interesting that park rankings have fallen despite increased spending.
   #RStats code: https://github.com/kaustavSen/tidytuesday/blob/master/2021/week_26.R",
   media = here::here(2021, "plots", "week_26.png"),
   media_alt_text =
