@@ -110,3 +110,21 @@ grid.curve(x1 = unit(0.89, "npc"), y1 = unit(0.77, "npc"),
            gp = gpar(col = "#DD8D29", fill = "#DD8D29"))
 grid.draw(text_birds_cats_water)
 dev.off()
+
+# Post tweet
+rtweet::post_tweet(
+  status =
+"#TidyTuesday Week 27: Animal Rescues. Explored at what times of the day dogs, cats and brids
+need the most 'rescuing'. Also tried by hand at some post-hoc annotations using {grid}.
+#RStats code: https://github.com/kaustavSen/tidytuesday/blob/master/2021/week_27.R",
+  media = here::here(2021, "plots", "week_27.png"),
+  media_alt_text =
+"Three density plots showing distribution of animal rescues by time of day.
+Left most panel shows animal rescue below ground. Center panel shows animal rescue from height and
+right most panel shows animal rescue from water.
+Some insights from the plot:
+1. Dogs need the most rescuing from heights during afternoons probably from their mid-day explorations.
+2. No surprise that cats and birds do not need to be rescued from heights often.
+3. Cats get stuck in water mainly during early morning while birds during early night.
+Data comes from london.gov website."
+)
