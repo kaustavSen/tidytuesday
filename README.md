@@ -4,7 +4,10 @@
   <p>My contributions to the <a href='https://github.com/rfordatascience/tidytuesday'>#TidyTuesday</a> weekly challenge run by the R4DS online learning community.</p>
 
   <p>You can find all my contributions on Twitter <a href="https://twitter.com/kustav_sen" target="_blank" class="fa fa-twitter"> @kustav_sen</a></p>
-
+  
+  <h2>2021 Week 31: Olympic Medals [<a href="https://github.com/kaustavSen/tidytuesday/blob/master/2021/week_31.R" target="_blank">Code</a>]</h2>
+  <img src="2021/plots/week_31.png">
+  
   <h2>2021 Week 30: US Droughts [<a href="https://github.com/kaustavSen/tidytuesday/blob/master/2021/week_30.R" target="_blank">Code</a>]</h2>
   <img src="2021/plots/week_30.png">
   
