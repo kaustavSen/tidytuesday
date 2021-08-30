@@ -5,6 +5,9 @@
 
   <p>You can find all my contributions on Twitter <a href="https://twitter.com/kustav_sen" target="_blank" class="fa fa-twitter"> @kustav_sen</a></p>
   
+  <h2>2021 Week 35: Lemurs [<a href="https://github.com/kaustavSen/tidytuesday/blob/master/2021/week_35.R" target="_blank">Code</a>]</h2>
+  <img src="2021/plots/week_35.png">
+  
   <h2>2021 Week 31: Olympic Medals [<a href="https://github.com/kaustavSen/tidytuesday/blob/master/2021/week_31.R" target="_blank">Code</a>]</h2>
   <img src="2021/plots/week_31.png">
   
