@@ -1,0 +1,93 @@
+race_year_id,rank,runner,time,age,gender,nationality,time_in_seconds,event,race,city,country,date,start_time,participation,distance,elevation_gain,elevation_loss,aid_stations,participants,event_race,year
+67218,1,MIHALIK Norbert,16H 34M 47S,39,M,HUN,59687,Centurion North Downs Way 100,Centurion North Downs Way 100,farnham,United Kingdom,2021-08-07,06:00:00,solo,165.2,3130,-3170,13,300,Centurion North Downs Way 100_Centurion North Downs Way 100,2021
+67422,1,MCDOWELL Richard,13H 43M 42S,42,M,GBR,49422,Centurion Thames Path 100,Centurion Thames Path 100,London,United Kingdom,2021-05-08,09:00:00,solo,161.3,3210,-3160,13,300,Centurion Thames Path 100_Centurion Thames Path 100,2021
+59805,1,TOLLEFSON Tim,13H 28M 4S,36,M,USA,48484,Javelina Jundred,100 Miles,FortMcDowell,United States,2020-10-31,06:00:00,solo,160.5,1720,-1720,26,800,Javelina Jundred_100 Miles,2020
+62021,1,LANDAUER Robert,17H 48M 10S,37,M,USA,64090,Cactus Rose,100 Mile,Bandera,United States,2020-10-24,05:00:00,solo,162.4,3500,-3500,20,550,Cactus Rose_100 Mile,2020
+56693,1,INNOCENTI Mark,14H 44M 21S,39,M,GBR,53061,Centurion Autumn 100,Centurion Autumn 100,GoringOnThames,United Kingdom,2020-10-10,09:00:00,solo,161.5,2060,-2060,16,250,Centurion Autumn 100_Centurion Autumn 100,2020
+49589,1,RABE Magnus,14H 47M 42S,38,M,SWE,53262,Täby Extreme Challenge,TEC 100 Miles,Täby,Sweden,2020-10-08,10:00:00,solo,160.7,1610,-1610,13,180,Täby Extreme Challenge_TEC 100 Miles,2020
+49901,1,ARNOLD Russell,14H 13M 40S,35,M,GBR,51220,Centurion Thames Path 100,Centurion Thames Path 100,London,United Kingdom,2020-09-05,09:00:00,solo,161.3,3160,-3110,13,300,Centurion Thames Path 100_Centurion Thames Path 100,2020
+58623,1,LEWIS Harvey,17H 48M 43S,45,M,USA,64123,Burning River Endurance Run,100 Mile,Hudson,United States,2020-08-22,04:00:00,solo,163.6,2700,-2700,14,250,Burning River Endurance Run_100 Mile,2020
+51393,1,KIRK Juhana,19H 33M 27S,37,M,FIN,70407,Centurion North Downs Way 100,Centurion North Downs Way 100,farnham,United Kingdom,2020-08-08,06:00:00,solo,168.2,3440,-3480,14,300,Centurion North Downs Way 100_Centurion North Downs Way 100,2020
+51777,1,WAGNER Thomas,22H 9M 32S,42,M,AUT,79772,Chiemgauer 100,100 Mile,Bergen,Germany,2020-07-31,13:00:00,Solo,0,0,-0,9,150,Chiemgauer 100_100 Mile,2020
+50523,1,RONEK Bruce,19H 45M 36S,29,M,USA,71136,Bryce Canyon,100 Mile,Hatch,United States,2020-05-15,00:00:00,solo,157.1,4320,-4320,13,300,Bryce Canyon_100 Mile,2020
+60007,1,FUCHS TREVOR,22H 4M 49S,40,M,USA,79489,HURT 100,HURT 100 MILE ENDURANCE RUN,NA,United States,2020-01-18,00:00:00,solo,161,8200,-8200,0,0,HURT 100_HURT 100 MILE ENDURANCE RUN,2020
+54821,1,LEWIS Michael,23H 1M 18S,44,M,USA,82878,Cactus Rose,100 Mile,Bandera,United States,2019-10-27,05:00:00,solo,162.4,3500,-3500,20,0,Cactus Rose_100 Mile,2019
+43385,1,REAGAN Patrick,13H 11M 48S,35,M,USA,47508,Javelina Jundred,100 Miles,FortMcDowell,United States,2019-10-26,06:00:00,solo,160.5,1720,-1720,26,799,Javelina Jundred_100 Miles,2019
+40741,1,WESTERLIN Henrik,14H 2M 19S,46,M,DEN,50539,Centurion Autumn 100,Centurion Autumn 100,GoringOnThames,United Kingdom,2019-10-12,09:00:00,solo,161.5,2060,-2060,14,250,Centurion Autumn 100_Centurion Autumn 100,2019
+40737,1,Darbyshire Mark,15H 18M 41S,42,M,GBR,55121,Centurion North Downs Way 100,Centurion North Downs Way 100,farnham,United Kingdom,2019-08-03,06:00:00,solo,168,3420,-3460,14,300,Centurion North Downs Way 100_Centurion North Downs Way 100,2019
+41117,1,PROBST Florian,22H 49M 16S,40,M,GER,82156,Chiemgauer 100,100 Mile,Bergen,Germany,2019-08-02,14:00:00,Solo,0,0,-0,9,150,Chiemgauer 100_100 Mile,2019
+40025,1,MILLER JOE,17H 25M 8S,33,M,USA,62708,Burning River Endurance Run,100 Mile,Hudson,United States,2019-07-27,04:00:00,solo,163.6,2700,-2700,14,250,Burning River Endurance Run_100 Mile,2019
+40649,1,Jay Luke,19H 50M 43S,41,M,USA,71443,Bryce Canyon,100 Mile,Hatch,United States,2019-05-17,00:00:00,solo,157.1,4470,-4460,13,300,Bryce Canyon_100 Mile,2019
+40649,1,JAY Luke,19H 50M 43S,41,M,USA,71443,Bryce Canyon,100 Mile,Hatch,United States,2019-05-17,00:00:00,solo,157.1,4470,-4460,13,300,Bryce Canyon_100 Mile,2019
+35185,1,HAMMETT Ian,14H 36M 25S,43,M,GBR,52585,Centurion Thames Path 100,Centurion Thames Path 100,London,United Kingdom,2019-05-04,10:00:00,solo,161.3,3160,-3110,13,300,Centurion Thames Path 100_Centurion Thames Path 100,2019
+39055,1,POKORNY Sebastian,15H 13M 30S,35,M,SWE,54810,Täby Extreme Challenge,TEC 100 Miles,Täby,Sweden,2019-04-27,10:00:00,solo,160.7,1610,-1610,13,150,Täby Extreme Challenge_TEC 100 Miles,2019
+43893,1,JAQUA Nate,22H 37M 54S,40,M,USA,81474,HURT 100,HURT 100 MILE ENDURANCE RUN,NA,United States,2019-01-19,00:00:00,solo,161,8200,-8200,0,0,HURT 100_HURT 100 MILE ENDURANCE RUN,2019
+38839,1,LEWIS Michael,27H 54M 0S,45,M,USA,100440,Cactus Rose,100 Mile,Bandera,United States,2018-10-28,05:00:00,solo,162.4,3500,-3500,20,0,Cactus Rose_100 Mile,2018
+32035,1,REAGAN Patrick,13H 42M 59S,35,M,USA,49379,Javelina Jundred,100 Miles,FortMcDowell,United States,2018-10-27,06:00:00,solo,160.2,2300,-2300,26,799,Javelina Jundred_100 Miles,2018
+30411,1,WILLIAMS James,15H 18M 42S,34,M,GBR,55122,Centurion Autumn 100,Centurion Autumn 100,GoringOnThames,United Kingdom,2018-10-13,10:00:00,solo,161.1,1580,-1580,14,250,Centurion Autumn 100_Centurion Autumn 100,2018
+25985,1,DICKINSON Matthew,17H 21M 22S,33,M,NZL,62482,Centurion North Downs Way 100,Centurion North Downs Way 100,farnham,United Kingdom,2018-08-04,06:00:00,solo,168,3420,-3460,14,300,Centurion North Downs Way 100_Centurion North Downs Way 100,2018
+27491,1,JEREMY Pope,17H 13M 8S,36,M,USA,61988,Burning River Endurance Run,100 Mile,Hudson,United States,2018-07-28,04:00:00,solo,164.4,2610,-2510,14,250,Burning River Endurance Run_100 Mile,2018
+25599,1,WAGNER Thomas,21H 19M 44S,42,M,AUT,76784,Chiemgauer 100,100 Mile,Bergen,Germany,2018-07-27,14:00:00,Solo,0,0,-0,9,150,Chiemgauer 100_100 Mile,2018
+28367,1,BLANKENSHIP Buck,19H 15M 2S,40,M,USA,69302,Bryce Canyon,100 Mile,Hatch,United States,2018-06-01,00:00:00,solo,158.1,4770,-4800,13,300,Bryce Canyon_100 Mile,2018
+22655,1,WINDROSS Peter,15H 49M 25S,50,M,GBR,56965,Centurion Thames Path 100,Centurion Thames Path 100,London,United Kingdom,2018-05-05,10:00:00,solo,161.2,3210,-3160,13,300,Centurion Thames Path 100_Centurion Thames Path 100,2018
+25257,1,Roos Henrik,17H 1M 38S,42,M,SWE,61298,Täby Extreme Challenge,TEC 100 Miles,Täby,Sweden,2018-04-21,10:00:00,solo,159.1,1640,-1640,13,150,Täby Extreme Challenge_TEC 100 Miles,2018
+31669,1,Collins Avery,21H 44M 0S,29,M,USA,78240,HURT 100,HURT 100 MILE ENDURANCE RUN,NA,United States,2018-01-13,00:00:00,solo,161,8200,-8200,0,0,HURT 100_HURT 100 MILE ENDURANCE RUN,2018
+16729,1,REAGAN Patrick,13H 1M 14S,35,M,USA,46874,Javelina Jundred,100 Miles,FortMcDowell,United States,2017-10-28,06:00:00,solo,159.4,1760,-1760,26,799,Javelina Jundred_100 Miles,2017
+24933,1,JOE Schmal,18H 46M 33S,42,M,USA,67593,Cactus Rose,100 Mile,Bandera,United States,2017-10-21,00:00:00,solo,0,0,-0,20,0,Cactus Rose_100 Mile,2017
+17291,1,MASKELL Paul,14H 34M 1S,43,M,GBR,52441,Centurion Autumn 100,Centurion Autumn 100,GoringOnThames,United Kingdom,2017-10-21,10:00:00,solo,161.8,2120,-2120,14,300,Centurion Autumn 100_Centurion Autumn 100,2017
+15312,1,MIHALIK Norbert,16H 39M 31S,39,M,HUN,59971,Centurion North Downs Way 100,Centurion North Downs Way 100,farnham,United Kingdom,2017-08-05,06:00:00,solo,170.2,3490,-3520,14,300,Centurion North Downs Way 100_Centurion North Downs Way 100,2017
+18669,1,WIECZOREK Matthew,16H 22M 56S,34,M,USA,58976,Burning River Endurance Run,100 Mile,Hudson,United States,2017-07-29,04:00:00,solo,164.6,2610,-2530,14,250,Burning River Endurance Run_100 Mile,2017
+16853,1,WAGNER Thomas,22H 51M 41S,42,M,AUT,82301,Chiemgauer 100,100 Mile,Bergen,Germany,2017-07-28,14:00:00,Solo,0,0,-0,9,150,Chiemgauer 100_100 Mile,2017
+16103,1,Hammes Christopher,21H 11M 27S,30,M,USA,76287,Bryce Canyon,100 Mile,Hatch,United States,2017-06-16,00:00:00,solo,159.4,4800,-4800,13,150,Bryce Canyon_100 Mile,2017
+14011,1,STOCKS Michael,14H 57M 53S,52,M,GBR,53873,Centurion Thames Path 100,Centurion Thames Path 100,London,United Kingdom,2017-04-29,10:00:00,solo,160.7,1880,-1850,13,300,Centurion Thames Path 100_Centurion Thames Path 100,2017
+21897,1,BYGDELL JOHANNA,15H 10M 35S,39,W,SWE,54635,Täby Extreme Challenge,TEC 100 Miles,Täby,Sweden,2017-04-22,10:00:00,solo,160.3,1780,-1780,13,150,Täby Extreme Challenge_TEC 100 Miles,2017
+19971,1,ARNSTEIN Michael,21H 52M 16S,44,M,USA,78736,HURT 100,HURT 100 MILE ENDURANCE RUN,NA,United States,2017-01-15,00:00:00,solo,161,8200,-8200,0,0,HURT 100_HURT 100 MILE ENDURANCE RUN,2017
+11955,1,Bitter Zach,13H 30M 28S,35,M,USA,48628,Javelina Jundred,100 Miles,FortMcDowell,United States,2016-10-29,06:00:00,solo,159.4,1760,-1760,26,799,Javelina Jundred_100 Miles,2016
+16971,1,Lasater Chad,21H 28M 51S,49,M,USA,77331,Cactus Rose,100 Mile,Bandera,United States,2016-10-22,00:00:00,solo,161,4400,-4400,20,0,Cactus Rose_100 Mile,2016
+11352,1,DENBY Mark,14H 7M 39S,48,M,GBR,50859,Centurion Autumn 100,Centurion Autumn 100,GoringOnThames,United Kingdom,2016-10-15,10:00:00,solo,162.4,2130,-2140,14,300,Centurion Autumn 100_Centurion Autumn 100,2016
+11982,1,WIECZOREK Matthew,17H 48M 42S,34,M,USA,64122,Burning River Endurance Run,100 Mile,Hudson,United States,2016-08-06,04:00:00,solo,163,2470,-2470,20,0,Burning River Endurance Run_100 Mile,2016
+11486,1,KIRBY Neil,16H 46M 21S,40,M,GBR,60381,Centurion North Downs Way 100,Centurion North Downs Way 100,farnham,United Kingdom,2016-08-06,06:00:00,solo,170.2,3490,-3520,14,300,Centurion North Downs Way 100_Centurion North Downs Way 100,2016
+12166,1,BERNARD Armin,23H 29M 32S,58,M,GER,84572,Chiemgauer 100,100 Mile,Bergen,Germany,2016-07-29,14:00:00,Solo,160,7500,-7500,9,150,Chiemgauer 100_100 Mile,2016
+12004,1,Hammond Mark,19H 30M 25S,36,M,USA,70225,Bryce Canyon,100 Mile,Hatch,United States,2016-06-03,00:00:00,solo,159.4,4800,-4800,13,90,Bryce Canyon_100 Mile,2016
+10686,1,HOLGATE Craig,14H 9M 54S,45,M,GBR,50994,Centurion Thames Path 100,Centurion Thames Path 100,London,United Kingdom,2016-04-30,00:00:00,solo,166.9,1532,-1502,13,300,Centurion Thames Path 100_Centurion Thames Path 100,2016
+10990,1,JOHANSSON Jonas,16H 3M 5S,42,M,SWE,57785,Täby Extreme Challenge,TEC 100 Miles,Täby,Sweden,2016-04-16,10:00:00,solo,158.2,1540,-1540,13,250,Täby Extreme Challenge_TEC 100 Miles,2016
+12320,1,BROWNING JEFF,21H 22M 49S,50,M,USA,76969,HURT 100,HURT 100 MILE ENDURANCE RUN,NA,United States,2016-01-16,00:00:00,solo,161,8200,-8200,0,0,HURT 100_HURT 100 MILE ENDURANCE RUN,2016
+9703,1,GIBLIN Paul,13H 49M 17S,44,M,GBR,49757,Javelina Jundred,100 Miles,FortMcDowell,United States,2015-10-31,00:00:00,solo,163.4,1850,-1850,26,0,Javelina Jundred_100 Miles,2015
+11422,1,LEWIS Michael,20H 18M 7S,45,M,USA,73087,Cactus Rose,100 Mile,Bandera,United States,2015-10-24,00:00:00,solo,161,4400,-4400,20,0,Cactus Rose_100 Mile,2015
+8966,1,Elson James,14H 35M 40S,39,M,GBR,52540,Centurion Autumn 100,Centurion Autumn 100,GoringOnThames,United Kingdom,2015-10-17,00:00:00,solo,162.4,2130,-2140,15,240,Centurion Autumn 100_Centurion Autumn 100,2015
+8392,1,CATMUR Edward,18H 2M 0S,39,M,GBR,64920,Centurion North Downs Way 100,Centurion North Downs Way 100,farnham,United Kingdom,2015-08-08,00:00:00,solo,170.2,3490,-3520,14,0,Centurion North Downs Way 100_Centurion North Downs Way 100,2015
+8728,1,OSKVIG Daven,17H 50M 0S,44,M,USA,64200,Burning River Endurance Run,100 Mile,Hudson,United States,2015-07-25,00:00:00,solo,163,2470,-2470,20,0,Burning River Endurance Run_100 Mile,2015
+12158,1,WAGNER Thomas,21H 56M 30S,42,M,AUT,78990,Chiemgauer 100,100 Mile,Bergen,Germany,2015-07-24,00:00:00,Solo,160,7500,-7500,9,0,Chiemgauer 100_100 Mile,2015
+9876,1,BOUGUIN Florent,17H 58M 34S,46,M,CAN,64714,Bryce Canyon,100 Mile,Hatch,United States,2015-06-05,00:00:00,solo,159.4,4800,-4800,13,0,Bryce Canyon_100 Mile,2015
+7980,1,WILLCOCKS Max,16H 35M 11S,39,M,GBR,59711,Centurion Thames Path 100,Centurion Thames Path 100,London,United Kingdom,2015-05-02,00:00:00,solo,161,1600,-1600,13,0,Centurion Thames Path 100_Centurion Thames Path 100,2015
+9963,1,SJALIN Max,14H 7M 5S,31,M,SWE,50825,Täby Extreme Challenge,TEC 100 Miles,Täby,Sweden,2015-04-11,00:00:00,solo,159.5,2510,-2520,13,150,Täby Extreme Challenge_TEC 100 Miles,2015
+9189,1,ARNSTEIN Michael,21H 29M 39S,44,M,USA,77379,HURT 100,HURT 100 MILE ENDURANCE RUN,NA,United States,2015-01-17,00:00:00,solo,161,8200,-8200,0,0,HURT 100_HURT 100 MILE ENDURANCE RUN,2015
+7253,1,SHIPEK Catlow,14H 51M 33S,43,M,USA,53493,Javelina Jundred,100 Miles,FortMcDowell,United States,2014-11-01,00:00:00,solo,162.9,1960,-1960,0,0,Javelina Jundred_100 Miles,2014
+7114,1,HOPTON JONES Brian,21H 8M 30S,34,M,USA,76110,Cactus Rose,100 Mile,Bandera,United States,2014-10-25,00:00:00,solo,161,4400,-4400,20,0,Cactus Rose_100 Mile,2014
+7558,1,CONSANI Marco,15H 3M 43S,47,M,GBR,54223,Centurion Autumn 100,Centurion Autumn 100,GoringOnThames,United Kingdom,2014-10-18,00:00:00,solo,162.4,2130,-2140,15,0,Centurion Autumn 100_Centurion Autumn 100,2014
+6241,1,OAKES Duncan,17H 4M 12S,56,M,GBR,61452,Centurion North Downs Way 100,Centurion North Downs Way 100,farnham,United Kingdom,2014-08-09,00:00:00,solo,173.5,2460,-2500,0,0,Centurion North Downs Way 100_Centurion North Downs Way 100,2014
+7124,1,SHELLHAMER Troy,17H 25M 2S,41,M,USA,62702,Burning River Endurance Run,100 Mile,Hudson,United States,2014-08-02,00:00:00,solo,163,2470,-2470,20,0,Burning River Endurance Run_100 Mile,2014
+6974,1,DOHNERT Rudi,21H 28M 4S,52,M,GER,77284,Chiemgauer 100,100 Mile,Bergen,Germany,2014-07-25,00:00:00,Solo,160,7500,-7500,0,0,Chiemgauer 100_100 Mile,2014
+7131,1,MARION Zac,21H 14M 11S,36,M,USA,76451,Bryce Canyon,100 Mile,Hatch,United States,2014-06-14,00:00:00,solo,161,4200,-4200,0,0,Bryce Canyon_100 Mile,2014
+6659,1,CATMUR Edward,16H 38M 13S,39,M,GBR,59893,Centurion Thames Path 100,Centurion Thames Path 100,London,United Kingdom,2014-05-03,00:00:00,solo,161,1600,-1600,0,0,Centurion Thames Path 100_Centurion Thames Path 100,2014
+7573,1,FALK Andreas,13H 34M 31S,44,M,SWE,48871,Täby Extreme Challenge,TEC 100 Miles,Täby,Sweden,2014-04-12,00:00:00,solo,160.9,2400,-2400,0,0,Täby Extreme Challenge_TEC 100 Miles,2014
+7112,1,ROBBINS Gary,21H 34M 0S,45,M,CAN,77640,HURT 100,HURT 100 MILE ENDURANCE RUN,NA,United States,2014-01-18,00:00:00,solo,161,7620,-7620,0,0,HURT 100_HURT 100 MILE ENDURANCE RUN,2014
+5266,1,CATMUR Edward,16H 5M 10S,39,M,GBR,57910,Centurion Autumn 100,Centurion Autumn 100,GoringOnThames,United Kingdom,2013-11-30,00:00:00,solo,162.4,2130,-2140,0,0,Centurion Autumn 100_Centurion Autumn 100,2013
+4344,1,LEEHMAN Nathan,18H 56M 33S,48,M,USA,68193,Cactus Rose,100 Mile,Bandera,United States,2013-10-26,00:00:00,solo,161,4400,-4400,0,0,Cactus Rose_100 Mile,2013
+4745,1,KOERNER Hal,14H 56M 53S,45,M,USA,53813,Javelina Jundred,100 Miles,FortMcDowell,United States,2013-10-26,00:00:00,solo,162.9,1960,-1960,0,0,Javelina Jundred_100 Miles,2013
+4126,1,CATMUR Edward,15H 44M 39S,39,M,GBR,56679,Centurion North Downs Way 100,Centurion North Downs Way 100,farnham,United Kingdom,2013-08-10,00:00:00,solo,161,3030,-3070,0,0,Centurion North Downs Way 100_Centurion North Downs Way 100,2013
+4303,1,HOGG Peter,14H 25M 14S,39,M,USA,51914,Burning River Endurance Run,100 Mile,Hudson,United States,2013-07-27,00:00:00,solo,161,2470,-2470,0,0,Burning River Endurance Run_100 Mile,2013
+4314,1,HOLLON Nick,22H 46M 1S,32,M,USA,81961,Chiemgauer 100,100 Mile,Bergen,Germany,2013-07-26,00:00:00,Solo,160,7500,-7500,0,0,Chiemgauer 100_100 Mile,2013
+5623,1,CANETTA Filippo,19H 52M 36S,49,M,ITA,71556,Bryce Canyon,100 Mile,Hatch,United States,2013-05-31,00:00:00,solo,161,4200,-4200,0,0,Bryce Canyon_100 Mile,2013
+4417,1,STEENE Johan,16H 54M 28S,48,M,SWE,60868,Täby Extreme Challenge,TEC 100 Miles,Täby,Sweden,2013-04-13,00:00:00,solo,160.9,2400,-2400,0,0,Täby Extreme Challenge_TEC 100 Miles,2013
+4080,1,BACON Martin,18H 10M 53S,55,M,GBR,65453,Centurion Thames Path 100,Centurion Thames Path 100,London,United Kingdom,2013-03-23,00:00:00,solo,161,1600,-1600,0,0,Centurion Thames Path 100_Centurion Thames Path 100,2013
+4290,1,ROBBINS Gary,19H 35M 0S,45,M,CAN,70500,HURT 100,HURT 100 MILE ENDURANCE RUN,NA,United States,2013-01-19,00:00:00,solo,161,7620,-7620,0,0,HURT 100_HURT 100 MILE ENDURANCE RUN,2013
+3491,1,CUNNINGHAM Richard,17H 14M 10S,52,M,GBR,62050,Centurion Autumn 100,Centurion Autumn 100,GoringOnThames,United Kingdom,2012-11-24,00:00:00,solo,162.4,2130,-2140,0,0,Centurion Autumn 100_Centurion Autumn 100,2012
+2692,1,MOORE Steven,17H 34M 8S,54,M,USA,63248,Cactus Rose,100 Mile,Bandera,United States,2012-10-27,00:00:00,solo,161,4400,-4400,0,0,Cactus Rose_100 Mile,2012
+3226,1,ARNSTEIN Michael,14H 38M 26S,44,M,USA,52706,Javelina Jundred,100 Miles,FortMcDowell,United States,2012-10-27,00:00:00,solo,162.9,1960,-1960,0,0,Javelina Jundred_100 Miles,2012
+2665,1,LAGO Manuel,17H 51M 56S,45,M,BRA,64316,Centurion North Downs Way 100,Centurion North Downs Way 100,farnham,United Kingdom,2012-08-11,00:00:00,solo,161,3030,-3070,0,0,Centurion North Downs Way 100_Centurion North Downs Way 100,2012
+2694,1,JAMES Dave,15H 2M 0S,43,M,USA,54120,Burning River Endurance Run,100 Mile,Hudson,United States,2012-07-28,00:00:00,solo,161,2470,-2350,0,0,Burning River Endurance Run_100 Mile,2012
+2903,1,DONATH Lars,24H 14M 0S,38,M,GER,87240,Chiemgauer 100,100 Mile,Bergen,Germany,2012-07-27,00:00:00,Solo,160,7500,-7500,0,0,Chiemgauer 100_100 Mile,2012
+2910,1,ORSVARN Sten,17H 24M 19S,59,M,SWE,62659,Täby Extreme Challenge,TEC 100 Miles,Täby,Sweden,2012-04-14,00:00:00,solo,160.9,2400,-2400,0,0,Täby Extreme Challenge_TEC 100 Miles,2012
+2320,1,HOLGATE Craig,15H 11M 15S,45,M,GBR,54675,Centurion Thames Path 100,Centurion Thames Path 100,London,United Kingdom,2012-03-03,00:00:00,solo,161,1600,-1600,0,0,Centurion Thames Path 100_Centurion Thames Path 100,2012
+3253,1,LOUTITT Jason,22H 44M 12S,47,M,CAN,81852,HURT 100,HURT 100 MILE ENDURANCE RUN,NA,United States,2012-01-14,00:00:00,solo,161,7620,-7620,0,0,HURT 100_HURT 100 MILE ENDURANCE RUN,2012
