@@ -1,0 +1,659 @@
+year,state,type,value
+2015,Alabama,colony_added,4940
+2015,Alabama,colony_lost,4670
+2015,Arizona,colony_added,30200
+2015,Arizona,colony_lost,28100
+2015,Arkansas,colony_added,15100
+2015,Arkansas,colony_lost,14800
+2015,California,colony_added,499000
+2015,California,colony_lost,584000
+2015,Colorado,colony_added,11000
+2015,Colorado,colony_lost,10400
+2015,Connecticut,colony_added,1620
+2015,Connecticut,colony_lost,1210
+2015,Florida,colony_added,165000
+2015,Florida,colony_lost,150000
+2015,Georgia,colony_added,95900
+2015,Georgia,colony_lost,68500
+2015,Hawaii,colony_added,8400
+2015,Hawaii,colony_lost,3890
+2015,Idaho,colony_added,30100
+2015,Idaho,colony_lost,46200
+2015,Illinois,colony_added,9600
+2015,Illinois,colony_lost,6900
+2015,Indiana,colony_added,6930
+2015,Indiana,colony_lost,6100
+2015,Iowa,colony_added,8880
+2015,Iowa,colony_lost,11800
+2015,Kansas,colony_added,3400
+2015,Kansas,colony_lost,6670
+2015,Kentucky,colony_added,4040
+2015,Kentucky,colony_lost,7480
+2015,Louisiana,colony_added,13000
+2015,Louisiana,colony_lost,16700
+2015,Maine,colony_added,4460
+2015,Maine,colony_lost,4090
+2015,Maryland,colony_added,4930
+2015,Maryland,colony_lost,5150
+2015,Massachusetts,colony_added,1520
+2015,Massachusetts,colony_lost,2140
+2015,Michigan,colony_added,24510
+2015,Michigan,colony_lost,37000
+2015,Minnesota,colony_added,21930
+2015,Minnesota,colony_lost,58200
+2015,Mississippi,colony_added,28260
+2015,Mississippi,colony_lost,24500
+2015,Missouri,colony_added,2850
+2015,Missouri,colony_lost,4390
+2015,Montana,colony_added,19600
+2015,Montana,colony_lost,26900
+2015,Nebraska,colony_added,16130
+2015,Nebraska,colony_lost,19700
+2015,New Jersey,colony_added,2880
+2015,New Jersey,colony_lost,3380
+2015,New Mexico,colony_added,3280
+2015,New Mexico,colony_lost,3580
+2015,New York,colony_added,16090
+2015,New York,colony_lost,18100
+2015,North Carolina,colony_added,14510
+2015,North Carolina,colony_lost,13900
+2015,North Dakota,colony_added,54500
+2015,North Dakota,colony_lost,157620
+2015,Ohio,colony_added,17500
+2015,Ohio,colony_lost,16900
+2015,Oklahoma,colony_added,8550
+2015,Oklahoma,colony_lost,9080
+2015,Oregon,colony_added,27000
+2015,Oregon,colony_lost,29000
+2015,Other States,colony_added,6160
+2015,Other States,colony_lost,6550
+2015,Pennsylvania,colony_added,11960
+2015,Pennsylvania,colony_lost,12400
+2015,South Carolina,colony_added,5320
+2015,South Carolina,colony_lost,7850
+2015,South Dakota,colony_added,40000
+2015,South Dakota,colony_lost,87600
+2015,Tennessee,colony_added,5170
+2015,Tennessee,colony_lost,5030
+2015,Texas,colony_added,176500
+2015,Texas,colony_lost,100500
+2015,United States,colony_added,1498980
+2015,United States,colony_lost,1722360
+2015,Utah,colony_added,14020
+2015,Utah,colony_lost,16600
+2015,Vermont,colony_added,1820
+2015,Vermont,colony_lost,1780
+2015,Virginia,colony_added,3420
+2015,Virginia,colony_lost,3450
+2015,Washington,colony_added,30630
+2015,Washington,colony_lost,37000
+2015,West Virginia,colony_added,3960
+2015,West Virginia,colony_lost,3280
+2015,Wisconsin,colony_added,14610
+2015,Wisconsin,colony_lost,28100
+2015,Wyoming,colony_added,9800
+2015,Wyoming,colony_lost,9000
+2016,Alabama,colony_added,2890
+2016,Alabama,colony_lost,4440
+2016,Arizona,colony_added,24000
+2016,Arizona,colony_lost,20900
+2016,Arkansas,colony_added,16990
+2016,Arkansas,colony_lost,12400
+2016,California,colony_added,488000
+2016,California,colony_lost,605000
+2016,Colorado,colony_added,12600
+2016,Colorado,colony_lost,12800
+2016,Connecticut,colony_added,1350
+2016,Connecticut,colony_lost,640
+2016,Florida,colony_added,172000
+2016,Florida,colony_lost,140000
+2016,Georgia,colony_added,70000
+2016,Georgia,colony_lost,55000
+2016,Hawaii,colony_added,1930
+2016,Hawaii,colony_lost,2680
+2016,Idaho,colony_added,31400
+2016,Idaho,colony_lost,41000
+2016,Illinois,colony_added,3520
+2016,Illinois,colony_lost,3340
+2016,Indiana,colony_added,3210
+2016,Indiana,colony_lost,2790
+2016,Iowa,colony_added,36590
+2016,Iowa,colony_lost,11100
+2016,Kansas,colony_added,3510
+2016,Kansas,colony_lost,4860
+2016,Kentucky,colony_added,3170
+2016,Kentucky,colony_lost,3700
+2016,Louisiana,colony_added,20350
+2016,Louisiana,colony_lost,22800
+2016,Maine,colony_added,750
+2016,Maine,colony_lost,4620
+2016,Maryland,colony_added,3260
+2016,Maryland,colony_lost,2420
+2016,Massachusetts,colony_added,1670
+2016,Massachusetts,colony_lost,1200
+2016,Michigan,colony_added,26810
+2016,Michigan,colony_lost,40000
+2016,Minnesota,colony_added,29700
+2016,Minnesota,colony_lost,45000
+2016,Mississippi,colony_added,21080
+2016,Mississippi,colony_lost,15900
+2016,Missouri,colony_added,4610
+2016,Missouri,colony_lost,3210
+2016,Montana,colony_added,43300
+2016,Montana,colony_lost,35340
+2016,Nebraska,colony_added,8620
+2016,Nebraska,colony_lost,19130
+2016,New Jersey,colony_added,2500
+2016,New Jersey,colony_lost,3110
+2016,New Mexico,colony_added,5810
+2016,New Mexico,colony_lost,5800
+2016,New York,colony_added,15780
+2016,New York,colony_lost,27000
+2016,North Carolina,colony_added,11700
+2016,North Carolina,colony_lost,11000
+2016,North Dakota,colony_added,61500
+2016,North Dakota,colony_lost,142000
+2016,Ohio,colony_added,7760
+2016,Ohio,colony_lost,9600
+2016,Oklahoma,colony_added,4210
+2016,Oklahoma,colony_lost,6470
+2016,Oregon,colony_added,27200
+2016,Oregon,colony_lost,24100
+2016,Other States,colony_added,5040
+2016,Other States,colony_lost,4470
+2016,Pennsylvania,colony_added,7520
+2016,Pennsylvania,colony_lost,8600
+2016,South Carolina,colony_added,6050
+2016,South Carolina,colony_lost,6920
+2016,South Dakota,colony_added,19230
+2016,South Dakota,colony_lost,36770
+2016,Tennessee,colony_added,4460
+2016,Tennessee,colony_lost,4070
+2016,Texas,colony_added,161700
+2016,Texas,colony_lost,116000
+2016,United States,colony_added,1457060
+2016,United States,colony_lost,1658260
+2016,Utah,colony_added,14350
+2016,Utah,colony_lost,11300
+2016,Vermont,colony_added,670
+2016,Vermont,colony_lost,680
+2016,Virginia,colony_added,3390
+2016,Virginia,colony_lost,2870
+2016,Washington,colony_added,35800
+2016,Washington,colony_lost,33000
+2016,West Virginia,colony_added,2810
+2016,West Virginia,colony_lost,2180
+2016,Wisconsin,colony_added,18920
+2016,Wisconsin,colony_lost,27900
+2016,Wyoming,colony_added,9350
+2016,Wyoming,colony_lost,11800
+2017,Alabama,colony_added,3010
+2017,Alabama,colony_lost,3930
+2017,Arizona,colony_added,21700
+2017,Arizona,colony_lost,19200
+2017,Arkansas,colony_added,12330
+2017,Arkansas,colony_lost,18900
+2017,California,colony_added,588000
+2017,California,colony_lost,476000
+2017,Colorado,colony_added,10000
+2017,Colorado,colony_lost,15900
+2017,Connecticut,colony_added,2540
+2017,Connecticut,colony_lost,980
+2017,Florida,colony_added,214000
+2017,Florida,colony_lost,144000
+2017,Georgia,colony_added,80300
+2017,Georgia,colony_lost,61000
+2017,Hawaii,colony_added,2430
+2017,Hawaii,colony_lost,1480
+2017,Idaho,colony_added,45000
+2017,Idaho,colony_lost,39000
+2017,Illinois,colony_added,7550
+2017,Illinois,colony_lost,7000
+2017,Indiana,colony_added,5440
+2017,Indiana,colony_lost,5730
+2017,Iowa,colony_added,26420
+2017,Iowa,colony_lost,13700
+2017,Kansas,colony_added,4970
+2017,Kansas,colony_lost,3910
+2017,Kentucky,colony_added,4350
+2017,Kentucky,colony_lost,4330
+2017,Louisiana,colony_added,30490
+2017,Louisiana,colony_lost,21500
+2017,Maine,colony_added,1320
+2017,Maine,colony_lost,2370
+2017,Maryland,colony_added,5290
+2017,Maryland,colony_lost,5190
+2017,Massachusetts,colony_added,2930
+2017,Massachusetts,colony_lost,3490
+2017,Michigan,colony_added,27890
+2017,Michigan,colony_lost,38600
+2017,Minnesota,colony_added,25600
+2017,Minnesota,colony_lost,35500
+2017,Mississippi,colony_added,29030
+2017,Mississippi,colony_lost,12700
+2017,Missouri,colony_added,2520
+2017,Missouri,colony_lost,2860
+2017,Montana,colony_added,26700
+2017,Montana,colony_lost,35770
+2017,Nebraska,colony_added,7080
+2017,Nebraska,colony_lost,12590
+2017,New Jersey,colony_added,2220
+2017,New Jersey,colony_lost,2540
+2017,New Mexico,colony_added,9400
+2017,New Mexico,colony_lost,8200
+2017,New York,colony_added,20440
+2017,New York,colony_lost,17700
+2017,North Carolina,colony_added,11760
+2017,North Carolina,colony_lost,12400
+2017,North Dakota,colony_added,54600
+2017,North Dakota,colony_lost,85140
+2017,Ohio,colony_added,10910
+2017,Ohio,colony_lost,10100
+2017,Oklahoma,colony_added,16120
+2017,Oklahoma,colony_lost,1360
+2017,Oregon,colony_added,33070
+2017,Oregon,colony_lost,36500
+2017,Other States,colony_added,1530
+2017,Other States,colony_lost,3120
+2017,Pennsylvania,colony_added,16310
+2017,Pennsylvania,colony_lost,11710
+2017,South Carolina,colony_added,8540
+2017,South Carolina,colony_lost,6170
+2017,South Dakota,colony_added,17500
+2017,South Dakota,colony_lost,25200
+2017,Tennessee,colony_added,5130
+2017,Tennessee,colony_lost,5700
+2017,Texas,colony_added,215200
+2017,Texas,colony_lost,88000
+2017,United States,colony_added,1728590
+2017,United States,colony_lost,1407200
+2017,Utah,colony_added,23380
+2017,Utah,colony_lost,13500
+2017,Vermont,colony_added,920
+2017,Vermont,colony_lost,820
+2017,Virginia,colony_added,5730
+2017,Virginia,colony_lost,4700
+2017,Washington,colony_added,52900
+2017,Washington,colony_lost,36500
+2017,West Virginia,colony_added,4360
+2017,West Virginia,colony_lost,3270
+2017,Wisconsin,colony_added,19980
+2017,Wisconsin,colony_lost,28300
+2017,Wyoming,colony_added,11700
+2017,Wyoming,colony_lost,13700
+2018,Alabama,colony_added,4310
+2018,Alabama,colony_lost,4160
+2018,Arizona,colony_added,18210
+2018,Arizona,colony_lost,21600
+2018,Arkansas,colony_added,17250
+2018,Arkansas,colony_lost,17300
+2018,California,colony_added,525000
+2018,California,colony_lost,533000
+2018,Colorado,colony_added,12770
+2018,Colorado,colony_lost,15700
+2018,Connecticut,colony_added,640
+2018,Connecticut,colony_lost,390
+2018,Florida,colony_added,217000
+2018,Florida,colony_lost,156000
+2018,Georgia,colony_added,96500
+2018,Georgia,colony_lost,77500
+2018,Hawaii,colony_added,4900
+2018,Hawaii,colony_lost,4620
+2018,Idaho,colony_added,43500
+2018,Idaho,colony_lost,55800
+2018,Illinois,colony_added,7000
+2018,Illinois,colony_lost,6560
+2018,Indiana,colony_added,4860
+2018,Indiana,colony_lost,7090
+2018,Iowa,colony_added,17750
+2018,Iowa,colony_lost,13400
+2018,Kansas,colony_added,3020
+2018,Kansas,colony_lost,3070
+2018,Kentucky,colony_added,2280
+2018,Kentucky,colony_lost,4890
+2018,Louisiana,colony_added,12830
+2018,Louisiana,colony_lost,9070
+2018,Maine,colony_added,740
+2018,Maine,colony_lost,3630
+2018,Maryland,colony_added,3040
+2018,Maryland,colony_lost,1420
+2018,Massachusetts,colony_added,2110
+2018,Massachusetts,colony_lost,4110
+2018,Michigan,colony_added,35400
+2018,Michigan,colony_lost,28000
+2018,Minnesota,colony_added,63600
+2018,Minnesota,colony_lost,50900
+2018,Mississippi,colony_added,32340
+2018,Mississippi,colony_lost,11900
+2018,Missouri,colony_added,3630
+2018,Missouri,colony_lost,3210
+2018,Montana,colony_added,33040
+2018,Montana,colony_lost,28940
+2018,Nebraska,colony_added,18600
+2018,Nebraska,colony_lost,14200
+2018,New Jersey,colony_added,1660
+2018,New Jersey,colony_lost,2620
+2018,New Mexico,colony_added,4320
+2018,New Mexico,colony_lost,8150
+2018,New York,colony_added,13000
+2018,New York,colony_lost,15300
+2018,North Carolina,colony_added,8850
+2018,North Carolina,colony_lost,10300
+2018,North Dakota,colony_added,63100
+2018,North Dakota,colony_lost,102200
+2018,Ohio,colony_added,10770
+2018,Ohio,colony_lost,8500
+2018,Oklahoma,colony_added,9970
+2018,Oklahoma,colony_lost,8170
+2018,Oregon,colony_added,53500
+2018,Oregon,colony_lost,33500
+2018,Other States,colony_added,2540
+2018,Other States,colony_lost,4170
+2018,Pennsylvania,colony_added,10770
+2018,Pennsylvania,colony_lost,7460
+2018,South Carolina,colony_added,5740
+2018,South Carolina,colony_lost,6000
+2018,South Dakota,colony_added,31250
+2018,South Dakota,colony_lost,55390
+2018,Tennessee,colony_added,4370
+2018,Tennessee,colony_lost,7000
+2018,Texas,colony_added,236500
+2018,Texas,colony_lost,77500
+2018,United States,colony_added,1721790
+2018,United States,colony_lost,1517070
+2018,Utah,colony_added,11640
+2018,Utah,colony_lost,10120
+2018,Vermont,colony_added,3830
+2018,Vermont,colony_lost,1350
+2018,Virginia,colony_added,4020
+2018,Virginia,colony_lost,4300
+2018,Washington,colony_added,38500
+2018,Washington,colony_lost,34100
+2018,West Virginia,colony_added,2650
+2018,West Virginia,colony_lost,4210
+2018,Wisconsin,colony_added,19300
+2018,Wisconsin,colony_lost,29100
+2018,Wyoming,colony_added,5190
+2018,Wyoming,colony_lost,9020
+2019,Alabama,colony_added,1200
+2019,Alabama,colony_lost,2300
+2019,Arizona,colony_added,6230
+2019,Arizona,colony_lost,11500
+2019,Arkansas,colony_added,620
+2019,Arkansas,colony_lost,10200
+2019,California,colony_added,330000
+2019,California,colony_lost,464000
+2019,Colorado,colony_added,3300
+2019,Colorado,colony_lost,17500
+2019,Connecticut,colony_added,250
+2019,Connecticut,colony_lost,770
+2019,Florida,colony_added,115000
+2019,Florida,colony_lost,96000
+2019,Georgia,colony_added,42000
+2019,Georgia,colony_lost,47500
+2019,Hawaii,colony_added,1160
+2019,Hawaii,colony_lost,1890
+2019,Idaho,colony_added,14900
+2019,Idaho,colony_lost,38500
+2019,Illinois,colony_added,1670
+2019,Illinois,colony_lost,4940
+2019,Indiana,colony_added,2800
+2019,Indiana,colony_lost,3010
+2019,Iowa,colony_added,3670
+2019,Iowa,colony_lost,12500
+2019,Kansas,colony_added,750
+2019,Kansas,colony_lost,4050
+2019,Kentucky,colony_added,950
+2019,Kentucky,colony_lost,2150
+2019,Louisiana,colony_added,13470
+2019,Louisiana,colony_lost,9900
+2019,Maine,colony_added,580
+2019,Maine,colony_lost,2340
+2019,Maryland,colony_added,1140
+2019,Maryland,colony_lost,4190
+2019,Massachusetts,colony_added,920
+2019,Massachusetts,colony_lost,2980
+2019,Michigan,colony_added,3820
+2019,Michigan,colony_lost,17500
+2019,Minnesota,colony_added,8480
+2019,Minnesota,colony_lost,38700
+2019,Mississippi,colony_added,4700
+2019,Mississippi,colony_lost,8700
+2019,Missouri,colony_added,600
+2019,Missouri,colony_lost,3100
+2019,Montana,colony_added,6070
+2019,Montana,colony_lost,29000
+2019,Nebraska,colony_added,1000
+2019,Nebraska,colony_lost,6400
+2019,New Jersey,colony_added,840
+2019,New Jersey,colony_lost,1210
+2019,New Mexico,colony_added,1030
+2019,New Mexico,colony_lost,240
+2019,New York,colony_added,3940
+2019,New York,colony_lost,21900
+2019,North Carolina,colony_added,2790
+2019,North Carolina,colony_lost,7600
+2019,North Dakota,colony_added,18000
+2019,North Dakota,colony_lost,108000
+2019,Ohio,colony_added,5300
+2019,Ohio,colony_lost,7800
+2019,Oklahoma,colony_added,610
+2019,Oklahoma,colony_lost,3480
+2019,Oregon,colony_added,14650
+2019,Oregon,colony_lost,30500
+2019,Other States,colony_added,670
+2019,Other States,colony_lost,4010
+2019,Pennsylvania,colony_added,3770
+2019,Pennsylvania,colony_lost,7680
+2019,South Carolina,colony_added,5400
+2019,South Carolina,colony_lost,4790
+2019,South Dakota,colony_added,1300
+2019,South Dakota,colony_lost,51000
+2019,Tennessee,colony_added,2460
+2019,Tennessee,colony_lost,7300
+2019,Texas,colony_added,75500
+2019,Texas,colony_lost,45500
+2019,United States,colony_added,733520
+2019,United States,colony_lost,1241910
+2019,Utah,colony_added,5370
+2019,Utah,colony_lost,9000
+2019,Vermont,colony_added,230
+2019,Vermont,colony_lost,570
+2019,Virginia,colony_added,440
+2019,Virginia,colony_lost,2870
+2019,Washington,colony_added,18310
+2019,Washington,colony_lost,40500
+2019,West Virginia,colony_added,250
+2019,West Virginia,colony_lost,3900
+2019,Wisconsin,colony_added,4780
+2019,Wisconsin,colony_lost,18700
+2019,Wyoming,colony_added,2600
+2019,Wyoming,colony_lost,6300
+2020,Alabama,colony_added,8250
+2020,Alabama,colony_lost,9310
+2020,Arizona,colony_added,22250
+2020,Arizona,colony_lost,19800
+2020,Arkansas,colony_added,7580
+2020,Arkansas,colony_lost,6900
+2020,California,colony_added,605000
+2020,California,colony_lost,537000
+2020,Colorado,colony_added,11580
+2020,Colorado,colony_lost,14750
+2020,Connecticut,colony_added,1410
+2020,Connecticut,colony_lost,1160
+2020,Florida,colony_added,163000
+2020,Florida,colony_lost,127000
+2020,Georgia,colony_added,84500
+2020,Georgia,colony_lost,77500
+2020,Hawaii,colony_added,5440
+2020,Hawaii,colony_lost,4740
+2020,Idaho,colony_added,62900
+2020,Idaho,colony_lost,63000
+2020,Illinois,colony_added,6200
+2020,Illinois,colony_lost,6700
+2020,Indiana,colony_added,6620
+2020,Indiana,colony_lost,5050
+2020,Iowa,colony_added,17500
+2020,Iowa,colony_lost,11800
+2020,Kansas,colony_added,4060
+2020,Kansas,colony_lost,4500
+2020,Kentucky,colony_added,6880
+2020,Kentucky,colony_lost,4900
+2020,Louisiana,colony_added,12430
+2020,Louisiana,colony_lost,10900
+2020,Maine,colony_added,1400
+2020,Maine,colony_lost,2900
+2020,Maryland,colony_added,5760
+2020,Maryland,colony_lost,2350
+2020,Massachusetts,colony_added,2690
+2020,Massachusetts,colony_lost,1810
+2020,Michigan,colony_added,52700
+2020,Michigan,colony_lost,53100
+2020,Minnesota,colony_added,25000
+2020,Minnesota,colony_lost,27500
+2020,Mississippi,colony_added,22500
+2020,Mississippi,colony_lost,13400
+2020,Missouri,colony_added,3240
+2020,Missouri,colony_lost,3970
+2020,Montana,colony_added,24000
+2020,Montana,colony_lost,26300
+2020,Nebraska,colony_added,10350
+2020,Nebraska,colony_lost,13770
+2020,New Jersey,colony_added,5210
+2020,New Jersey,colony_lost,3620
+2020,New Mexico,colony_added,3750
+2020,New Mexico,colony_lost,1880
+2020,New York,colony_added,14630
+2020,New York,colony_lost,16300
+2020,North Carolina,colony_added,10150
+2020,North Carolina,colony_lost,10900
+2020,North Dakota,colony_added,101000
+2020,North Dakota,colony_lost,120000
+2020,Ohio,colony_added,11080
+2020,Ohio,colony_lost,10700
+2020,Oklahoma,colony_added,11400
+2020,Oklahoma,colony_lost,3600
+2020,Oregon,colony_added,39500
+2020,Oregon,colony_lost,34800
+2020,Other States,colony_added,3740
+2020,Other States,colony_lost,5240
+2020,Pennsylvania,colony_added,10180
+2020,Pennsylvania,colony_lost,6100
+2020,South Carolina,colony_added,7670
+2020,South Carolina,colony_lost,6900
+2020,South Dakota,colony_added,39520
+2020,South Dakota,colony_lost,87800
+2020,Tennessee,colony_added,5680
+2020,Tennessee,colony_lost,5580
+2020,Texas,colony_added,194000
+2020,Texas,colony_lost,112500
+2020,United States,colony_added,1693840
+2020,United States,colony_lost,1548610
+2020,Utah,colony_added,14500
+2020,Utah,colony_lost,8900
+2020,Vermont,colony_added,1430
+2020,Vermont,colony_lost,740
+2020,Virginia,colony_added,7380
+2020,Virginia,colony_lost,4500
+2020,Washington,colony_added,16580
+2020,Washington,colony_lost,28100
+2020,West Virginia,colony_added,2380
+2020,West Virginia,colony_lost,2760
+2020,Wisconsin,colony_added,17270
+2020,Wisconsin,colony_lost,19200
+2020,Wyoming,colony_added,3550
+2020,Wyoming,colony_lost,6940
+2021,Alabama,colony_added,3470
+2021,Alabama,colony_lost,3900
+2021,Arizona,colony_added,12000
+2021,Arizona,colony_lost,11200
+2021,Arkansas,colony_added,9790
+2021,Arkansas,colony_lost,3800
+2021,California,colony_added,276000
+2021,California,colony_lost,257000
+2021,Colorado,colony_added,5650
+2021,Colorado,colony_lost,6140
+2021,Connecticut,colony_added,1310
+2021,Connecticut,colony_lost,840
+2021,Florida,colony_added,94000
+2021,Florida,colony_lost,64000
+2021,Georgia,colony_added,59000
+2021,Georgia,colony_lost,40000
+2021,Hawaii,colony_added,2860
+2021,Hawaii,colony_lost,1530
+2021,Idaho,colony_added,49000
+2021,Idaho,colony_lost,34500
+2021,Illinois,colony_added,7000
+2021,Illinois,colony_lost,4100
+2021,Indiana,colony_added,7500
+2021,Indiana,colony_lost,3260
+2021,Iowa,colony_added,13600
+2021,Iowa,colony_lost,4300
+2021,Kansas,colony_added,7200
+2021,Kansas,colony_lost,2270
+2021,Kentucky,colony_added,4600
+2021,Kentucky,colony_lost,2370
+2021,Louisiana,colony_added,9100
+2021,Louisiana,colony_lost,9800
+2021,Maine,colony_added,490
+2021,Maine,colony_lost,1400
+2021,Maryland,colony_added,3190
+2021,Maryland,colony_lost,1520
+2021,Massachusetts,colony_added,1430
+2021,Massachusetts,colony_lost,1810
+2021,Michigan,colony_added,10320
+2021,Michigan,colony_lost,5000
+2021,Minnesota,colony_added,30900
+2021,Minnesota,colony_lost,8700
+2021,Mississippi,colony_added,23500
+2021,Mississippi,colony_lost,10300
+2021,Missouri,colony_added,2780
+2021,Missouri,colony_lost,2170
+2021,Montana,colony_added,13500
+2021,Montana,colony_lost,3100
+2021,Nebraska,colony_added,9800
+2021,Nebraska,colony_lost,2440
+2021,New Jersey,colony_added,2010
+2021,New Jersey,colony_lost,770
+2021,New Mexico,colony_added,2280
+2021,New Mexico,colony_lost,770
+2021,New York,colony_added,17900
+2021,New York,colony_lost,7900
+2021,North Carolina,colony_added,8700
+2021,North Carolina,colony_lost,3800
+2021,North Dakota,colony_added,7500
+2021,North Dakota,colony_lost,4580
+2021,Ohio,colony_added,6620
+2021,Ohio,colony_lost,4820
+2021,Oklahoma,colony_added,8300
+2021,Oklahoma,colony_lost,6200
+2021,Oregon,colony_added,27600
+2021,Oregon,colony_lost,6400
+2021,Other States,colony_added,3490
+2021,Other States,colony_lost,680
+2021,Pennsylvania,colony_added,11100
+2021,Pennsylvania,colony_lost,7600
+2021,South Carolina,colony_added,5030
+2021,South Carolina,colony_lost,3000
+2021,South Dakota,colony_added,39000
+2021,South Dakota,colony_lost,6500
+2021,Tennessee,colony_added,5760
+2021,Tennessee,colony_lost,2920
+2021,Texas,colony_added,121000
+2021,Texas,colony_lost,57000
+2021,United States,colony_added,986220
+2021,United States,colony_lost,628490
+2021,Utah,colony_added,12500
+2021,Utah,colony_lost,6000
+2021,Vermont,colony_added,1440
+2021,Vermont,colony_lost,1340
+2021,Virginia,colony_added,5400
+2021,Virginia,colony_lost,1930
+2021,Washington,colony_added,15000
+2021,Washington,colony_lost,8900
+2021,West Virginia,colony_added,3600
+2021,West Virginia,colony_lost,1370
+2021,Wisconsin,colony_added,16000
+2021,Wisconsin,colony_lost,4700
+2021,Wyoming,colony_added,8000
+2021,Wyoming,colony_lost,5100
