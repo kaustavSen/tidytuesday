@@ -6,7 +6,7 @@
   <p>You can find all my contributions on Twitter <a href="https://twitter.com/kustav_sen" target="_blank" class="fa fa-twitter"> @kustav_sen</a></p>
 
   <h2>2022 Week 27: San Francisco Rentals [<a href="https://github.com/kaustavSen/tidytuesday/blob/master/2022/week_27.R" target="_blank">Code</a>]</h2>
-  <img src="2022/week_27/week_27.png">
+  <img src="2022/plots/week_27.png" height=600 width=600>
   
   <h2>2022 Week 14: Digital publications [<a href="https://github.com/kaustavSen/tidytuesday/blob/master/2022/week_14" target="_blank">Code</a>]</h2>
   <img src="2022/week_14/week_14.png">
