@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Kaustav Sen">
+<meta name="dcterms.date" content="2022-08-20">
+
+<title>#TidyTuesday 2002 week 33</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="week_33_files/libs/clipboard/clipboard.min.js"></script>
+<script src="week_33_files/libs/quarto-html/quarto.js"></script>
+<script src="week_33_files/libs/quarto-html/popper.min.js"></script>
+<script src="week_33_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="week_33_files/libs/quarto-html/anchor.min.js"></script>
+<link href="week_33_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="week_33_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="week_33_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="week_33_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="week_33_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#loading-packages" id="toc-loading-packages" class="nav-link active" data-scroll-target="#loading-packages">Loading packages</a></li>
+  <li><a href="#reading-in-the-data" id="toc-reading-in-the-data" class="nav-link" data-scroll-target="#reading-in-the-data">Reading in the data</a></li>
+  <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling">Data wrangling</a></li>
+  <li><a href="#plotting" id="toc-plotting" class="nav-link" data-scroll-target="#plotting">Plotting</a></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">#TidyTuesday 2002 week 33</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Kaustav Sen </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 20, 2022</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<section id="loading-packages" class="level2">
+<h2 class="anchored" data-anchor-id="loading-packages">Loading packages</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)  <span class="co"># for all the data wrangling </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magick)  <span class="co"># getting the images of the characters</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gggrid)  <span class="co"># adding images and character names to the plots</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="reading-in-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="reading-in-the-data">Reading in the data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>characters <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-08-16/characters.csv'</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>psych_stats <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-08-16/psych_stats.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="data-wrangling" class="level2">
+<h2 class="anchored" data-anchor-id="data-wrangling">Data wrangling</h2>
+<p>Will be working with the <strong>Lord of the Rings</strong> characters in this week’s data. Initial idea is to compare top 10 traits across all the main characters provided in the data-set.</p>
+<p>Here I have extracted the <em>top 10</em> traits based on those which show the greatest amount of variance amongst the characters. To compute the variance, first converted the <code>personality</code> column to a factor and then took its numeric representation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>top_questions <span class="ot">&lt;-</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  psych_stats <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(uni_name <span class="sc">==</span> <span class="st">"Lord of the Rings"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(question) <span class="sc">|&gt;</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">question_var =</span> <span class="fu">as.factor</span>(personality) <span class="sc">|&gt;</span> <span class="fu">as.numeric</span>(personality) <span class="sc">|&gt;</span> <span class="fu">var</span>()</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(question_var <span class="sc">==</span> <span class="fu">max</span>(question_var)) <span class="sc">|&gt;</span> </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">10</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(question)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>top_questions</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "apprentice/master"               "old/young"                      
+ [3] "dunce/genius"                    "alpha/beta"                     
+ [5] "enlightened/lost"                "codependent/independent"        
+ [7] "princess/queen"                  "dominant/submissive"            
+ [9] "eloquent/unpolished"             "introspective/not introspective"</code></pre>
+</div>
+</div>
+<p>Now that we have the traits by which we want to compare, lets filter the data-set and convert it to a plot-ready data frame.</p>
+<p>But before we do that, we will use Gandalf’s personality traits as the <em>anchor</em> points.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Choosing Gandalf’s personality traits as the anchor points was just an arbitrary decision. Could equally well have chosen any other character or based it on the <code>personality</code> column as well.</p>
+</div>
+</div>
+<p>It was tricky interpreting the <code>avg_rating</code> column, so thanks to <a href="https://twitter.com/tanya_shapiro">Tanya</a> for the below explanation:</p>
+<blockquote class="twitter-tweet blockquote">
+<p lang="en" dir="ltr">
+Tip for <a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a> folks this week. Avg rating is tied to personality extremes. One idea might be to rescale it 🙂 <a href="https://t.co/bzuTcvtKtY">https://t.co/bzuTcvtKtY</a>
+</p>
+— Tanya Shapiro (<span class="citation" data-cites="tanya_shapiro">@tanya_shapiro</span>) <a href="https://twitter.com/tanya_shapiro/status/1559506447070887939?ref_src=twsrc%5Etfw">August 16, 2022</a>
+</blockquote>
+<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>anchor_traits <span class="ot">&lt;-</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  psych_stats <span class="sc">|&gt;</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(char_name <span class="sc">==</span> <span class="st">"Gandalf"</span>, question <span class="sc">%in%</span> top_questions) <span class="sc">|&gt;</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(question, <span class="at">anchor =</span> personality)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>anchor_traits</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+   question                        anchor       
+   &lt;chr&gt;                           &lt;chr&gt;        
+ 1 apprentice/master               master       
+ 2 old/young                       old          
+ 3 dunce/genius                    genius       
+ 4 alpha/beta                      alpha        
+ 5 enlightened/lost                enlightened  
+ 6 codependent/independent         independent  
+ 7 princess/queen                  queen        
+ 8 dominant/submissive             dominant     
+ 9 eloquent/unpolished             eloquent     
+10 introspective/not introspective introspective</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>plot_df <span class="ot">&lt;-</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  psych_stats <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(uni_name <span class="sc">==</span> <span class="st">"Lord of the Rings"</span>, question <span class="sc">%in%</span> top_questions) <span class="sc">|&gt;</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Here I am retaining only those columns which I will be using in plotting.</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># This is not necessary - just helps viewing all relevant columns in one go </span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># when working interactively</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(char_name, question, personality, avg_rating) <span class="sc">|&gt;</span> </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(question) <span class="sc">|&gt;</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(anchor_traits, <span class="at">by =</span> <span class="st">"question"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rescaled_score =</span> <span class="fu">if_else</span>(anchor <span class="sc">==</span> personality, avg_rating, <span class="dv">100</span> <span class="sc">-</span> avg_rating))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="plotting" class="level2">
+<h2 class="anchored" data-anchor-id="plotting">Plotting</h2>
+<p>Now we have a data also prepped and ready. So, let’s move onto some plotting!!</p>
+<p>I was inspired by <a href="https://twitter.com/nrennie35">Nicola’s</a> and <a href="https://twitter.com/danoehm">Dan’s</a> submissions for this week to try and create mobile-friendly <em>card</em>-style plots.</p>
+<p>Definitely worth checking out their stunning plots as well:</p>
+<div class="grid">
+<div class="g-col-5">
+<blockquote class="twitter-tweet blockquote">
+<p lang="en" dir="ltr">
+This week's <a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a> is about personality test results - I focused on Killing Eve characters! Inspired by <a href="https://twitter.com/bear_jordan_?ref_src=twsrc%5Etfw"><span class="citation" data-cites="bear_jordan_">@bear_jordan_</span></a> to try mobile-friendly data viz formats! Thanks to <a href="https://twitter.com/tanya_shapiro?ref_src=twsrc%5Etfw"><span class="citation" data-cites="tanya_shapiro">@tanya_shapiro</span></a> for the data and plot inspiration!<br><br>Code: <a href="https://t.co/XiCurLLHFI">https://t.co/XiCurLLHFI</a><a href="https://twitter.com/hashtag/rstats?src=hash&amp;ref_src=twsrc%5Etfw">#rstats</a> <a href="https://twitter.com/hashtag/DataViz?src=hash&amp;ref_src=twsrc%5Etfw">#DataViz</a> <a href="https://t.co/ZQeoD6xcoE">pic.twitter.com/ZQeoD6xcoE</a>
+</p>
+— Nicola Rennie (<span class="citation" data-cites="nrennie35">@nrennie35</span>) <a href="https://twitter.com/nrennie35/status/1559513805440385027?ref_src=twsrc%5Etfw">August 16, 2022</a>
+</blockquote>
+</div>
+<div class="g-col-5">
+<blockquote class="twitter-tweet blockquote">
+<p lang="en" dir="ltr">
+<a href="https://twitter.com/hashtag/TidyTuesday?src=hash&amp;ref_src=twsrc%5Etfw">#TidyTuesday</a> week 33: Psychometrics 🧠<br><br>Psychometric profiles for <a href="https://twitter.com/BreakingBad?ref_src=twsrc%5Etfw"><span class="citation" data-cites="BreakingBad">@BreakingBad</span></a> main characters. Inspired by <a href="https://twitter.com/nrennie35?ref_src=twsrc%5Etfw"><span class="citation" data-cites="nrennie35">@nrennie35</span></a>'s style I've made individual character cards<br><br>🧵[1/3]<a href="https://twitter.com/hashtag/RStats?src=hash&amp;ref_src=twsrc%5Etfw">#RStats</a> <a href="https://twitter.com/hashtag/DataVisualization?src=hash&amp;ref_src=twsrc%5Etfw">#DataVisualization</a> <a href="https://twitter.com/hashtag/dataviz?src=hash&amp;ref_src=twsrc%5Etfw">#dataviz</a> <a href="https://t.co/5VXDpSdWZ6">pic.twitter.com/5VXDpSdWZ6</a>
+</p>
+— Dan Oehm 🌲⛰️ (<span class="citation" data-cites="danoehm">@danoehm</span>) <a href="https://twitter.com/danoehm/status/1560405471085084674?ref_src=twsrc%5Etfw">August 18, 2022</a>
+</blockquote>
+</div>
+</div>
+<p>For each character I wanted to create a bar-(<em>code</em>)-plot similar to how trading cards look like. I ended up creating two functions to re-use in creating the individual plots:</p>
+<ul>
+<li><p><code>img_circle()</code> this function uses the <code>{grid}</code> package in order to add the character image and name at the top of the plot. This is used in conjunction with <code>grid_panel()</code> in the main plotting function <code>draw_barcode_plot()</code></p></li>
+<li><p><code>draw_barcode_plot</code> this is the main function which uses <code>{ggplot}</code> to create the plot</p></li>
+</ul>
+<p>Expand the below section to view the full code.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-overflow-scroll code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># function to add image and character's name to the plot</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>img_circle <span class="ot">&lt;-</span> <span class="cf">function</span>(data, coords) {</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  img <span class="ot">&lt;-</span> <span class="fu">image_read</span>(data<span class="sc">$</span>img_link[<span class="dv">1</span>])</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  character_name <span class="ot">&lt;-</span> data<span class="sc">$</span>name_label[<span class="dv">1</span>]</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  outline <span class="ot">&lt;-</span> <span class="fu">circleGrob</span>(<span class="at">x =</span> <span class="fl">0.4</span>, <span class="at">y =</span> <span class="fl">1.1</span>, <span class="at">r =</span> <span class="fl">0.11</span>, <span class="at">gp =</span> <span class="fu">gpar</span>(<span class="at">col =</span> <span class="st">"#F2A444"</span>, <span class="at">lwd =</span> <span class="dv">3</span>))</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  image <span class="ot">&lt;-</span> <span class="fu">rasterGrob</span>(img, <span class="at">vp =</span> <span class="fu">viewport</span>(<span class="at">x =</span> <span class="fu">unit</span>(<span class="fl">0.4</span>, <span class="st">"npc"</span>),</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">y =</span> <span class="fu">unit</span>(<span class="fl">1.1</span>, <span class="st">"npc"</span>),</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">width =</span> <span class="fu">unit</span>(<span class="fl">0.2</span>, <span class="st">"npc"</span>),</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">height =</span> <span class="fu">unit</span>(<span class="fl">0.2</span>, <span class="st">"npc"</span>),</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">clip =</span> <span class="fu">circleGrob</span>()))</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  label <span class="ot">&lt;-</span> <span class="fu">textGrob</span>(character_name, <span class="at">x =</span> <span class="fu">unit</span>(<span class="fl">0.53</span>, <span class="st">"npc"</span>), <span class="at">y =</span> <span class="fu">unit</span>(<span class="fl">1.1</span>, <span class="st">"npc"</span>),</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>                    <span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">gp =</span> <span class="fu">gpar</span>(<span class="at">fontfamily =</span> <span class="st">"Cabinet Grotesk"</span>,</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">fontface =</span> <span class="st">"bold"</span>,</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">fontsize =</span> <span class="dv">13</span>,</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">col =</span> <span class="st">"#F2A444"</span>))</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gTree</span>(<span class="at">children =</span> <span class="fu">gList</span>(outline, image, label))</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="co"># main function to create the plot</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>draw_barcode_plot <span class="ot">&lt;-</span> <span class="cf">function</span>(df, character_name) {</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  plot_df_filtered <span class="ot">&lt;-</span> </span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  df <span class="sc">|&gt;</span> </span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(char_name <span class="sc">==</span> character_name) <span class="sc">|&gt;</span> </span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">full =</span> <span class="dv">100</span>,</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">anchor =</span> <span class="fu">fct_reorder</span>(anchor, rescaled_score)</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(anchor)</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>  img_link <span class="ot">&lt;-</span> characters <span class="sc">|&gt;</span> </span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(name <span class="sc">==</span> character_name) <span class="sc">|&gt;</span> </span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(image_link)</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>  num_labels <span class="ot">&lt;-</span> <span class="fu">str_c</span>(</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">round</span>(plot_df_filtered<span class="sc">$</span>rescaled_score,<span class="dv">0</span>), </span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">""</span>, <span class="dv">9</span>), <span class="st">"%"</span>)</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>  subtitle <span class="ot">&lt;-</span> <span class="st">"Using data from the Open-Source Psychometrics Project, we </span></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a><span class="st">  analyse ten personality traits for each character from the Lord of the </span></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a><span class="st">  Rings franchise"</span> <span class="sc">|&gt;</span> </span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_wrap</span>(<span class="dv">65</span>)</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(plot_df_filtered, <span class="fu">aes</span>(<span class="at">y =</span> anchor)) <span class="sc">+</span></span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x =</span> full), <span class="at">width =</span> <span class="fl">0.4</span>, <span class="at">fill =</span> <span class="st">"grey90"</span>) <span class="sc">+</span></span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x =</span> rescaled_score), <span class="at">width =</span> <span class="fl">0.4</span>, <span class="at">fill =</span> <span class="st">"#A65F46"</span>) <span class="sc">+</span></span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="dv">2</span>), <span class="at">color =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span> <span class="sc">+</span> <span class="fl">0.38</span>, </span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>             <span class="at">label =</span> <span class="fu">str_to_sentence</span>(plot_df_filtered<span class="sc">$</span>anchor),</span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>             <span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, <span class="at">family =</span> <span class="st">"Cabinet Grotesk"</span>, </span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">3.5</span>, <span class="at">color =</span> <span class="st">"grey20"</span>) <span class="sc">+</span></span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotate</span>(<span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">100</span>, <span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span> <span class="sc">+</span> <span class="fl">0.38</span>, <span class="at">label =</span> num_labels,</span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>             <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, <span class="at">family =</span> <span class="st">"Tabular"</span>, <span class="at">size =</span> <span class="fl">3.5</span>,</span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"#A65F46"</span>) <span class="sc">+</span></span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>    <span class="fu">grid_panel</span>(img_circle, <span class="fu">aes</span>(<span class="at">img_link =</span> img_link, </span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>                               <span class="at">name_label =</span> character_name)) <span class="sc">+</span></span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">"Lord of the personalities"</span>,</span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>      <span class="at">subtitle =</span> subtitle</span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>)) <span class="sc">+</span></span>
+<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_cartesian</span>(<span class="at">clip =</span> <span class="st">"off"</span>) <span class="sc">+</span></span>
+<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>, <span class="at">base_family =</span> <span class="st">"Cabinet Grotesk"</span>) <span class="sc">+</span></span>
+<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(</span>
+<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a>      <span class="at">plot.title.position =</span> <span class="st">"plot"</span>,</span>
+<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a>      <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="fu">rel</span>(<span class="fl">1.8</span>), <span class="at">hjust =</span> <span class="fl">0.5</span>,</span>
+<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a>                                <span class="at">color =</span> <span class="st">"#1B3C59"</span>),</span>
+<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>      <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="fu">rel</span>(<span class="fl">0.7</span>), <span class="at">hjust =</span> <span class="fl">0.5</span>,</span>
+<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">70</span>), <span class="at">color =</span> <span class="st">"grey45"</span>),</span>
+<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a>      <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a>      <span class="at">panel.grid.major =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a>      <span class="at">axis.text =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>…and here are the final plots.</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Aragorn</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Gandalf</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Frodo</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false" href="">Legolas</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-5" role="tab" aria-controls="tabset-1-5" aria-selected="false" href="">Gimli</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell" data-fig.asp="1.62">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">draw_barcode_plot</span>(plot_df, <span class="st">"Aragorn"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="week_33_files/figure-html/plot-aragorn-1.png" class="img-fluid" width="600"></p>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell" data-fig.asp="1.62">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">draw_barcode_plot</span>(plot_df, <span class="st">"Gandalf"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="week_33_files/figure-html/plot-gandalf-1.png" class="img-fluid" width="600"></p>
+</div>
+</div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<div class="cell" data-fig.asp="1.62">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">draw_barcode_plot</span>(plot_df, <span class="st">"Frodo Baggins"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="week_33_files/figure-html/plot-frodo-1.png" class="img-fluid" width="600"></p>
+</div>
+</div>
+</div>
+<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
+<div class="cell" data-fig.asp="1.62">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">draw_barcode_plot</span>(plot_df, <span class="st">"Legolas"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="week_33_files/figure-html/plot-legolas-1.png" class="img-fluid" width="600"></p>
+</div>
+</div>
+</div>
+<div id="tabset-1-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-5-tab">
+<div class="cell" data-fig.asp="1.62">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">draw_barcode_plot</span>(plot_df, <span class="st">"Gimli"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="week_33_files/figure-html/plot-gimli-1.png" class="img-fluid" width="600"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
