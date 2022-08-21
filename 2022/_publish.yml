@@ -1,0 +1,4 @@
+- source: week_33.qmd
+  quarto-pub:
+    - id: c18ab34f-78c8-48e1-a418-edf5901d9513
+      url: 'https://quartopub.com/sites/kaustav/2022_week_33'
